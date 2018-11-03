@@ -63,17 +63,32 @@
                 Stretch="UniformToFill" />
         </Viewbox>
 
+        <Grid
+            Grid.Row="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="3*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
 
-        <TextBlock 
-            Grid.Row="2" 
-            Name="Angles"
-            Margin="0" 
-            HorizontalAlignment="Center" 
-            VerticalAlignment="Center" 
-            Foreground="Red" 
-            FontFamily="Segoe UI" 
-            FontSize="36"
-            Text="Body Angles"/>
+            <TextBlock 
+                Grid.Column="0" 
+                Name="Angles"
+                Margin="0" 
+                HorizontalAlignment="Center" 
+                VerticalAlignment="Center" 
+                Foreground="{Binding TextColourOfBody}" 
+                FontFamily="Segoe UI" 
+                FontSize="36"
+                Text="Body Angles"/>
+            
+            <ComboBox 
+                x:Name="BodiesListXaml"
+                Grid.Column="1"
+                
+                ItemsSource="{Binding BodiesList}"
+                SelectedIndex="{Binding BodiesListIndex, Mode=TwoWay}"/>
+            
+        </Grid>
 
         <StatusBar 
             Grid.Row="3" 

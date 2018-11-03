@@ -23,14 +23,10 @@ namespace KinectSkeletalTracking
     /// </summary>
     public partial class MainWindow : Window, INotifyPropertyChanged
     {
-        // Create the serial port with basic settings
-        private SerialPort port = new SerialPort("COM3",
-          115200, Parity.None, 8, StopBits.One);
-
         private const bool SendToMotors = true;
-        
-        private const double Rad2Deg = 180 / Math.PI; 
-        private const double Deg2Rad = Math.PI / 180; 
+
+        private const double Rad2Deg = 180 / Math.PI;
+        private const double Deg2Rad = Math.PI / 180;
 
         private const string SerialDataFormat = "S{0}E";
 
@@ -139,6 +135,60 @@ namespace KinectSkeletalTracking
         /// </summary>
         private string statusText = null;
 
+
+        SolidColorBrush[] colours = new SolidColorBrush[]
+        {
+            Brushes.Red,
+            Brushes.Orange,
+            Brushes.Green,
+            Brushes.Blue,
+            Brushes.Indigo,
+            Brushes.Violet
+        };
+
+        enum ColoursIndex
+        {
+            Red, Orange, Green, Blue, Indigo, Violet
+        }
+
+        private List<string> bodiesList = new List<string>();
+        public List<string> BodiesList
+        {
+            get { return bodiesList; }
+            set
+            {
+                bodiesList = value;
+                OnPropertyChanged(nameof(BodiesList));
+
+                if(bodiesListIndex > bodiesList.Count)
+                {
+                    bodiesListIndex = bodiesList.Count - 1;
+                }
+            }
+        }
+
+        private int bodiesListIndex = 0;
+        public int BodiesListIndex
+        {
+            get { return bodiesListIndex; }
+            set
+            {
+                bodiesListIndex = value;
+                OnPropertyChanged(nameof(bodiesListIndex));
+            }
+        }
+
+        private Brush textColourOfBody = new SolidColorBrush(Color.FromRgb(0, 0, 0));
+        public Brush TextColourOfBody
+        {
+            get { return textColourOfBody; }
+            set
+            {
+                textColourOfBody = value;
+                OnPropertyChanged(nameof(TextColourOfBody));
+            }
+        }
+
         /// <summary>
         /// Initializes a new instance of the MainWindow class.
         /// </summary>
@@ -146,7 +196,7 @@ namespace KinectSkeletalTracking
         {
             // one sensor is currently supported
             this.kinectSensor = KinectSensor.GetDefault();
-
+            
             // get the coordinate mapper
             this.coordinateMapper = this.kinectSensor.CoordinateMapper;
 
@@ -200,12 +250,12 @@ namespace KinectSkeletalTracking
             // populate body colors, one for each BodyIndex
             this.bodyColors = new List<Pen>();
 
-            this.bodyColors.Add(new Pen(Brushes.Red, 6));
-            this.bodyColors.Add(new Pen(Brushes.Orange, 6));
-            this.bodyColors.Add(new Pen(Brushes.Green, 6));
-            this.bodyColors.Add(new Pen(Brushes.Blue, 6));
-            this.bodyColors.Add(new Pen(Brushes.Indigo, 6));
-            this.bodyColors.Add(new Pen(Brushes.Violet, 6));
+            this.bodyColors.Add(new Pen(colours[(int)ColoursIndex.Red], 6));
+            this.bodyColors.Add(new Pen(colours[(int)ColoursIndex.Orange], 6));
+            this.bodyColors.Add(new Pen(colours[(int)ColoursIndex.Green], 6));
+            this.bodyColors.Add(new Pen(colours[(int)ColoursIndex.Blue], 6));
+            this.bodyColors.Add(new Pen(colours[(int)ColoursIndex.Indigo], 6));
+            this.bodyColors.Add(new Pen(colours[(int)ColoursIndex.Violet], 6));
 
             // set IsAvailableChanged event notifier
             this.kinectSensor.IsAvailableChanged += this.Sensor_IsAvailableChanged;
@@ -226,7 +276,8 @@ namespace KinectSkeletalTracking
             // use the window object as the view model in this simple example
             this.DataContext = this;
 
-            port.DataReceived += port_DataReceived;
+            if (SendToMotors)
+                SerialInterface.Instance.Init();
 
             // initialize the components (controls) of the window
             this.InitializeComponent();
@@ -255,13 +306,15 @@ namespace KinectSkeletalTracking
                 {
                     this.statusText = value;
 
-                    // notify any bound elements that the text has changed
-                    if (this.PropertyChanged != null)
-                    {
-                        this.PropertyChanged(this, new PropertyChangedEventArgs("StatusText"));
-                    }
+                    OnPropertyChanged(nameof(StatusText));
                 }
             }
+        }
+
+        private void OnPropertyChanged(string nameOfProperty)
+        {
+            // notify any bound elements that the property has changed
+            this.PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameOfProperty));
         }
 
         /// <summary>
@@ -331,13 +384,20 @@ namespace KinectSkeletalTracking
                     // Draw a transparent background to set the render size
                     dc.DrawRectangle(Brushes.Black, null, new Rect(0.0, 0.0, this.displayWidth, this.displayHeight));
 
+                    List<string> tempListstring = new List<string>();
+
                     int penIndex = 0;
-                    foreach (Body body in this.bodies)
+                    for (int bodyIndex = 0; bodyIndex < bodies.Count(); bodyIndex++)
+                    //foreach (Body body in this.bodies)
                     {
+                        Body body = bodies[bodyIndex];
+
                         Pen drawPen = this.bodyColors[penIndex++];
 
                         if (body.IsTracked)
                         {
+                            tempListstring.Add($"{penIndex - 1} - {(ColoursIndex)(penIndex - 1)}");
+
                             this.DrawClippedEdges(body, dc);
 
                             IReadOnlyDictionary<JointType, Joint> joints = body.Joints;
@@ -360,17 +420,34 @@ namespace KinectSkeletalTracking
                                 DepthSpacePoint depthSpacePoint = this.coordinateMapper.MapCameraPointToDepthSpace(position);
                                 jointPoints[jointType] = new Point(depthSpacePoint.X, depthSpacePoint.Y);
                             }
-
-                            // for Testing, get elbow angle by doing shoulder->elbow and wrist->elbow
-                            //TestElbowPitch(ref joints);
-                            //TestShoulderPitch(ref joints);
-                            TestShoulderToElbow(ref joints);
+                            
+                            string selection = String.Empty;
+                            int selectedIndex = 0;
+                            if (BodiesList.Count > 0 &&
+                                BodiesListIndex >= 0 &&
+                                !String.IsNullOrWhiteSpace(selection = BodiesList[BodiesListIndex]) &&
+                                Int32.TryParse(selection.Substring(0, 1), out selectedIndex) &&
+                                selectedIndex == bodyIndex)
+                            {
+                                TextColourOfBody = drawPen.Brush;
+                                // for Testing, get elbow angle by doing shoulder->elbow and wrist->elbow
+                                //TestElbowPitch(ref joints);
+                                //TestShoulderPitch(ref joints);
+                                TestShoulderToElbow(ref joints);
+                            }
 
                             this.DrawBody(joints, jointPoints, dc, drawPen);
 
                             this.DrawHand(body.HandLeftState, jointPoints[JointType.HandLeft], dc);
                             this.DrawHand(body.HandRightState, jointPoints[JointType.HandRight], dc);
                         }
+                    }
+
+                    BodiesList = tempListstring;
+
+                    if (tempListstring.Count > 0)
+                    {
+                        int i = 0;
                     }
 
                     // prevent drawing outside of our render area
@@ -656,28 +733,12 @@ namespace KinectSkeletalTracking
                 Z = transformedElbowPoint.Z * factor
             };
 
-            //double theta2 = Math.Acos((shoulderToElbow.Z - a1 - (a2 * Math.Sin((alpha - 90) / Rad2Deg))) / a3);
-            //double theta2 = Math.Acos((shoulderToElbow.Z - (a2 * Math.Cos((180 - alpha) * Deg2Rad)) - a1) / a3) * Rad2Deg;
-            //double theta2 = (Math.Acos((shoulderToElbow.Z - (a2 * Math.Cos((180 - alpha) * Deg2Rad)) - a1) / a3) * Rad2Deg) - (180 - alpha);
             double theta2Y = (Math.Asin((shoulderToElbow.Y - (a2 * Math.Sin((180 - alpha) * Deg2Rad))) / a3) * Rad2Deg) - (180 - alpha);
             double theta2Z = (Math.Acos((shoulderToElbow.Z - (a2 * Math.Cos((180 - alpha) * Deg2Rad)) - a1) / a3) * Rad2Deg) - (180 - alpha);
             double theta2 = Math.Sin(shoulderOrientation) * theta2Z + Math.Cos(shoulderOrientation) * theta2Y;
             double theta1 = Math.Acos(shoulderToElbow.X / ((a3 * Math.Cos(theta2 / Rad2Deg)) + (a2 * Math.Cos((alpha - 90) / Rad2Deg))));
 
-
-            //Angles.Text = String.Format("Shoulder {0:F3}, {1:F3}, {2:F3}" + Environment.NewLine + 
-            //    "Elbow {3:F3}, {4:F3}, {5:F3}" + Environment.NewLine +
-            //    "theta1: {6}, theta2: {7}" + Environment.NewLine + 
-            //    "Magnitude: {8:F2}" + Environment.NewLine +
-            //    "Shoulder orientation: {9:F2}" + Environment.NewLine +
-            //    "theta2Y: {10}, theta2Z: {11}",
-            //    pointForShoulderRight.X, pointForShoulderRight.Y, pointForShoulderRight.Z,
-            //    shoulderToElbow.X, shoulderToElbow.Y, shoulderToElbow.Z, 
-            //    (int)(GetAngleFromSpineToElbow(spineToNeck, shoulderToElbowFromShoulder)), (int)(GetAngleFromCrossShoulderToElbow(ref crossShoulderVector, ref shoulderToElbowFromShoulder)),
-            //    magnitude,
-            //    shoulderOrientation * Rad2Deg,
-            //    (int)(theta2Y), (int)(theta2Z)
-            //    );
+            
             Angles.Text = String.Format("Shoulder {0}, {1}" + Environment.NewLine +
                 "Elbow {2}",
                 (int)(GetAngleFromSpineToElbow(spineToNeck, shoulderToElbowFromShoulder)), (int)(GetAngleFromCrossShoulderToElbow(ref crossShoulderVector, ref shoulderToElbowFromShoulder)),
@@ -696,12 +757,6 @@ namespace KinectSkeletalTracking
 
         #region Serial stuff
 
-        private void port_DataReceived(object sender, SerialDataReceivedEventArgs e)
-        {
-            // Show all the incoming data in the port's buffer
-            System.Diagnostics.Debug.WriteLine(port.ReadExisting());
-        }
-
         private void SerialWrite(double angle)
         {
             SerialWrite(new double[1] { angle });
@@ -709,22 +764,15 @@ namespace KinectSkeletalTracking
 
         private void SerialWrite(params double[] angles)
         {
-            if (!port.IsOpen && SendToMotors)
-            {
-                port.Open();
-            }
-
             string dataToSend = ",";
             foreach(double angle in angles)
             {
                 dataToSend += (int)(angle) + ",";
             }
-            
-            System.Diagnostics.Debug.WriteLine($"Sending data: {dataToSend}");
 
-            if (port.IsOpen && SendToMotors)
+            if (SendToMotors)
             {
-                port.Write(String.Format(SerialDataFormat, dataToSend));
+                SerialInterface.Instance.Write(String.Format(SerialDataFormat, dataToSend));
             }
         }
 
@@ -737,15 +785,18 @@ namespace KinectSkeletalTracking
             return GetAngleBetweenVectors(crossShoulder, shoulderElbow) * Rad2Deg;
         }
 
+
         private double GetAngleFromSpineToElbow(Vector3 spine, Vector3 shoulderElbow)
         {
             return GetAngleBetweenVectors(spine, shoulderElbow) * Rad2Deg;
         }
 
+
         private double GetElbowAngle(ref Vector3 shoulderToElbow, ref Vector3 wristToElbow)
         {
             return GetAngleBetweenVectors(shoulderToElbow, wristToElbow) * Rad2Deg;
         }
+
 
         private Vector3 GetVectorFromPoints(CameraSpacePoint p, CameraSpacePoint q)
         {
@@ -765,6 +816,7 @@ namespace KinectSkeletalTracking
                 Z = q.Z - p.Z
             };
         }
+
 
         private double GetAngleBetweenVectors(Vector3 u, Vector3 v)
         {
@@ -786,6 +838,7 @@ namespace KinectSkeletalTracking
             return angle;
         }
 
+
         private Plane GetPlaneFromPoints(params CameraSpacePoint[] points)
         {
             // minimum 3 points are required
@@ -794,6 +847,7 @@ namespace KinectSkeletalTracking
                 return null;
             }
 
+            // Only 3 points are needed to make a plane
             CameraSpacePoint A = points[0];
             CameraSpacePoint B = points[1];
             CameraSpacePoint C = points[2];
@@ -820,58 +874,5 @@ namespace KinectSkeletalTracking
         }
 
         #endregion
-    }
-
-    public class Vector3
-    {
-        private double x = 0.0;
-        private double y = 0.0;
-        private double z = 0.0;
-        private double magnitude = 0.0;
-
-        public double X
-        {
-            get { return x; }
-            set
-            {
-                x = value;
-                magnitude = Math.Sqrt((x * x) + (y * y) + (z * z));
-            }
-        }
-        public double Y
-        {
-            get { return y; }
-            set
-            {
-                y = value;
-                magnitude = Math.Sqrt((x * x) + (y * y) + (z * z));
-            }
-        }
-        public double Z
-        {
-            get { return z; }
-            set
-            {
-                z = value;
-                magnitude = Math.Sqrt((x * x) + (y * y) + (z * z));
-            }
-        }
-
-        public double Magnitude
-        {
-            get
-            {
-                return (this is Plane ? Double.NaN : magnitude);
-            }
-        }
-    }
-
-    /// <summary>
-    /// Gives vector perpendicular to plane.
-    /// Should return in the format Xx + Yy + Zz + D = 0
-    /// </summary>
-    public class Plane : Vector3
-    {
-        public double D { get; set; } = 0.0;
     }
 }
