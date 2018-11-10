@@ -4,7 +4,6 @@
 #include "SerialControl.h"
 
 //#define ARM_DEMO
-#define JOINT_TEST
 
 bool ledStatus = false;
 long timer1 = 0;
@@ -46,8 +45,6 @@ void loop()
     Dynamixel.moveSpeed(SHOULDER_YAW, shoulderPos, 100);
   }
 #else
-#ifdef JOINT_TEST
   CheckAndHandleSerialInput();
-#endif
 #endif
 }

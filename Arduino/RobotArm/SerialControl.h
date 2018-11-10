@@ -3,6 +3,7 @@ bool isCurrentValueNegative = false;
 unsigned int elbowAngle = 0;
 int shoulderPitch = 0;
 int shoulderYaw = 0;
+int shoulderRoll = 0;
 
 enum MessageIndex
 {
@@ -94,7 +95,7 @@ void PrepareForNextJoint()
 //            {
 //                shoulderRoll = -shoulderRoll;
 //            }
-            currentMessageIndex = ElbowPitch;
+            currentMessageIndex = EndByte;
             break;
     }
 
@@ -118,8 +119,8 @@ void AssignToJointAngle(char* readByte)
             break;
     
         case ShoulderRoll:
-//            elbowAngle = elbowAngle * 10;
-//            elbowAngle = elbowAngle + (*readByte - 48);
+            shoulderRoll = shoulderRoll * 10;
+            shoulderRoll = shoulderRoll + (*readByte - 48);
             break;
     
         case ElbowPitch:
@@ -138,6 +139,7 @@ void TestShoulderAndElbow(char* readByte)
         isCurrentValueNegative = false;
         shoulderPitch = 0;
         shoulderYaw = 0;
+        shoulderRoll = 0;
         elbowAngle = 0;
         currentMessageIndex = StartByte;
     }
@@ -163,6 +165,7 @@ void TestShoulderAndElbow(char* readByte)
       
             SetShoulderYaw(&shoulderYaw);
             SetShoulderPitch(&shoulderPitch);
+            SetShoulderRoll(&shoulderRoll);
             SetElbowPitch(&elbowAngle);
             
             Serial.println();

@@ -7,8 +7,8 @@
 #define ID2_MAX 550
 
 #define SHOULDER_ROLL 3
-#define ID3_MIN 0   // Elbow contract
-#define ID3_MAX 250 // Elbow extend
+#define ID3_MIN 0
+#define ID3_MAX 600
 
 #define ELBOW_PITCH 4
 #define ID4_MIN 500

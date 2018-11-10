@@ -445,11 +445,6 @@ namespace KinectSkeletalTracking
 
                     BodiesList = tempListstring;
 
-                    if (tempListstring.Count > 0)
-                    {
-                        int i = 0;
-                    }
-
                     // prevent drawing outside of our render area
                     this.drawingGroup.ClipGeometry = new RectangleGeometry(new Rect(0.0, 0.0, this.displayWidth, this.displayHeight));
                 }
@@ -662,94 +657,44 @@ namespace KinectSkeletalTracking
             CameraSpacePoint pointForShoulderRight = joints[JointType.ShoulderRight].Position;
             CameraSpacePoint pointForShoulderleft = joints[JointType.ShoulderLeft].Position;
             CameraSpacePoint pointForElbow = joints[JointType.ElbowRight].Position;
+            CameraSpacePoint pointForWrist = joints[JointType.WristRight].Position;
 
-            // 2. Transform the origin.
-            CameraSpacePoint origin = pointForShoulderRight;
-            CameraSpacePoint transformedElbowPoint = new CameraSpacePoint()
-            {
-                X = pointForElbow.X - origin.X,
-                Y = pointForElbow.Y - origin.Y,
-                Z = pointForElbow.Z - origin.Z
-            };
-
-            // 2.5 Rotate axes to match plane
-            // TODO
-
-            // 2.5.1 Get the vectors from the shoulder to elbow (and later elbow to wrist) 
-            // with the origin at the shoulder.
-            Vector3 shoulderToElbowFromShoulder = GetVectorFromPoints(pointForShoulderRight, pointForElbow);
-
-            // 2.5.2 Get the Body Plane
+            // 2. Created necessary planes and vectors
             Plane bodyPlane = GetPlaneFromPoints(joints[JointType.ShoulderRight].Position, joints[JointType.Neck].Position, joints[JointType.SpineShoulder].Position);
-
-            // 2.5.3 Make right shoulder origin
-            CameraSpacePoint originOfShoulderOnBodyPlane = pointForShoulderRight;
-
-            // 2.5.4 Get elbow point wrt Body plane
-
-
-            // 3. Calculate the pitch and yaw of the elbow from the shoulder
-            double shoulderYaw1 = Math.Atan2(transformedElbowPoint.Z, transformedElbowPoint.X);
-            double magnitudeYaw = Math.Sqrt((transformedElbowPoint.X * transformedElbowPoint.X) + (transformedElbowPoint.Z * transformedElbowPoint.Z));
-            double shoulderPitch1 = Math.Atan2(transformedElbowPoint.Y, magnitudeYaw);
-
-
-            // Get cross-shoulder vector
-            Vector3 crossShoulderVector = GetVectorFromPoints(pointForShoulderRight, pointForShoulderleft);
-            // Get rotation angle around Y axis
-            CameraSpacePoint rotationOrigin = new CameraSpacePoint()
-            {
-                X = (float)crossShoulderVector.X / 2,
-                Y = 0,
-                Z = (float)crossShoulderVector.Z / 2
-            };
-            double shoulderOrientation = Math.Asin(rotationOrigin.Z / rotationOrigin.X);
-
-            // Get spine-neck vector
             Vector3 spineToNeck = new Vector3()
             {
                 X = bodyPlane.X,
                 Y = bodyPlane.Y,
                 Z = bodyPlane.Z
             };
-
-            // Get elbow-wrist vector
-            CameraSpacePoint pointForWrist = joints[JointType.WristRight].Position;
+            Vector3 crossShoulderVector = GetVectorFromPoints(pointForShoulderRight, pointForShoulderleft);
+            Vector3 shoulderToElbow = GetVectorFromPoints(pointForShoulderRight, pointForElbow);
+            Vector3 shoulderToWrist = GetVectorFromPoints(pointForShoulderRight, pointForWrist);
             Vector3 wristToElbow = GetVectorFromPoints(pointForElbow, pointForWrist);
 
-            // Get the angles (reference from the drawing)
-            const float a1 = 0.01f; // cm
-            const float a2 = 0.02f; // cm
-            const int alpha = 135; // degrees
-            const float a3 = 0.04f; // cm
-            double magnitude = Math.Sqrt((transformedElbowPoint.X * transformedElbowPoint.X) + (transformedElbowPoint.Z * transformedElbowPoint.Z));
-            double robotArmLength = a1 + a2 + a3;
-            // Kinect measures distance in metres. Convert to cm
-            double factor = robotArmLength / (magnitude);
-            Vector3 shoulderToElbow = new Vector3
-            {
-                X = transformedElbowPoint.X * factor,
-                Y = transformedElbowPoint.Y * factor,
-                Z = transformedElbowPoint.Z * factor
-            };
-
-            double theta2Y = (Math.Asin((shoulderToElbow.Y - (a2 * Math.Sin((180 - alpha) * Deg2Rad))) / a3) * Rad2Deg) - (180 - alpha);
-            double theta2Z = (Math.Acos((shoulderToElbow.Z - (a2 * Math.Cos((180 - alpha) * Deg2Rad)) - a1) / a3) * Rad2Deg) - (180 - alpha);
-            double theta2 = Math.Sin(shoulderOrientation) * theta2Z + Math.Cos(shoulderOrientation) * theta2Y;
-            double theta1 = Math.Acos(shoulderToElbow.X / ((a3 * Math.Cos(theta2 / Rad2Deg)) + (a2 * Math.Cos((alpha - 90) / Rad2Deg))));
-
+            // 3 Calculate the anngles of each degree of freedom, here
+            //   theta1 = shoulder yaw
+            //   theta2 = shoulder pitch
+            //   theta3 = shoulder roll
+            //   theta4 = elbow pitch
+            double theta1 = GetAngleFromSpineToElbow(ref spineToNeck, ref shoulderToElbow);
+            double theta2 = GetAngleFromCrossShoulderToElbow(ref crossShoulderVector, ref shoulderToElbow);
+            double theta3 = GetShoulderRoll(ref bodyPlane, ref shoulderToElbow, ref shoulderToWrist);
+            double theta4 = GetElbowAngle(ref shoulderToElbow, ref wristToElbow);
             
-            Angles.Text = String.Format("Shoulder {0}, {1}" + Environment.NewLine +
-                "Elbow {2}",
-                (int)(GetAngleFromSpineToElbow(spineToNeck, shoulderToElbowFromShoulder)), (int)(GetAngleFromCrossShoulderToElbow(ref crossShoulderVector, ref shoulderToElbowFromShoulder)),
-                (int)GetElbowAngle(ref shoulderToElbow, ref wristToElbow));
+            // 3.5 Display the angles on the screen
+            Angles.Text = String.Format("Shoulder {0}, {1}, {2}" + Environment.NewLine +
+                "Elbow {3}",
+                (int)(theta1), (int)(theta2), (int)(theta3),
+                (int)(theta4));
 
             // 4. Send this angle to motors
             SerialWrite(new double[] 
             {
-                GetAngleFromSpineToElbow(spineToNeck, shoulderToElbowFromShoulder),
-                GetAngleFromCrossShoulderToElbow(ref crossShoulderVector, ref shoulderToElbowFromShoulder),
-                GetElbowAngle(ref shoulderToElbow, ref wristToElbow)
+                theta1,
+                theta2,
+                theta3,
+                theta4
             });
         }
 
@@ -780,18 +725,60 @@ namespace KinectSkeletalTracking
 
         #region Math stuff
 
+        /// <summary>
+        /// Calculates the shoulder pitch
+        /// </summary>
         private double GetAngleFromCrossShoulderToElbow(ref Vector3 crossShoulder, ref Vector3 shoulderElbow)
         {
             return GetAngleBetweenVectors(crossShoulder, shoulderElbow) * Rad2Deg;
         }
 
 
-        private double GetAngleFromSpineToElbow(Vector3 spine, Vector3 shoulderElbow)
+        /// <summary>
+        /// Calculates the shoulder yaw.
+        /// </summary>
+        private double GetAngleFromSpineToElbow(ref Vector3 spine, ref Vector3 shoulderElbow)
         {
             return GetAngleBetweenVectors(spine, shoulderElbow) * Rad2Deg;
         }
 
 
+        /// <summary>
+        /// Calculates the shoulder roll.
+        /// </summary>
+        private double GetShoulderRoll(ref Plane body, ref Vector3 shoulderToElbow, ref Vector3 elbowToWrist)
+        {
+            // 1. Get shoulder-elbow-wrist plane
+            Plane armPlane = GetPlaneFromVectors(new Vector3[]
+            {
+                shoulderToElbow * -1,
+                elbowToWrist
+            });
+
+            // 2. Get orthogonal vector of Body plane
+            Vector3 bodyOrthogonal = new Vector3
+            {
+                X = body.X,
+                Y = body.Y,
+                Z = body.Z
+            };
+
+            // 3. Get elbow-shoulder / elbow-wrist orthogonal vector
+            Vector3 armOrthogonal = new Vector3
+            {
+                X = armPlane.X,
+                Y = armPlane.Y,
+                Z = armPlane.Z
+            };
+
+            // 4. Calculate angle between orthogonal vector of Body and orthogonal vector of Arm
+            return GetAngleBetweenVectors(bodyOrthogonal, armOrthogonal) * Rad2Deg;
+        }
+
+
+        /// <summary>
+        /// Calculates the elbow angle.
+        /// </summary>
         private double GetElbowAngle(ref Vector3 shoulderToElbow, ref Vector3 wristToElbow)
         {
             return GetAngleBetweenVectors(shoulderToElbow, wristToElbow) * Rad2Deg;
@@ -820,22 +807,7 @@ namespace KinectSkeletalTracking
 
         private double GetAngleBetweenVectors(Vector3 u, Vector3 v)
         {
-            // Do dot product
-            double dotProductResult =
-                (u.X * v.X) +
-                (u.Y * v.Y) +
-                (u.Z * v.Z);
-
-            // Magnitude of u
-            double magnitudeOfU = Math.Sqrt((u.X * u.X) + (u.Y * u.Y) + (u.Z * u.Z));
-
-            // Magnitude of v
-            double magnitudeOfV = Math.Sqrt((v.X * v.X) + (v.Y * v.Y) + (v.Z * v.Z));
-
-            // arccose of [dot] / (||u|| * ||v||)
-            double angle = Math.Acos(dotProductResult / (magnitudeOfU * magnitudeOfV));
-
-            return angle;
+            return Vector3.GetAngleBetweenVectors(u, v);
         }
 
 
@@ -856,12 +828,7 @@ namespace KinectSkeletalTracking
             Vector3 AC = GetVectorFromPoints(A, C);
 
             // Do the cross product
-            Vector3 normal = new Vector3
-            {
-                X = (AB.Y * AC.Z) - (AB.Z * AC.Y),
-                Y = (AB.X * AC.Z) - (AB.Z * AC.X),
-                Z = (AB.X * AC.Y) - (AB.Y * AC.X),
-            };
+            Vector3 normal = AB.Cross(AC);
 
             // Return the normal with the ammended D value. This is the Plane equation.
             return new Plane
@@ -870,6 +837,32 @@ namespace KinectSkeletalTracking
                 Y = normal.Y,
                 Z = normal.Z,
                 D = -((normal.X * (-A.X)) + (normal.Y * (-A.Y)) + (normal.Z * (-A.Z)))
+            };
+        }
+
+
+        private Plane GetPlaneFromVectors(params Vector3[] vectors)
+        {
+            // minimum 2 vectors are required
+            if (vectors.Length < 2)
+            {
+                return null;
+            }
+
+            // Only 2 vectors are needed to make a plane
+            Vector3 u = vectors[0];
+            Vector3 v = vectors[1];
+
+            // Do the cross product
+            Vector3 orthogonal = u.Cross(v);
+
+            // Return the normal with the ammended D value. This is the Plane equation.
+            return new Plane
+            {
+                X = orthogonal.X,
+                Y = orthogonal.Y,
+                Z = orthogonal.Z,
+                D = -((orthogonal.X * (-u.X)) + (orthogonal.Y * (-u.Y)) + (orthogonal.Z * (-u.Z)))
             };
         }
 

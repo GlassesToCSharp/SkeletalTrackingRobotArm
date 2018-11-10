@@ -55,6 +55,20 @@ void SetShoulderYaw(const int* shoulderYaw)
     MoveToAngle(SHOULDER_YAW, dynamixelPosition);
 }
 
+void SetShoulderRoll(const int* shoulderRoll)
+{
+    uint16_t dynamixelPosition = map(*shoulderRoll, 0, 180, ID3_MIN, ID3_MAX);
+    if (dynamixelPosition > ID3_MAX)
+    {
+        dynamixelPosition = ID3_MAX;
+    }
+    else if (dynamixelPosition < ID3_MIN)
+    {
+        dynamixelPosition = ID3_MIN;
+    }
+    MoveToAngle(SHOULDER_ROLL, dynamixelPosition);
+}
+
 void SetElbowPitch(const int* elbowPitch)
 {
     uint16_t dynamixelPosition = map(*elbowPitch, 150, 0, ID4_MIN, ID4_MAX);
