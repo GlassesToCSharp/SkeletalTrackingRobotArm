@@ -1,18 +1,22 @@
 #define SHOULDER_YAW 1
-#define ID1_MIN 200 // Shoulder pull back
-#define ID1_MAX 700 // Shoulder push up
+#define ID1_MIN 000 // Shoulder pull back
+#define ID1_MAX 500 // Shoulder push up
+#define ID1_NAT 200
 
 #define SHOULDER_PITCH 2
-#define ID2_MIN 250 
-#define ID2_MAX 550
+#define ID2_MIN 000 
+#define ID2_MAX 340
+#define ID2_NAT 040
 
 #define SHOULDER_ROLL 3
-#define ID3_MIN 0
-#define ID3_MAX 600
+#define ID3_MIN 212
+#define ID3_MAX 812
+#define ID3_NAT 512
 
 #define ELBOW_PITCH 4
-#define ID4_MIN 500
-#define ID4_MAX 900
+#define ID4_MIN 650
+#define ID4_MAX 1023
+#define ID4_NAT 1023
 
 const char separator = ',';
 const char startByte = 'S';

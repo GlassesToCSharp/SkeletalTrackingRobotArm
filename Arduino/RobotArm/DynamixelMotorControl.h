@@ -1,4 +1,5 @@
 
+extern void ResetDynamixelSerial();
 extern void DynamixelInit();
 extern void SetShoulderYaw(const int* shoulderYaw);
 extern void SetShoulderPitch(const int* shoulderPitch);

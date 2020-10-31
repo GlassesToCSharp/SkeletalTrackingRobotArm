@@ -1,19 +1,36 @@
 #include <Arduino.h>
 #include "Constants.h"
 #include "DynamixelMotorControl.h"
-#include <DynamixelSoftSerial.h>
+#include <DynamixelSerial.h>
+#include <SoftwareSerial.h>
 #include <stdint.h>
+
+#define SERIAL_RX 3
+#define SERIAL_TX 4
+
+SoftwareSerial mySerial(SERIAL_RX, SERIAL_TX);
 
 void MoveToAngle(uint8_t id, uint16_t angle)
 {
     Dynamixel.moveSpeed(id, angle, motorSpeed);
 }
 
+void ResetDynamixelSerial()
+{
+    if (Serial)
+    {
+        Serial.end();
+    }
+  
+    Dynamixel.setSerial(&Serial);
+    Dynamixel.begin(1000000, 4);
+
+    while(!Serial);
+}
+
 void DynamixelInit()
 {
-    // Rx - 2, Tx - 3
-//    Dynamixel.begin(1000000, 2, 3, 4); // 1000000 works for rx-64
-    Dynamixel.begin(1000000, 2, 3, 4); 
+    ResetDynamixelSerial();
     
 //    Dynamixel.setTempLimit(254,80);         // Set Max Temperature to 80 Celcius
 //    Dynamixel.setVoltageLimit(254,65,160);  // Set Operating Voltage from 6.5v to 16v
@@ -21,10 +38,10 @@ void DynamixelInit()
 //    Dynamixel.setSRL(254,2);                // Set the SRL to Return All
   
     // Set the initial position
-    MoveToAngle(SHOULDER_YAW, 400);
-    MoveToAngle(SHOULDER_PITCH, 250);
-    MoveToAngle(SHOULDER_ROLL, 200);
-    MoveToAngle(ELBOW_PITCH, 750);
+    MoveToAngle(SHOULDER_YAW, ID1_NAT);
+    MoveToAngle(SHOULDER_PITCH, ID2_NAT);
+    MoveToAngle(SHOULDER_ROLL, ID3_NAT);
+    MoveToAngle(ELBOW_PITCH, ID4_NAT);
 }
 
 void SetShoulderPitch(const int* shoulderPitch)
@@ -82,5 +99,3 @@ void SetElbowPitch(const int* elbowPitch)
     }
     MoveToAngle(ELBOW_PITCH, dynamixelPosition);
 }
-
-

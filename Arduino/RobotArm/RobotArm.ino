@@ -1,6 +1,6 @@
 #include "Constants.h"
 #include "DynamixelMotorControl.h"
-#include <DynamixelSoftSerial.h>
+#include <DynamixelSerial.h>
 #include "SerialControl.h"
 
 //#define ARM_DEMO
