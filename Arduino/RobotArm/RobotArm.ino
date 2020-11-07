@@ -16,6 +16,8 @@ void setup()
   DynamixelInit();
   delay(1000);
   
+  RequestData();
+  
   timer1  = millis();
   timer2 = timer1;
 }
@@ -45,6 +47,10 @@ void loop()
     Dynamixel.moveSpeed(SHOULDER_YAW, shoulderPos, 100);
   }
 #else
+  if (GetTimeSinceLastRequest() > 1000) {
+    RequestData();
+  }
+
   CheckAndHandleSerialInput();
 #endif
 }

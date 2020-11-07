@@ -715,7 +715,7 @@ namespace KinectSkeletalTracking
                 dataToSend += (int)(angle) + ",";
             }
 
-            if (SendToMotors)
+            if (SendToMotors && SerialInterface.Instance.CanWrite)
             {
                 SerialInterface.Instance.Write(String.Format(SerialDataFormat, dataToSend));
             }

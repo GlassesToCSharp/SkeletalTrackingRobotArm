@@ -11,6 +11,7 @@ namespace KinectSkeletalTracking
     {
         private SerialPort port = null;
         private Action<byte[]> onDataReceivedHandler = null;
+        private bool incomingStreamStarted = false;
 
 
         // Singleton Implementation
@@ -31,6 +32,8 @@ namespace KinectSkeletalTracking
             }
         }
 
+        public bool CanWrite { get; private set; } = false;
+
 
         private SerialInterface() { }
 
@@ -41,7 +44,7 @@ namespace KinectSkeletalTracking
 
         public void Init()
         {
-            Init(3);
+            Init(10);
         }
 
         public void Init(int comPort)
@@ -65,7 +68,30 @@ namespace KinectSkeletalTracking
             onDataReceivedHandler?.Invoke(receivedDataBytes);
 
             // Show all the incoming data in the port's buffer
-            System.Diagnostics.Debug.WriteLine(port.ReadExisting());
+            //System.Diagnostics.Debug.WriteLine(port.ReadExisting());
+            System.Diagnostics.Debug.WriteLine(Encoding.ASCII.GetString(receivedDataBytes));
+
+            // Check to set flag to write-able
+            foreach(byte dataByte in receivedDataBytes)
+            {
+                switch (dataByte)
+                {
+                    case (byte)'S':
+                        incomingStreamStarted = true;
+                        break;
+
+                    case (byte)'R':
+                        if (incomingStreamStarted)
+                        {
+                            CanWrite = true;
+                        }
+                        break;
+
+                    default:
+                        incomingStreamStarted = false;
+                        break;
+                }
+            }
         }
 
         public void Write(string stream)
@@ -82,6 +108,8 @@ namespace KinectSkeletalTracking
             System.Diagnostics.Debug.WriteLine($"Sending data: {stream}");
 
             port.Write(stream);
+
+            CanWrite = false;
         }
     }
 }

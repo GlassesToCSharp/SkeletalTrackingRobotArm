@@ -1,9 +1,16 @@
+#ifndef SERIAL_CONTROL_H
+#define SERIAL_CONTROL_H
+
+#include "Constants.h"
+
 bool hasStartMessageBeenReceived = false;
 bool isCurrentValueNegative = false;
 int elbowAngle = 0;
 int shoulderPitch = 0;
 int shoulderYaw = 0;
 int shoulderRoll = 0;
+
+long requestTimer = 0;
 
 enum MessageIndex
 {
@@ -23,6 +30,15 @@ void FlushReceiveBuffer();
 void TestShoulderAndElbow(char* readByte);
 void TestElbowPitch(char* readByte);
 void TestShoulderPitch(char* readByte);
+
+void RequestData()
+{
+  Serial.write(startByte);
+  Serial.write('R');
+  Serial.write(endByte);
+
+  requestTimer = millis();
+}
 
 void SerialInit()
 {
@@ -45,11 +61,11 @@ void FlushReceiveBuffer()
 
 void CheckAndHandleSerialInput()
 {
-  while (Serial.available())
+  while (Serial.available() > 0)
   {
     char readByte = Serial.read();
-//    TestElbowPitch(&readByte);
-//    TestShoulderPitch(&readByte);
+    //    TestElbowPitch(&readByte);
+    //    TestShoulderPitch(&readByte);
     TestShoulderAndElbow(&readByte);
   }
 }
@@ -76,7 +92,7 @@ void PrepareForNextJoint()
       {
         shoulderPitch = -shoulderPitch;
       }
-      currentMessageIndex = ElbowPitch; // CHANGE TO SHOULDER ROLL
+      currentMessageIndex = ShoulderRoll; // CHANGE TO SHOULDER ROLL
       break;
 
     case ShoulderRoll:
@@ -127,6 +143,11 @@ void AssignToJointAngle(char* readByte)
   }
 }
 
+long GetTimeSinceLastRequest()
+{
+  return millis() - requestTimer;
+}
+
 
 void TestShoulderAndElbow(char* readByte)
 {
@@ -152,25 +173,13 @@ void TestShoulderAndElbow(char* readByte)
     }
     else if (*readByte == endByte)
     {
-      // Send angles
-      Serial.print("Yaw S: ");
-      Serial.print(shoulderYaw);
-      Serial.print("\tPitch S: ");
-      Serial.print(shoulderPitch);
-      Serial.print("\tElbow S: ");
-      Serial.print(elbowAngle);
-
-      // Set the serial to send data to motors
-      ResetDynamixelSerial();
-      
+      // Move servos to position.
       SetShoulderYaw(&shoulderYaw);
       SetShoulderPitch(&shoulderPitch);
       SetShoulderRoll(&shoulderRoll);
       SetElbowPitch(&elbowAngle);
-
-      // Set it back to USB
-      SerialInit();
-
+      
+      RequestData();
       Serial.println();
     }
     else
@@ -222,3 +231,5 @@ void TestShoulderPitch(char* readByte)
     shoulderPitch = shoulderPitch + (*readByte - 48);
   }
 }
+
+#endif

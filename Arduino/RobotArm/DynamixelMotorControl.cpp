@@ -2,13 +2,7 @@
 #include "Constants.h"
 #include "DynamixelMotorControl.h"
 #include <DynamixelSerial.h>
-#include <SoftwareSerial.h>
 #include <stdint.h>
-
-#define SERIAL_RX 3
-#define SERIAL_TX 4
-
-SoftwareSerial mySerial(SERIAL_RX, SERIAL_TX);
 
 void MoveToAngle(uint8_t id, uint16_t angle)
 {
@@ -17,15 +11,8 @@ void MoveToAngle(uint8_t id, uint16_t angle)
 
 void ResetDynamixelSerial()
 {
-    if (Serial)
-    {
-        Serial.end();
-    }
-  
-    Dynamixel.setSerial(&Serial);
-    Dynamixel.begin(1000000, 4);
-
-    while(!Serial);
+    Dynamixel.setSerial(&Serial2);
+    Dynamixel.begin(1000000, 15);
 }
 
 void DynamixelInit()
@@ -44,23 +31,9 @@ void DynamixelInit()
     MoveToAngle(ELBOW_PITCH, ID4_NAT);
 }
 
-void SetShoulderPitch(const int* shoulderPitch)
-{
-    uint16_t dynamixelPosition = map(*shoulderPitch, 90, 180, ID2_MIN, ID2_MAX);
-    if (dynamixelPosition > ID2_MAX)
-    {
-        dynamixelPosition = ID2_MAX;
-    }
-    else if (dynamixelPosition < ID2_MIN)
-    {
-        dynamixelPosition = ID2_MIN;
-    }
-    MoveToAngle(SHOULDER_PITCH, dynamixelPosition);
-}
-
 void SetShoulderYaw(const int* shoulderYaw)
 {
-    uint16_t dynamixelPosition = map(*shoulderYaw, 70, 180, ID1_MIN, ID1_MAX);
+    int16_t dynamixelPosition = map(*shoulderYaw, 70, 180, ID1_MIN, ID1_MAX);
     if (dynamixelPosition > ID1_MAX)
     {
         dynamixelPosition = ID1_MAX;
@@ -69,12 +42,34 @@ void SetShoulderYaw(const int* shoulderYaw)
     {
         dynamixelPosition = ID1_MIN;
     }
+    
+    char buff[30];
+    sprintf(buff, "Shoulder Yaw: %d | %d", *shoulderYaw, dynamixelPosition);
+    Serial.print(buff);
     MoveToAngle(SHOULDER_YAW, dynamixelPosition);
+}
+
+void SetShoulderPitch(const int* shoulderPitch)
+{
+    int16_t dynamixelPosition = map(*shoulderPitch, 90, 180, ID2_MIN, ID2_MAX);
+    if (dynamixelPosition > ID2_MAX)
+    {
+        dynamixelPosition = ID2_MAX;
+    }
+    else if (dynamixelPosition < ID2_MIN)
+    {
+        dynamixelPosition = ID2_MIN;
+    }
+    
+    char buff[40];
+    sprintf(buff, "Shoulder Pitch: %d | %d", *shoulderPitch, dynamixelPosition);
+    Serial.print(buff);
+    MoveToAngle(SHOULDER_PITCH, dynamixelPosition);
 }
 
 void SetShoulderRoll(const int* shoulderRoll)
 {
-    uint16_t dynamixelPosition = map(*shoulderRoll, 0, 180, ID3_MIN, ID3_MAX);
+    int16_t dynamixelPosition = map(*shoulderRoll, 0, 180, ID3_MIN, ID3_MAX);
     if (dynamixelPosition > ID3_MAX)
     {
         dynamixelPosition = ID3_MAX;
@@ -83,12 +78,16 @@ void SetShoulderRoll(const int* shoulderRoll)
     {
         dynamixelPosition = ID3_MIN;
     }
+    
+    char buff[40];
+    sprintf(buff, "Shoulder Roll: %d | %d", *shoulderRoll, dynamixelPosition);
+    Serial.print(buff);
     MoveToAngle(SHOULDER_ROLL, dynamixelPosition);
 }
 
 void SetElbowPitch(const int* elbowPitch)
 {
-    uint16_t dynamixelPosition = map(*elbowPitch, 150, 0, ID4_MIN, ID4_MAX);
+    int16_t dynamixelPosition = map(*elbowPitch, 150, 0, ID4_MIN, ID4_MAX);
     if (dynamixelPosition > ID4_MAX)
     {
         dynamixelPosition = ID4_MAX;
@@ -97,5 +96,9 @@ void SetElbowPitch(const int* elbowPitch)
     {
         dynamixelPosition = ID4_MIN;
     }
+    
+    char buff[40];
+    sprintf(buff, "Elbow Pitch: %d | %d", *elbowPitch, dynamixelPosition);
+    Serial.print(buff);
     MoveToAngle(ELBOW_PITCH, dynamixelPosition);
 }

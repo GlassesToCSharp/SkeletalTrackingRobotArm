@@ -1,10 +1,13 @@
+#ifndef CONSTANTS_H
+#define CONSTANTS_H
+//S,82,159,87,97,E
 #define SHOULDER_YAW 1
-#define ID1_MIN 000 // Shoulder pull back
-#define ID1_MAX 500 // Shoulder push up
+#define ID1_MIN 100 // Shoulder pull back
+#define ID1_MAX 600 // Shoulder push up
 #define ID1_NAT 200
 
 #define SHOULDER_PITCH 2
-#define ID2_MIN 000 
+#define ID2_MIN 040 
 #define ID2_MAX 340
 #define ID2_NAT 040
 
@@ -23,3 +26,5 @@ const char startByte = 'S';
 const char endByte = 'E';
 
 const uint16_t motorSpeed = 100;
+
+#endif
