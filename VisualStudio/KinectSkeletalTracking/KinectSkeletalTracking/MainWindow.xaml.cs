@@ -689,13 +689,13 @@ namespace KinectSkeletalTracking
                 (int)(theta4));
 
             // 4. Send this angle to motors
-            SerialWrite(new double[] 
+            SerialWrite(FilterAngles(new double[] 
             {
                 theta1,
                 theta2,
                 theta3,
                 theta4
-            });
+            }));
         }
 
         #endregion
@@ -864,6 +864,62 @@ namespace KinectSkeletalTracking
                 Z = orthogonal.Z,
                 D = -((orthogonal.X * (-u.X)) + (orthogonal.Y * (-u.Y)) + (orthogonal.Z * (-u.Z)))
             };
+        }
+
+        #endregion
+
+        #region Filtering
+
+        private const byte averageSpan = 5;
+        private const byte columns = 4;
+        private double[,] recentAngles;
+        /// <summary>
+        /// Applies a moving average filter to the angles. The new values are
+        /// averaged with the previous 4 (four), giving an overall average
+        /// across 5 (five) values.
+        /// </summary>
+        /// <param name="angles"></param>
+        /// <returns></returns>
+        double[] FilterAngles(double[] angles)
+        {
+            if (recentAngles == null)
+            {
+                recentAngles = new double[averageSpan, columns]; // 4 angle values for now.
+                for (byte i = 0; i < averageSpan; i++)
+                {
+                    for (byte j = 0; j < columns; j++)
+                    {
+                        recentAngles[i,j] = angles[j];
+                    }
+                    
+                }
+                // The average of all the same angles is going to be the
+                // assigned angles.
+                return angles;
+            }
+
+            // Get the average of the angles
+            double[] averagedAngles = new double[columns];
+            for (byte i = 0; i < columns; i++)
+            {
+                double sum = 0;
+                // For calulating the average, we are not interested in the
+                // oldest value. We will need to add the new values instead.
+                for (byte j = 1; j < averageSpan; j++)
+                {
+                    double currentValue = recentAngles[j, i];
+                    sum += currentValue;
+
+                    recentAngles[j - 1, i] = currentValue;
+                }
+
+                recentAngles[averageSpan - 1, i] = angles[i];
+                sum += angles[i];
+
+                averagedAngles[i] = sum / averageSpan;
+            }
+            System.Diagnostics.Debug.WriteLine(String.Format("Averaged Angles: {0}, {1}, {2}, {3}", averagedAngles[0], averagedAngles[1], averagedAngles[2], averagedAngles[3]));
+            return averagedAngles;
         }
 
         #endregion
