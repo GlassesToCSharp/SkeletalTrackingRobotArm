@@ -918,7 +918,7 @@ namespace KinectSkeletalTracking
 
                 averagedAngles[i] = sum / averageSpan;
             }
-            System.Diagnostics.Debug.WriteLine(String.Format("Averaged Angles: {0}, {1}, {2}, {3}", averagedAngles[0], averagedAngles[1], averagedAngles[2], averagedAngles[3]));
+            //System.Diagnostics.Debug.WriteLine(String.Format("Averaged Angles: {0}, {1}, {2}, {3}", averagedAngles[0], averagedAngles[1], averagedAngles[2], averagedAngles[3]));
             return averagedAngles;
         }
 

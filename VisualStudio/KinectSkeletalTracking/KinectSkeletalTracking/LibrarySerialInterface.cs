@@ -105,7 +105,7 @@ namespace KinectSkeletalTracking
                 ThrowNewException("Port is not open.");
             }
 
-            System.Diagnostics.Debug.WriteLine($"Sending data: {stream}");
+            //System.Diagnostics.Debug.WriteLine($"Sending data: {stream}");
 
             port.Write(stream);
 

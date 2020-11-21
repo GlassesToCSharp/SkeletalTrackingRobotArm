@@ -25,6 +25,6 @@ const char separator = ',';
 const char startByte = 'S';
 const char endByte = 'E';
 
-const uint16_t motorSpeed = 100;
+const uint16_t defaultMotorSpeed = 100;
 
 #endif

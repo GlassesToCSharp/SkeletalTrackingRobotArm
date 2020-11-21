@@ -7,5 +7,6 @@ extern void SetShoulderYaw(const int* shoulderYaw);
 extern void SetShoulderPitch(const int* shoulderPitch);
 extern void SetShoulderRoll(const int* shoulderRoll);
 extern void SetElbowPitch(const int* elbowPitch);
+extern void MoveToAngle(uint8_t id, uint16_t angle, bool setTimerCount = true);
 
 #endif

@@ -34,18 +34,32 @@ void loop()
 //  }
 
 #ifdef ARM_DEMO
-  if(millis() - timer2 > 3000)
+
+#define ANGLE_DIFF  10
+#define TIME_DIFF  100
+  if(millis() - timer2 > TIME_DIFF)
   {
+    static int shoulderPos = ID1_MIN;
+    static int elbowPos = ID4_MIN;
     timer2 = millis();
-    int shoulderPos = random(ID1_MIN, 3 * ID1_MAX / 4);
-    Serial.print("\tShoulder Z: ");
-    Serial.print(shoulderPos);
-    int elbowPos = random(ID4_MIN, ID4_MAX);
-    Serial.print("\t\tElbow Z: ");
-    Serial.println(elbowPos);
-    Dynamixel.moveSpeed(ELBOW_PITCH, elbowPos, 100);
-    Dynamixel.moveSpeed(SHOULDER_YAW, shoulderPos, 100);
+//    int shoulderPos = random(ID1_MIN, ID1_MAX);
+//    Serial.print("\tShoulder Z: ");
+//    Serial.print(shoulderPos);
+//    int elbowPos = random(ID4_MIN, ID4_MAX);
+//    Serial.print("\t\tElbow Z: ");
+//    Serial.println(elbowPos);
+//    Dynamixel.moveSpeed(SHOULDER_YAW, shoulderPos, 100);
+//    Dynamixel.moveSpeed(ELBOW_PITCH, elbowPos, 100);
+    MoveToAngle(SHOULDER_YAW, shoulderPos);
+    MoveToAngle(ELBOW_PITCH, elbowPos);
+
+    Serial.println();
+
+    shoulderPos += ANGLE_DIFF;
+    elbowPos++;
   }
+#undef ANGLE_DIFF
+#undef TIME_DIFF
 #else
   if (GetTimeSinceLastRequest() > 1000) {
     RequestData();
