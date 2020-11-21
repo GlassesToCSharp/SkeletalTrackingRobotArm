@@ -180,7 +180,6 @@ void TestShoulderAndElbow(char* readByte)
       SetElbowPitch(&elbowAngle);
       
       RequestData();
-      Serial.println();
     }
     else
     {

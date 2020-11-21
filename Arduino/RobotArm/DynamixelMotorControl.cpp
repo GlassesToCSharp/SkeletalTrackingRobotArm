@@ -4,66 +4,8 @@
 #include <DynamixelSerial.h>
 #include <stdint.h>
 
-typedef struct {
-//  uint8_t id;
-  uint32_t lastServoAngle;
-  uint32_t timeAngleSet;
-} ServoConfiguration;
-
-ServoConfiguration servoConfigurations[5];
-
 void MoveToAngle(uint8_t id, uint16_t inputAngle, bool setTimerCount = true)
 {
-//    uint32_t timerCount = 0;
-//    ServoConfiguration * currentConf = &servoConfigurations[id];
-//    int16_t motorSpeed = defaultMotorSpeed;
-//    char buff[100];
-//
-//    // If we have a time since last positioning, we need to calculate
-//    // how fast to move the servo to the new position.
-//    if (currentConf->timeAngleSet != 0)
-//    {
-//        uint32_t timeDiff = millis() - currentConf->timeAngleSet;
-//        uint16_t angleDiff = abs(int16_t(currentConf->lastServoAngle - inputAngle));
-//        // The RX-28 servos can reach speeds of 85rpm (at 18.5V, no load).
-//        // Only 12V is supplied, so it is expected that this would make the
-//        // servos slower. For the calculations, we'll use the given speed.
-//        // 85rpm = 1.4rps = 510deg/s = 0.510deg/ms
-//        // RX-28 operating range of 300 deg means to go from 0 to 300 should
-//        // take 588ms. The value ranges for RX-28 speed control is 0-1023,
-//        // which is the range expected for "angleDiff" (the angle parameter
-//        // is already in the 0-1023 range). 
-//        // Therefore, the fastest speed to go from 0 to 1023 is 1023/588=1.740
-//        // (units per ms?). We can use the "map" function to determine the
-//        // values in between.
-//        uint16_t division = uint16_t((double(angleDiff) / timeDiff) * 1000);
-//        motorSpeed = map(division, 0, 1740, 0, 1023);
-////        sprintf(buff, "AngleDiff: %u, TimeDiff: %lu, Div: %lu\n", angleDiff, timeDiff, division);
-////        Serial.print(buff);
-////        sprintf(buff, "CurrentConf timet: %lu, angle: %u\n", currentConf->timeAngleSet, currentConf->lastServoAngle);
-////        Serial.print(buff);
-//        if (motorSpeed > 1023)
-//        {
-//            motorSpeed = 1023;
-//        }
-//        else if (motorSpeed < 0)
-//        {
-//            motorSpeed = 0;
-//        }
-//    }
-//    
-//    if (setTimerCount)
-//    {
-//        timerCount = millis();
-//    }
-//    
-////    sprintf(buff, "About to set timerCount: %lu, motorSpeed: %u", timerCount, motorSpeed);
-////    Serial.println(buff);
-////    sprintf(buff, "SET \t ID: %d\tAngle: %u\tTime: %lu", id, inputAngle, timerCount);
-////    Serial.println(buff);
-//    
-//    currentConf->lastServoAngle = inputAngle;
-//    currentConf->timeAngleSet = timerCount;
     Dynamixel.moveSpeed(id, inputAngle, defaultMotorSpeed);
 }
 
@@ -101,9 +43,6 @@ void SetShoulderYaw(const int* shoulderYaw)
         dynamixelPosition = ID1_MIN;
     }
     
-//    char buff[30];
-//    sprintf(buff, "Shoulder Yaw: %d | %d", *shoulderYaw, dynamixelPosition);
-//    Serial.print(buff);
     MoveToAngle(SHOULDER_YAW, dynamixelPosition);
 }
 
@@ -119,9 +58,6 @@ void SetShoulderPitch(const int* shoulderPitch)
         dynamixelPosition = ID2_MIN;
     }
     
-//    char buff[40];
-//    sprintf(buff, "Shoulder Pitch: %d | %d", *shoulderPitch, dynamixelPosition);
-//    Serial.print(buff);
     MoveToAngle(SHOULDER_PITCH, dynamixelPosition);
 }
 
@@ -137,9 +73,6 @@ void SetShoulderRoll(const int* shoulderRoll)
         dynamixelPosition = ID3_MIN;
     }
     
-//    char buff[40];
-//    sprintf(buff, "Shoulder Roll: %d | %d", *shoulderRoll, dynamixelPosition);
-//    Serial.print(buff);
     MoveToAngle(SHOULDER_ROLL, dynamixelPosition);
 }
 
@@ -155,8 +88,5 @@ void SetElbowPitch(const int* elbowPitch)
         dynamixelPosition = ID4_MIN;
     }
     
-//    char buff[40];
-//    sprintf(buff, "Elbow Pitch: %d | %d", *elbowPitch, dynamixelPosition);
-//    Serial.print(buff);
     MoveToAngle(ELBOW_PITCH, dynamixelPosition);
 }
