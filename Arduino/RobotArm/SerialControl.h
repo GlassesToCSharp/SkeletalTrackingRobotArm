@@ -27,9 +27,7 @@ MessageIndex currentMessageIndex = EndByte; // Expecting a start byte
 /* ---------------------------- */
 
 void FlushReceiveBuffer();
-void TestShoulderAndElbow(char* readByte);
-void TestElbowPitch(char* readByte);
-void TestShoulderPitch(char* readByte);
+void ProcessIncomingByte(char* readByte);
 
 void RequestData()
 {
@@ -64,9 +62,7 @@ void CheckAndHandleSerialInput()
   while (Serial.available() > 0)
   {
     char readByte = Serial.read();
-    //    TestElbowPitch(&readByte);
-    //    TestShoulderPitch(&readByte);
-    TestShoulderAndElbow(&readByte);
+    ProcessIncomingByte(&readByte);
   }
 }
 
@@ -92,7 +88,7 @@ void PrepareForNextJoint()
       {
         shoulderPitch = -shoulderPitch;
       }
-      currentMessageIndex = ShoulderRoll; // CHANGE TO SHOULDER ROLL
+      currentMessageIndex = ShoulderRoll;
       break;
 
     case ShoulderRoll:
@@ -149,7 +145,7 @@ long GetTimeSinceLastRequest()
 }
 
 
-void TestShoulderAndElbow(char* readByte)
+void ProcessIncomingByte(char* readByte)
 {
   if (*readByte == startByte)
   {
@@ -185,49 +181,6 @@ void TestShoulderAndElbow(char* readByte)
     {
       AssignToJointAngle(readByte);
     }
-  }
-}
-
-
-void TestElbowPitch(char* readByte)
-{
-  if  (*readByte == startByte)
-  {
-    hasStartMessageBeenReceived = true;
-    elbowAngle = 0;
-  }
-  else if (*readByte == endByte)
-  {
-    hasStartMessageBeenReceived = false;
-    SetElbowPitch(&elbowAngle);
-    Serial.println(elbowAngle);
-  }
-  else if (hasStartMessageBeenReceived)
-  {
-    elbowAngle = elbowAngle * 10;
-    elbowAngle = elbowAngle + (*readByte - 48);
-  }
-}
-
-
-void TestShoulderPitch(char* readByte)
-{
-  Serial.print("|"); Serial.print(*readByte);
-  if (*readByte == startByte)
-  {
-    hasStartMessageBeenReceived = true;
-    shoulderPitch = 0;
-  }
-  else if (*readByte == endByte)
-  {
-    hasStartMessageBeenReceived = false;
-    SetShoulderPitch(&shoulderPitch);
-    Serial.println(shoulderPitch);
-  }
-  else if (hasStartMessageBeenReceived)
-  {
-    shoulderPitch = shoulderPitch * 10;
-    shoulderPitch = shoulderPitch + (*readByte - 48);
   }
 }
 
