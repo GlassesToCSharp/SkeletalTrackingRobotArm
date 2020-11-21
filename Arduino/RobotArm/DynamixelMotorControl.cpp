@@ -23,6 +23,10 @@ void DynamixelInit()
 //    Dynamixel.setVoltageLimit(254,65,160);  // Set Operating Voltage from 6.5v to 16v
 //    Dynamixel.setMaxTorque(254,512);        // 50% of Torque
 //    Dynamixel.setSRL(254,2);                // Set the SRL to Return All
+
+    Dynamixel.setCMargin(254, 0, 0);
+    Dynamixel.setCSlope(254, 50, 50);
+    Dynamixel.setPunch(254, 0);
   
     // Set the initial position
     MoveToAngle(SHOULDER_YAW, ID1_NAT);
