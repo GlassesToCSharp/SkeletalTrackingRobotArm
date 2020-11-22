@@ -26,7 +26,7 @@ namespace KinectSkeletalTracking
         private const bool SendToMotors = true;
 
         private const double Rad2Deg = 180 / Math.PI;
-        private const double Deg2Rad = Math.PI / 180;
+        //private const double Deg2Rad = Math.PI / 180;
 
         private const string SerialDataFormat = "S{0}E";
 
@@ -83,12 +83,12 @@ namespace KinectSkeletalTracking
         /// <summary>
         /// Drawing group for body rendering output
         /// </summary>
-        private DrawingGroup drawingGroup;
+        private readonly DrawingGroup drawingGroup;
 
         /// <summary>
         /// Drawing image that we will display
         /// </summary>
-        private DrawingImage imageSource;
+        private readonly DrawingImage imageSource;
 
         /// <summary>
         /// Active Kinect sensor
@@ -98,7 +98,7 @@ namespace KinectSkeletalTracking
         /// <summary>
         /// Coordinate mapper to map one type of point to another
         /// </summary>
-        private CoordinateMapper coordinateMapper = null;
+        private readonly CoordinateMapper coordinateMapper = null;
 
         /// <summary>
         /// Reader for body frames
@@ -113,22 +113,22 @@ namespace KinectSkeletalTracking
         /// <summary>
         /// definition of bones
         /// </summary>
-        private List<Tuple<JointType, JointType>> bones;
+        private readonly List<Tuple<JointType, JointType>> bones;
 
         /// <summary>
         /// Width of display (depth space)
         /// </summary>
-        private int displayWidth;
+        private readonly int displayWidth;
 
         /// <summary>
         /// Height of display (depth space)
         /// </summary>
-        private int displayHeight;
+        private readonly int displayHeight;
 
         /// <summary>
         /// List of colors for each body tracked
         /// </summary>
-        private List<Pen> bodyColors;
+        private readonly List<Pen> bodyColors;
 
         /// <summary>
         /// Current status text to display
@@ -136,7 +136,7 @@ namespace KinectSkeletalTracking
         private string statusText = null;
 
 
-        SolidColorBrush[] colours = new SolidColorBrush[]
+        readonly SolidColorBrush[] colours = new SolidColorBrush[]
         {
             Brushes.Red,
             Brushes.Orange,
@@ -211,51 +211,53 @@ namespace KinectSkeletalTracking
             this.bodyFrameReader = this.kinectSensor.BodyFrameSource.OpenReader();
 
             // a bone defined as a line between two joints
-            this.bones = new List<Tuple<JointType, JointType>>();
+            this.bones = new List<Tuple<JointType, JointType>>
+            {
+                // Torso
+                new Tuple<JointType, JointType>(JointType.Head, JointType.Neck),
+                new Tuple<JointType, JointType>(JointType.Neck, JointType.SpineShoulder),
+                new Tuple<JointType, JointType>(JointType.SpineShoulder, JointType.SpineMid),
+                new Tuple<JointType, JointType>(JointType.SpineMid, JointType.SpineBase),
+                new Tuple<JointType, JointType>(JointType.SpineShoulder, JointType.ShoulderRight),
+                new Tuple<JointType, JointType>(JointType.SpineShoulder, JointType.ShoulderLeft),
+                new Tuple<JointType, JointType>(JointType.SpineBase, JointType.HipRight),
+                new Tuple<JointType, JointType>(JointType.SpineBase, JointType.HipLeft),
 
-            // Torso
-            this.bones.Add(new Tuple<JointType, JointType>(JointType.Head, JointType.Neck));
-            this.bones.Add(new Tuple<JointType, JointType>(JointType.Neck, JointType.SpineShoulder));
-            this.bones.Add(new Tuple<JointType, JointType>(JointType.SpineShoulder, JointType.SpineMid));
-            this.bones.Add(new Tuple<JointType, JointType>(JointType.SpineMid, JointType.SpineBase));
-            this.bones.Add(new Tuple<JointType, JointType>(JointType.SpineShoulder, JointType.ShoulderRight));
-            this.bones.Add(new Tuple<JointType, JointType>(JointType.SpineShoulder, JointType.ShoulderLeft));
-            this.bones.Add(new Tuple<JointType, JointType>(JointType.SpineBase, JointType.HipRight));
-            this.bones.Add(new Tuple<JointType, JointType>(JointType.SpineBase, JointType.HipLeft));
+                // Right Arm
+                new Tuple<JointType, JointType>(JointType.ShoulderRight, JointType.ElbowRight),
+                new Tuple<JointType, JointType>(JointType.ElbowRight, JointType.WristRight),
+                new Tuple<JointType, JointType>(JointType.WristRight, JointType.HandRight),
+                new Tuple<JointType, JointType>(JointType.HandRight, JointType.HandTipRight),
+                new Tuple<JointType, JointType>(JointType.WristRight, JointType.ThumbRight),
 
-            // Right Arm
-            this.bones.Add(new Tuple<JointType, JointType>(JointType.ShoulderRight, JointType.ElbowRight));
-            this.bones.Add(new Tuple<JointType, JointType>(JointType.ElbowRight, JointType.WristRight));
-            this.bones.Add(new Tuple<JointType, JointType>(JointType.WristRight, JointType.HandRight));
-            this.bones.Add(new Tuple<JointType, JointType>(JointType.HandRight, JointType.HandTipRight));
-            this.bones.Add(new Tuple<JointType, JointType>(JointType.WristRight, JointType.ThumbRight));
+                // Left Arm
+                new Tuple<JointType, JointType>(JointType.ShoulderLeft, JointType.ElbowLeft),
+                new Tuple<JointType, JointType>(JointType.ElbowLeft, JointType.WristLeft),
+                new Tuple<JointType, JointType>(JointType.WristLeft, JointType.HandLeft),
+                new Tuple<JointType, JointType>(JointType.HandLeft, JointType.HandTipLeft),
+                new Tuple<JointType, JointType>(JointType.WristLeft, JointType.ThumbLeft),
 
-            // Left Arm
-            this.bones.Add(new Tuple<JointType, JointType>(JointType.ShoulderLeft, JointType.ElbowLeft));
-            this.bones.Add(new Tuple<JointType, JointType>(JointType.ElbowLeft, JointType.WristLeft));
-            this.bones.Add(new Tuple<JointType, JointType>(JointType.WristLeft, JointType.HandLeft));
-            this.bones.Add(new Tuple<JointType, JointType>(JointType.HandLeft, JointType.HandTipLeft));
-            this.bones.Add(new Tuple<JointType, JointType>(JointType.WristLeft, JointType.ThumbLeft));
+                // Right Leg
+                new Tuple<JointType, JointType>(JointType.HipRight, JointType.KneeRight),
+                new Tuple<JointType, JointType>(JointType.KneeRight, JointType.AnkleRight),
+                new Tuple<JointType, JointType>(JointType.AnkleRight, JointType.FootRight),
 
-            // Right Leg
-            this.bones.Add(new Tuple<JointType, JointType>(JointType.HipRight, JointType.KneeRight));
-            this.bones.Add(new Tuple<JointType, JointType>(JointType.KneeRight, JointType.AnkleRight));
-            this.bones.Add(new Tuple<JointType, JointType>(JointType.AnkleRight, JointType.FootRight));
-
-            // Left Leg
-            this.bones.Add(new Tuple<JointType, JointType>(JointType.HipLeft, JointType.KneeLeft));
-            this.bones.Add(new Tuple<JointType, JointType>(JointType.KneeLeft, JointType.AnkleLeft));
-            this.bones.Add(new Tuple<JointType, JointType>(JointType.AnkleLeft, JointType.FootLeft));
+                // Left Leg
+                new Tuple<JointType, JointType>(JointType.HipLeft, JointType.KneeLeft),
+                new Tuple<JointType, JointType>(JointType.KneeLeft, JointType.AnkleLeft),
+                new Tuple<JointType, JointType>(JointType.AnkleLeft, JointType.FootLeft)
+            };
 
             // populate body colors, one for each BodyIndex
-            this.bodyColors = new List<Pen>();
-
-            this.bodyColors.Add(new Pen(colours[(int)ColoursIndex.Red], 6));
-            this.bodyColors.Add(new Pen(colours[(int)ColoursIndex.Orange], 6));
-            this.bodyColors.Add(new Pen(colours[(int)ColoursIndex.Green], 6));
-            this.bodyColors.Add(new Pen(colours[(int)ColoursIndex.Blue], 6));
-            this.bodyColors.Add(new Pen(colours[(int)ColoursIndex.Indigo], 6));
-            this.bodyColors.Add(new Pen(colours[(int)ColoursIndex.Violet], 6));
+            this.bodyColors = new List<Pen>
+            {
+                new Pen(colours[(int)ColoursIndex.Red], 6),
+                new Pen(colours[(int)ColoursIndex.Orange], 6),
+                new Pen(colours[(int)ColoursIndex.Green], 6),
+                new Pen(colours[(int)ColoursIndex.Blue], 6),
+                new Pen(colours[(int)ColoursIndex.Indigo], 6),
+                new Pen(colours[(int)ColoursIndex.Violet], 6)
+            };
 
             // set IsAvailableChanged event notifier
             this.kinectSensor.IsAvailableChanged += this.Sensor_IsAvailableChanged;
