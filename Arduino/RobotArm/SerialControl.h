@@ -10,8 +10,6 @@ int shoulderPitch = 0;
 int shoulderYaw = 0;
 int shoulderRoll = 0;
 
-long requestTimer = 0;
-
 enum MessageIndex
 {
   StartByte,
@@ -34,8 +32,6 @@ void RequestData()
   Serial.write(startByte);
   Serial.write('R');
   Serial.write(endByte);
-
-  requestTimer = millis();
 }
 
 void SerialInit()
@@ -139,11 +135,6 @@ void AssignToJointAngle(char* readByte)
   }
 }
 
-long GetTimeSinceLastRequest()
-{
-  return millis() - requestTimer;
-}
-
 
 void ProcessIncomingByte(char* readByte)
 {
@@ -174,8 +165,6 @@ void ProcessIncomingByte(char* readByte)
       SetShoulderPitch(&shoulderPitch);
       SetShoulderRoll(&shoulderRoll);
       SetElbowPitch(&elbowAngle);
-      
-      RequestData();
     }
     else
     {

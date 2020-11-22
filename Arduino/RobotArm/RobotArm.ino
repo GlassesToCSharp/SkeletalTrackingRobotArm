@@ -4,6 +4,8 @@
 #include "SerialControl.h"
 
 //#define ARM_DEMO
+#define TIME_BETWEEN_REQUESTS_MS 1000
+#define TIME_BETWEEN_EMPTY_REQUESTS_MS 1000
 
 bool ledStatus = false;
 long timer1 = 0;
@@ -61,10 +63,6 @@ void loop()
 #undef ANGLE_DIFF
 #undef TIME_DIFF
 #else
-  if (GetTimeSinceLastRequest() > 1000) {
-    RequestData();
-  }
-
   CheckAndHandleSerialInput();
 #endif
 }

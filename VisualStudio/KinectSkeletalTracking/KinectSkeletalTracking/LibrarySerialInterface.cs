@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO.Ports;
 using System.Linq;
 using System.Text;
@@ -9,9 +10,9 @@ namespace KinectSkeletalTracking
 {
     public class SerialInterface
     {
+        private const byte minTimeBetweenSend = 100;
         private SerialPort port = null;
-        private Action<byte[]> onDataReceivedHandler = null;
-        private bool incomingStreamStarted = false;
+        private readonly Stopwatch stopWatch = new Stopwatch();
 
 
         // Singleton Implementation
@@ -32,7 +33,7 @@ namespace KinectSkeletalTracking
             }
         }
 
-        public bool CanWrite { get; private set; } = false;
+        public bool CanWrite => stopWatch.ElapsedMilliseconds > minTimeBetweenSend;
 
 
         private SerialInterface() { }
@@ -54,6 +55,7 @@ namespace KinectSkeletalTracking
                 port = new SerialPort($"COM{comPort}", 115200, Parity.None, 8, StopBits.One);
                 port.DataReceived += Port_DataReceived;
                 port.Open();
+                stopWatch.Start();
             }
             else
             {
@@ -65,33 +67,9 @@ namespace KinectSkeletalTracking
         {
             string receivedDataStream = port.ReadExisting();
             byte[] receivedDataBytes = Encoding.UTF8.GetBytes(receivedDataStream);
-            onDataReceivedHandler?.Invoke(receivedDataBytes);
 
             // Show all the incoming data in the port's buffer
-            //System.Diagnostics.Debug.WriteLine(port.ReadExisting());
-            System.Diagnostics.Debug.WriteLine(Encoding.ASCII.GetString(receivedDataBytes));
-
-            // Check to set flag to write-able
-            foreach(byte dataByte in receivedDataBytes)
-            {
-                switch (dataByte)
-                {
-                    case (byte)'S':
-                        incomingStreamStarted = true;
-                        break;
-
-                    case (byte)'R':
-                        if (incomingStreamStarted)
-                        {
-                            CanWrite = true;
-                        }
-                        break;
-
-                    default:
-                        incomingStreamStarted = false;
-                        break;
-                }
-            }
+            Debug.WriteLine(Encoding.ASCII.GetString(receivedDataBytes));
         }
 
         public void Write(string stream)
@@ -105,11 +83,10 @@ namespace KinectSkeletalTracking
                 ThrowNewException("Port is not open.");
             }
 
-            //System.Diagnostics.Debug.WriteLine($"Sending data: {stream}");
-
             port.Write(stream);
+            stopWatch.Restart();
 
-            CanWrite = false;
+            //Debug.WriteLine($"Data sent at {DateTime.Now}");
         }
     }
 }
