@@ -160,7 +160,7 @@ namespace KinectSkeletalTracking
                 bodiesList = value;
                 OnPropertyChanged(nameof(BodiesList));
 
-                if(bodiesListIndex > bodiesList.Count)
+                if (bodiesListIndex > bodiesList.Count)
                 {
                     bodiesListIndex = bodiesList.Count - 1;
                 }
@@ -196,7 +196,7 @@ namespace KinectSkeletalTracking
         {
             // one sensor is currently supported
             this.kinectSensor = KinectSensor.GetDefault();
-            
+
             // get the coordinate mapper
             this.coordinateMapper = this.kinectSensor.CoordinateMapper;
 
@@ -422,7 +422,7 @@ namespace KinectSkeletalTracking
                                 DepthSpacePoint depthSpacePoint = this.coordinateMapper.MapCameraPointToDepthSpace(position);
                                 jointPoints[jointType] = new Point(depthSpacePoint.X, depthSpacePoint.Y);
                             }
-                            
+
                             string selection = String.Empty;
                             int selectedIndex = 0;
                             if (BodiesList.Count > 0 &&
@@ -431,11 +431,7 @@ namespace KinectSkeletalTracking
                                 Int32.TryParse(selection.Substring(0, 1), out selectedIndex) &&
                                 selectedIndex == bodyIndex)
                             {
-                                TextColourOfBody = drawPen.Brush;
-                                // for Testing, get elbow angle by doing shoulder->elbow and wrist->elbow
-                                //TestElbowPitch(ref joints);
-                                //TestShoulderPitch(ref joints);
-                                TestShoulderToElbow(ref joints);
+                                FollowBody(drawPen, ref joints);
                             }
 
                             this.DrawBody(joints, jointPoints, dc, drawPen);
@@ -603,6 +599,15 @@ namespace KinectSkeletalTracking
 
         #region Testing stuff
 
+        private void FollowBody(Pen drawPen, ref IReadOnlyDictionary<JointType, Joint> joints)
+        {
+            TextColourOfBody = drawPen.Brush;
+            // for Testing, get elbow angle by doing shoulder->elbow and wrist->elbow
+            //TestElbowPitch(ref joints);
+            //TestShoulderPitch(ref joints);
+            TestShoulderToElbow(ref joints);
+        }
+
         /// <summary>
         /// Gets the angle of the elbow joint from the upper arm and lower arm vectors.
         /// </summary>
@@ -683,7 +688,7 @@ namespace KinectSkeletalTracking
             double theta2 = GetAngleFromCrossShoulderToElbow(ref crossShoulderVector, ref shoulderToElbow);
             double theta3 = GetShoulderRoll(ref bodyPlane, ref shoulderToElbow, ref shoulderToWrist);
             double theta4 = GetElbowAngle(ref shoulderToElbow, ref wristToElbow);
-            
+
             // 3.5 Display the angles on the screen
             Angles.Text = String.Format("Shoulder {0}, {1}, {2}" + Environment.NewLine +
                 "Elbow {3}",
@@ -691,7 +696,7 @@ namespace KinectSkeletalTracking
                 (int)(theta4));
 
             // 4. Send this angle to motors
-            SerialWrite(FilterAngles(new double[] 
+            SerialWrite(FilterAngles(new double[]
             {
                 theta1,
                 theta2,
@@ -712,7 +717,7 @@ namespace KinectSkeletalTracking
         private void SerialWrite(params double[] angles)
         {
             string dataToSend = ",";
-            foreach(double angle in angles)
+            foreach (double angle in angles)
             {
                 dataToSend += (int)(angle) + ",";
             }
@@ -891,9 +896,9 @@ namespace KinectSkeletalTracking
                 {
                     for (byte j = 0; j < columns; j++)
                     {
-                        recentAngles[i,j] = angles[j];
+                        recentAngles[i, j] = angles[j];
                     }
-                    
+
                 }
                 // The average of all the same angles is going to be the
                 // assigned angles.
