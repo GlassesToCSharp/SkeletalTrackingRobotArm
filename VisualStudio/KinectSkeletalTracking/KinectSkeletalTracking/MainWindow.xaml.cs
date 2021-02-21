@@ -381,6 +381,7 @@ namespace KinectSkeletalTracking
 
             if (dataReceived)
             {
+
                 using (DrawingContext dc = this.drawingGroup.Open())
                 {
                     // Draw a transparent background to set the render size
@@ -388,17 +389,16 @@ namespace KinectSkeletalTracking
 
                     List<string> tempListstring = new List<string>();
 
-                    int penIndex = 0;
                     for (int bodyIndex = 0; bodyIndex < bodies.Count(); bodyIndex++)
                     //foreach (Body body in this.bodies)
                     {
                         Body body = bodies[bodyIndex];
 
-                        Pen drawPen = this.bodyColors[penIndex++];
+                        Pen drawPen = this.bodyColors[bodyIndex];
 
                         if (body.IsTracked)
                         {
-                            tempListstring.Add($"{penIndex - 1} - {(ColoursIndex)(penIndex - 1)}");
+                            tempListstring.Add($"{bodyIndex} - {(ColoursIndex)(bodyIndex)}");
 
                             this.DrawClippedEdges(body, dc);
 
@@ -423,16 +423,16 @@ namespace KinectSkeletalTracking
                                 jointPoints[jointType] = new Point(depthSpacePoint.X, depthSpacePoint.Y);
                             }
 
-                            string selection = String.Empty;
-                            int selectedIndex = 0;
+                            string selection;
                             if (BodiesList.Count > 0 &&
                                 BodiesListIndex >= 0 &&
                                 !String.IsNullOrWhiteSpace(selection = BodiesList[BodiesListIndex]) &&
-                                Int32.TryParse(selection.Substring(0, 1), out selectedIndex) &&
+                                Int32.TryParse(selection.Substring(0, 1), out int selectedIndex) &&
                                 selectedIndex == bodyIndex)
                             {
                                 FollowBody(drawPen, ref joints);
                             }
+
 
                             this.DrawBody(joints, jointPoints, dc, drawPen);
 
@@ -442,6 +442,30 @@ namespace KinectSkeletalTracking
                     }
 
                     BodiesList = tempListstring;
+
+                    //string selection = "";
+                    //int selectedIndex = 0;
+
+                    // If there is only one body being tracked, automatically
+                    // follow that one. Otherwise, follow the selected body.
+                    //if ((BodiesList.Count == 1) || (BodiesList.Count > 0 &&
+                    //    BodiesListIndex >= 0 &&
+                    //    !String.IsNullOrWhiteSpace(selection) &&
+                    //    Int32.TryParse(selection.Substring(0, 1), out selectedIndex) &&
+                    //    selectedIndex < bodies.Length))
+                    //System.Diagnostics.Debug.WriteLine($"BodiesListCount: {BodiesList.Count}");
+                    //System.Diagnostics.Debug.WriteLine($"bodyColours count: {bodyColors.Count}");
+                    //System.Diagnostics.Debug.WriteLine($"bodies count: {bodies.Length}");
+                    //foreach (string colour in BodiesList)
+                    //{
+                    //    System.Diagnostics.Debug.WriteLine($"Colour: {colour}");
+                    //}
+                    //if (BodiesList.Count == 1)
+                    //{
+                    //    Pen drawPen = bodyColors[selectedIndex];
+                    //    IReadOnlyDictionary<JointType, Joint> joints = bodies[selectedIndex].Joints;
+                    //    FollowBody(drawPen, ref joints);
+                    //}
 
                     // prevent drawing outside of our render area
                     this.drawingGroup.ClipGeometry = new RectangleGeometry(new Rect(0.0, 0.0, this.displayWidth, this.displayHeight));
