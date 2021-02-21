@@ -86,9 +86,19 @@ namespace KinectSkeletalTracking
         private readonly DrawingGroup drawingGroup;
 
         /// <summary>
+        /// Drawing group for body projection output
+        /// </summary>
+        private readonly DrawingGroup projectedGroup;
+
+        /// <summary>
         /// Drawing image that we will display
         /// </summary>
         private readonly DrawingImage imageSource;
+
+        /// <summary>
+        /// Projected image that we will display
+        /// </summary>
+        private readonly DrawingImage projectedSource;
 
         /// <summary>
         /// Active Kinect sensor
@@ -272,8 +282,14 @@ namespace KinectSkeletalTracking
             // Create the drawing group we'll use for drawing
             this.drawingGroup = new DrawingGroup();
 
+            // Create the drawing group we'll use for projecting
+            this.projectedGroup = new DrawingGroup();
+
             // Create an image source that we can use in our image control
             this.imageSource = new DrawingImage(this.drawingGroup);
+
+            // Create the projected image we need to draw.
+            this.projectedSource = new DrawingImage(this.projectedGroup);
 
             // use the window object as the view model in this simple example
             this.DataContext = this;
@@ -294,6 +310,11 @@ namespace KinectSkeletalTracking
         /// Gets the bitmap to display
         /// </summary>
         public ImageSource ImageSource => this.imageSource;
+
+        /// <summary>
+        /// Gets the bitmap to display
+        /// </summary>
+        public ImageSource ProjectionSource => this.projectedSource;
 
         /// <summary>
         /// Gets or sets the current status text to display
@@ -417,8 +438,6 @@ namespace KinectSkeletalTracking
                                     position.Z = InferredZPositionClamp;
                                 }
 
-                                // At this point, calculate the angles of the arm joints relative to the shoulder plane.
-
                                 DepthSpacePoint depthSpacePoint = this.coordinateMapper.MapCameraPointToDepthSpace(position);
                                 jointPoints[jointType] = new Point(depthSpacePoint.X, depthSpacePoint.Y);
                             }
@@ -430,6 +449,7 @@ namespace KinectSkeletalTracking
                                 Int32.TryParse(selection.Substring(0, 1), out int selectedIndex) &&
                                 selectedIndex == bodyIndex)
                             {
+                                // At this point, calculate the angles of the arm joints relative to the shoulder plane.
                                 FollowBody(drawPen, ref joints);
                             }
 
@@ -703,23 +723,34 @@ namespace KinectSkeletalTracking
             Vector3 shoulderToWrist = GetVectorFromPoints(pointForShoulderRight, pointForWrist);
             Vector3 wristToElbow = GetVectorFromPoints(pointForElbow, pointForWrist);
 
-            // 3 Calculate the anngles of each degree of freedom, here
-            //   theta1 = shoulder yaw
-            //   theta2 = shoulder pitch
-            //   theta3 = shoulder roll
-            //   theta4 = elbow pitch
+            // 3. Calculate the anngles of each degree of freedom, here
+            //    theta1 = shoulder yaw
+            //    theta2 = shoulder pitch
+            //    theta3 = shoulder roll
+            //    theta4 = elbow pitch
             double theta1 = GetAngleFromSpineToElbow(ref spineToNeck, ref shoulderToElbow);
             double theta2 = GetAngleFromCrossShoulderToElbow(ref crossShoulderVector, ref shoulderToElbow);
             double theta3 = GetShoulderRoll(ref bodyPlane, ref shoulderToElbow, ref shoulderToWrist);
             double theta4 = GetElbowAngle(ref shoulderToElbow, ref wristToElbow);
 
-            // 3.5 Display the angles on the screen
+            // 4. Display the angles on the screen
+            using (DrawingContext dc = this.projectedGroup.Open())
+            {
+                Pen drawingPen = new Pen(new SolidColorBrush(Color.FromArgb(255, 68, 192, 68)), 3);
+                Pen skeletonPen = this.inferredBonePen;
+
+                // Use the angles to create projected vectors of joints
+                // TODO
+
+                // Draw the skeleton (neck/spine and shoulders)
+                // Draw the projected vectors
+            }
             Angles.Text = String.Format("Shoulder {0}, {1}, {2}" + Environment.NewLine +
                 "Elbow {3}",
                 (int)(theta1), (int)(theta2), (int)(theta3),
                 (int)(theta4));
 
-            // 4. Send this angle to motors
+            // 5. Send this angle to motors
             SerialWrite(FilterAngles(new double[]
             {
                 theta1,
