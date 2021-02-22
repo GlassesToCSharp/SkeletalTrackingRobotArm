@@ -19,24 +19,18 @@ namespace MatrixDesign
 
 
         // Publicly accessible read-only number of rows
-        public int Rows
-        {
-            get { return rows; }
-        }
+        public int Rows => rows;
 
 
         // Publicly accessible read-only number of columns
-        public int Columns
-        {
-            get { return columns; }
-        }
+        public int Columns => columns;
 
 
         // Publicly accessible individual matrix cells
         public double this[int row, int column] 
         {
-            get { return matrixArray[row-1, column-1]; }
-            set { matrixArray[row-1, column-1] = value; }
+            get => matrixArray[row-1, column-1];
+            set => matrixArray[row-1, column-1] = value;
         }
 
 
@@ -48,9 +42,9 @@ namespace MatrixDesign
                 throw new Exception("Row cannot be 0.");
             }
 
-            row = row - 1;
-            double[] target = new double[this.Columns];
-            Buffer.BlockCopy(this.matrixArray, 8 * this.Columns * row, target, 0, 8 * this.Columns);
+            row -= 1;
+            double[] target = new double[columns];
+            Buffer.BlockCopy(matrixArray, 8 * columns * row, target, 0, 8 * columns);
             return target;
         }
 
@@ -63,12 +57,12 @@ namespace MatrixDesign
                 throw new Exception("Column cannot be 0.");
             }
 
-            column = column - 1;
-            double[] target = new double[this.Rows];
+            column -= 1;
+            double[] target = new double[rows];
             int columnOffset = 8 * column;
-            for (int i = 0; i < this.Rows; i++)
+            for (int i = 0; i < rows; i++)
             {
-                Buffer.BlockCopy(this.matrixArray, columnOffset + i * this.Columns * 8, target, i * 8, 8);
+                Buffer.BlockCopy(matrixArray, columnOffset + i * columns * 8, target, i * 8, 8);
             }
             return target;
         }
@@ -79,73 +73,38 @@ namespace MatrixDesign
         #region Initialisation variations
 
 
-        // Initialiser for square matrices (with option for contents to be the identity matrix). 
-        // Default option is a square matrix of zeros.
-        public Matrix(int squareRowsColumns, bool isIdentityMatrix = false)
+        public static Matrix Identity(int squareSize)
         {
-            NewMatrix(squareRowsColumns, squareRowsColumns);
+            Matrix mat = new Matrix(squareSize, squareSize, initialValue: 0.0);
 
-            if (isIdentityMatrix)
+            for (int rowIndex = 1; rowIndex <= squareSize; rowIndex++)
             {
-                for (int rowIndex = 1; rowIndex <= rows; rowIndex++)
+                for (int columnIndex = 1; columnIndex <= squareSize; columnIndex++)
                 {
-                    for (int columnIndex = 1; columnIndex <= columns; columnIndex++)
+                    if (rowIndex == columnIndex)
                     {
-                        if (rowIndex == columnIndex)
-                        {
-                            this[rowIndex, columnIndex] = 1.0;
-                        }
-                        else
-                        {
-                            this[rowIndex, columnIndex] = 0.0;
-                        }
+                        mat[rowIndex, columnIndex] = 1.0;
                     }
                 }
             }
-            else
-            {
-                SetAllValuesTo(this, 0.0);
-            }
+
+            return mat;
+        }
+
+        public static Matrix Zeros(int squareSize)
+        {
+            return new Matrix(squareSize, squareSize, initialValue: 0.0);
+        }
+
+        public static Matrix Ones(int squareSize)
+        {
+            return new Matrix(squareSize, squareSize, initialValue: 1.0);
         }
 
 
         // Initialiser for general matrices with a custom initial value set for all cells (default
         // option is a matrix of zeros).
-        public Matrix(int rows, int columns, string initialValues)
-        {
-            NewMatrix(rows, columns);
-
-            switch (initialValues.ToLower())
-            {
-                case "zero":
-                case "zeros":
-                default:
-                    SetAllValuesTo(this, 0.0);
-                    break;
-                case "one":
-                case "ones":
-                    SetAllValuesTo(this, 1.0);
-                    break;
-            }
-        }
-
-
-        // Initialiser for general matrices with a custom initial value set for all cells (default
-        // option is a matrix of zeros).
-        public Matrix(int rows, int columns, double intialValues = 0.0)
-        {
-            NewMatrix(rows, columns);
-
-            SetAllValuesTo(this, intialValues);
-        }
-
-
-        #endregion
-
-
-        
-        // General function to setup a new matrix for this instance.
-        private void NewMatrix(int rows, int columns)
+        public Matrix(int rows, int columns, double initialValue = 0.0)
         {
             if (rows < 1 || columns < 1)
             {
@@ -155,36 +114,12 @@ namespace MatrixDesign
             this.rows = rows;
             this.columns = columns;
             matrixArray = new double[rows, columns];
-        }
 
-        
-        // Set the content of the current matrix to a zero-matrix.
-        public Matrix Zeros()
-        {
-            Matrix temp = new Matrix(rows, columns);
-
-            SetAllValuesTo(temp, 0);
-
-            return temp;
+            SetAllValuesTo(initialValue);
         }
 
 
-        // Set the content of the current matrix to a random number between 0 and 1.
-        public Matrix Random()
-        {
-            Matrix temp = new Matrix(rows, columns);
-            System.Random random = new System.Random();
-
-            for (int rowIndex = 1; rowIndex <= rows; rowIndex++)
-            {
-                for (int columnIndex = 1; columnIndex <= columns; columnIndex++)
-                {
-                    this[rowIndex, columnIndex] = random.NextDouble();
-                }
-            }
-
-            return temp;
-        }
+        #endregion
 
 
         // Transpose the current matrix.
@@ -208,7 +143,7 @@ namespace MatrixDesign
         // Find the determinant of the current matrix. (Currently only for 2x2)
         public double Determinant()
         {
-            double determinant = 0;
+            double determinant;
             if(rows == columns && rows < 3)
             {
                 determinant = (this[1, 1] * this[2, 2]) - (this[2, 1] * this[1, 2]);
@@ -225,11 +160,11 @@ namespace MatrixDesign
         // Multiply the current matrix by a number.
         public Matrix Multiply(double value)
         {
-            Matrix resultantMatrix = this;
+            Matrix resultantMatrix = new Matrix(rows, columns);
 
-            for (int matrix1Row = 1; matrix1Row <= this.Rows; matrix1Row++)
+            for (int matrix1Row = 1; matrix1Row <= rows; matrix1Row++)
             {
-                for (int matrix2Column = 1; matrix2Column <= this.Columns; matrix2Column++)
+                for (int matrix2Column = 1; matrix2Column <= columns; matrix2Column++)
                 {
                     resultantMatrix[matrix1Row, matrix2Column] = this[matrix1Row, matrix2Column] * value;
                 }
@@ -242,7 +177,7 @@ namespace MatrixDesign
         // Multiply the current matrix by another matrix.
         public Matrix Multiply(Matrix matrix2)
         {
-            var matrix1 = this;
+            Matrix matrix1 = this;
             Matrix resultantMatrix = new Matrix(matrix1.Rows, matrix2.Columns);
 
             if (matrix1.Columns != matrix2.Rows)
@@ -281,11 +216,11 @@ namespace MatrixDesign
         // Add to the current matrix a number
         public Matrix Add(double value)
         {
-            Matrix resultantMatrix = new Matrix(this.Rows, this.Columns);
+            Matrix resultantMatrix = new Matrix(rows, columns);
 
-            for (int matrixRow = 1; matrixRow <= this.Rows; matrixRow++)
+            for (int matrixRow = 1; matrixRow <= rows; matrixRow++)
             {
-                for (int matrixColumn = 1; matrixColumn <= this.Columns; matrixColumn++)
+                for (int matrixColumn = 1; matrixColumn <= columns; matrixColumn++)
                 {
                     resultantMatrix[matrixRow, matrixColumn] = this[matrixRow, matrixColumn] + value;
                 }
@@ -298,16 +233,16 @@ namespace MatrixDesign
         // Add to the current matrix another matrix
         public Matrix Add(Matrix matrix)
         {
-            if(matrix.Rows != this.Rows && matrix.Columns != this.Columns)
+            if(matrix.Rows != rows && matrix.Columns != columns)
             {
                 throw new Exception("Invalid matrices");
             }
 
-            Matrix resultantMatrix = new Matrix(this.Rows, this.Columns);
+            Matrix resultantMatrix = new Matrix(rows, columns);
 
-            for (int matrixRow = 1; matrixRow <= this.Rows; matrixRow++)
+            for (int matrixRow = 1; matrixRow <= rows; matrixRow++)
             {
-                for (int matrixColumn = 1; matrixColumn <= this.Columns; matrixColumn++)
+                for (int matrixColumn = 1; matrixColumn <= columns; matrixColumn++)
                 {
                     resultantMatrix[matrixRow, matrixColumn] = this[matrixRow, matrixColumn] + matrix[matrixRow, matrixColumn];
                 }
@@ -320,16 +255,16 @@ namespace MatrixDesign
         // Subtract from the current matrix another matrix
         public Matrix Subtract(Matrix matrix)
         {
-            if(matrix.Rows != this.Rows && matrix.Columns != this.Columns)
+            if(matrix.Rows != rows && matrix.Columns != columns)
             {
                 throw new Exception("Invalid matrices");
             }
 
-            Matrix resultantMatrix = new Matrix(this.Rows, this.Columns);
+            Matrix resultantMatrix = new Matrix(rows, columns);
 
-            for (int matrixRow = 1; matrixRow <= this.Rows; matrixRow++)
+            for (int matrixRow = 1; matrixRow <= rows; matrixRow++)
             {
-                for (int matrixColumn = 1; matrixColumn <= this.Columns; matrixColumn++)
+                for (int matrixColumn = 1; matrixColumn <= columns; matrixColumn++)
                 {
                     resultantMatrix[matrixRow, matrixColumn] = this[matrixRow, matrixColumn] - matrix[matrixRow, matrixColumn];
                 }
@@ -342,21 +277,18 @@ namespace MatrixDesign
         // Subtract from the current matrix a number
         public Matrix Subtract(double value)
         {
-            return this.Add(value * -1);
+            return Add(value * -1);
         }
 
 
         // Privately set all the vallues of the current matrix to a specific value.
-        private void SetAllValuesTo(Matrix matrix, double value)
+        private void SetAllValuesTo(double value)
         {
-            int rows = matrix.Rows;
-            int columns = matrix.Columns;
-
             for(int rowIndex = 1; rowIndex <= rows; rowIndex++)
             {
                 for(int columnIndex = 1; columnIndex <= columns; columnIndex++)
                 {
-                    matrix[rowIndex, columnIndex] = value;
+                    this[rowIndex, columnIndex] = value;
                 }
             }
         }
