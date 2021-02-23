@@ -75,18 +75,9 @@ namespace MatrixDesign
 
         public static Matrix Identity(int squareSize)
         {
-            Matrix mat = new Matrix(squareSize, squareSize, initialValue: 0.0);
+            Matrix mat = new Matrix(squareSize, squareSize);
 
-            for (int rowIndex = 1; rowIndex <= squareSize; rowIndex++)
-            {
-                for (int columnIndex = 1; columnIndex <= squareSize; columnIndex++)
-                {
-                    if (rowIndex == columnIndex)
-                    {
-                        mat[rowIndex, columnIndex] = 1.0;
-                    }
-                }
-            }
+            mat.ApplyOperation((rowIndex, columnIndex) => rowIndex == columnIndex ? 1.0 : 0.0);
 
             return mat;
         }
@@ -128,13 +119,7 @@ namespace MatrixDesign
             // switch the row/column value around
             Matrix temp = new Matrix(columns, rows);
 
-            for(int rowIndex = 1; rowIndex <= columns; rowIndex++)
-            {
-                for(int columnIndex = 1; columnIndex <= rows; columnIndex++)
-                {
-                    temp[rowIndex, columnIndex] = this[columnIndex, rowIndex];
-                }
-            }
+            temp.ApplyOperation((matrixRow, matrixColumn) => this[matrixColumn, matrixRow]);
 
             return temp;
         }
@@ -162,13 +147,7 @@ namespace MatrixDesign
         {
             Matrix resultantMatrix = new Matrix(rows, columns);
 
-            for (int matrix1Row = 1; matrix1Row <= rows; matrix1Row++)
-            {
-                for (int matrix2Column = 1; matrix2Column <= columns; matrix2Column++)
-                {
-                    resultantMatrix[matrix1Row, matrix2Column] = this[matrix1Row, matrix2Column] * value;
-                }
-            }
+            resultantMatrix.ApplyOperation((matrixRow, matrixColumn) => this[matrixRow, matrixColumn] * value);
 
             return resultantMatrix;
         }
@@ -218,13 +197,7 @@ namespace MatrixDesign
         {
             Matrix resultantMatrix = new Matrix(rows, columns);
 
-            for (int matrixRow = 1; matrixRow <= rows; matrixRow++)
-            {
-                for (int matrixColumn = 1; matrixColumn <= columns; matrixColumn++)
-                {
-                    resultantMatrix[matrixRow, matrixColumn] = this[matrixRow, matrixColumn] + value;
-                }
-            }
+            resultantMatrix.ApplyOperation((matrixRow, matrixColumn) => this[matrixRow, matrixColumn] + value);
 
             return resultantMatrix;
         }
@@ -240,13 +213,7 @@ namespace MatrixDesign
 
             Matrix resultantMatrix = new Matrix(rows, columns);
 
-            for (int matrixRow = 1; matrixRow <= rows; matrixRow++)
-            {
-                for (int matrixColumn = 1; matrixColumn <= columns; matrixColumn++)
-                {
-                    resultantMatrix[matrixRow, matrixColumn] = this[matrixRow, matrixColumn] + matrix[matrixRow, matrixColumn];
-                }
-            }
+            resultantMatrix.ApplyOperation((matrixRow, matrixColumn) => this[matrixRow, matrixColumn] + matrix[matrixRow, matrixColumn]);
 
             return resultantMatrix;
         }
@@ -262,13 +229,7 @@ namespace MatrixDesign
 
             Matrix resultantMatrix = new Matrix(rows, columns);
 
-            for (int matrixRow = 1; matrixRow <= rows; matrixRow++)
-            {
-                for (int matrixColumn = 1; matrixColumn <= columns; matrixColumn++)
-                {
-                    resultantMatrix[matrixRow, matrixColumn] = this[matrixRow, matrixColumn] - matrix[matrixRow, matrixColumn];
-                }
-            }
+            resultantMatrix.ApplyOperation((matrixRow, matrixColumn) => this[matrixRow, matrixColumn] - matrix[matrixRow, matrixColumn]);
 
             return resultantMatrix;
         }
@@ -284,11 +245,17 @@ namespace MatrixDesign
         // Privately set all the vallues of the current matrix to a specific value.
         private void SetAllValuesTo(double value)
         {
-            for(int rowIndex = 1; rowIndex <= rows; rowIndex++)
+            ApplyOperation((_, __) => value);
+        }
+
+
+        private void ApplyOperation(Func<int, int, double> operation)
+        {
+            for (int rowIndex = 1; rowIndex <= rows; rowIndex++)
             {
-                for(int columnIndex = 1; columnIndex <= columns; columnIndex++)
+                for (int columnIndex = 1; columnIndex <= columns; columnIndex++)
                 {
-                    this[rowIndex, columnIndex] = value;
+                    this[rowIndex, columnIndex] = operation(rowIndex, columnIndex);
                 }
             }
         }
