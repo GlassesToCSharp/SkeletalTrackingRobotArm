@@ -27,17 +27,17 @@ namespace MatrixDesign
 
 
         // Publicly accessible individual matrix cells
-        public double this[int row, int column] 
+        public double this[int row, int column]
         {
-            get => matrixArray[row-1, column-1];
-            set => matrixArray[row-1, column-1] = value;
+            get => matrixArray[row - 1, column - 1];
+            set => matrixArray[row - 1, column - 1] = value;
         }
 
 
         // Publicly accessible read-only matrix row
         public double[] GetRow(int row)
         {
-            if(row == 0)
+            if (row == 0)
             {
                 throw new Exception("Row cannot be 0.");
             }
@@ -116,7 +116,8 @@ namespace MatrixDesign
             if (rows < 1 || columns < 1 || matrix.Length < 1)
             {
                 throw new Exception("Matrix cannot have 0 or negative-value rows/columns.");
-            } else if (rows * columns < matrix.Length)
+            }
+            else if (rows * columns < matrix.Length)
             {
                 throw new Exception("Matrix rows and columns must match matrix given.");
             }
@@ -146,7 +147,7 @@ namespace MatrixDesign
         public double Determinant()
         {
             double determinant;
-            if(rows == columns && rows < 3)
+            if (rows == columns && rows < 3)
             {
                 determinant = (this[1, 1] * this[2, 2]) - (this[2, 1] * this[1, 2]);
             }
@@ -169,7 +170,7 @@ namespace MatrixDesign
             return resultantMatrix;
         }
 
-        
+
         // Multiply the current matrix by another matrix.
         public Matrix Multiply(Matrix matrix2)
         {
@@ -182,14 +183,14 @@ namespace MatrixDesign
             }
             else
             {
-                for(int matrix1Row = 1; matrix1Row <= matrix1.Rows; matrix1Row++)
+                for (int matrix1Row = 1; matrix1Row <= matrix1.Rows; matrix1Row++)
                 {
-                    for(int matrix2Column = 1; matrix2Column <= matrix2.Columns; matrix2Column++)
+                    for (int matrix2Column = 1; matrix2Column <= matrix2.Columns; matrix2Column++)
                     {
                         var vector1 = matrix1.GetRow(matrix1Row);
                         var vector2 = matrix2.GetColumn(matrix2Column);
 
-                        if(vector1.Length != vector2.Length)
+                        if (vector1.Length != vector2.Length)
                         {
                             throw new Exception("Vector lengths do not match.");
                         }
@@ -223,7 +224,7 @@ namespace MatrixDesign
         // Add to the current matrix another matrix
         public Matrix Add(Matrix matrix)
         {
-            if(matrix.Rows != rows && matrix.Columns != columns)
+            if (matrix.Rows != rows && matrix.Columns != columns)
             {
                 throw new Exception("Invalid matrices");
             }
@@ -239,7 +240,7 @@ namespace MatrixDesign
         // Subtract from the current matrix another matrix
         public Matrix Subtract(Matrix matrix)
         {
-            if(matrix.Rows != rows && matrix.Columns != columns)
+            if (matrix.Rows != rows && matrix.Columns != columns)
             {
                 throw new Exception("Invalid matrices");
             }
@@ -291,7 +292,7 @@ namespace MatrixDesign
 
                 outputString += "\r\n";
             }
-            
+
             outputString += "\r\n";
             outputString += "\r\n";
             return outputString;
