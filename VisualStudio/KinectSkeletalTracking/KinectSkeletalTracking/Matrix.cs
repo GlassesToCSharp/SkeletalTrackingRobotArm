@@ -110,6 +110,23 @@ namespace MatrixDesign
         }
 
 
+        // Initialiser for specific rows/columns and specifc values for each cell.
+        public Matrix(int rows, int columns, double[,] matrix)
+        {
+            if (rows < 1 || columns < 1 || matrix.Length < 1)
+            {
+                throw new Exception("Matrix cannot have 0 or negative-value rows/columns.");
+            } else if (rows * columns < matrix.Length)
+            {
+                throw new Exception("Matrix rows and columns must match matrix given.");
+            }
+
+            this.rows = rows;
+            this.columns = columns;
+            matrixArray = matrix;
+        }
+
+
         #endregion
 
 
