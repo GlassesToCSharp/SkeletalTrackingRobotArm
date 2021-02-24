@@ -25,20 +25,19 @@ namespace MatrixDesign
         // Publicly accessible individual matrix cells
         public double this[int row, int column]
         {
-            get => matrixArray[row - 1, column - 1];
-            set => matrixArray[row - 1, column - 1] = value;
+            get => matrixArray[row, column];
+            set => matrixArray[row, column] = value;
         }
 
 
         // Publicly accessible read-only matrix row
         public double[] GetRow(int row)
         {
-            if (row == 0)
+            if (row < 0)
             {
-                throw new Exception("Row cannot be 0.");
+                throw new Exception("Row cannot be less than 0.");
             }
 
-            row -= 1;
             double[] target = new double[Columns];
             Buffer.BlockCopy(matrixArray, 8 * Columns * row, target, 0, 8 * Columns);
             return target;
@@ -48,12 +47,11 @@ namespace MatrixDesign
         // Publicly accessible read-only matrix column
         public double[] GetColumn(int column)
         {
-            if (column == 0)
+            if (column < 0)
             {
-                throw new Exception("Column cannot be 0.");
+                throw new Exception("Column cannot be less than 0.");
             }
 
-            column -= 1;
             double[] target = new double[Rows];
             int columnOffset = 8 * column;
             for (int i = 0; i < Rows; i++)
