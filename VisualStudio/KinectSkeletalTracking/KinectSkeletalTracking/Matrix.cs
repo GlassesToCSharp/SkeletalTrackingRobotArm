@@ -8,22 +8,18 @@ namespace MatrixDesign
 {
     public class Matrix
     {
-        // This iteration of the class needs to know the number of rows, number of columns, and the
-        // the contents of the matrix (arranged as a 2D array of type double)
-        int rows = 0;
-        int columns = 0;
-        double[,] matrixArray;
+        private readonly double[,] matrixArray;
 
 
         #region Get/Sets for matrix
 
 
         // Publicly accessible read-only number of rows
-        public int Rows => rows;
+        public int Rows { get; } = 0;
 
 
         // Publicly accessible read-only number of columns
-        public int Columns => columns;
+        public int Columns { get; } = 0;
 
 
         // Publicly accessible individual matrix cells
@@ -43,8 +39,8 @@ namespace MatrixDesign
             }
 
             row -= 1;
-            double[] target = new double[columns];
-            Buffer.BlockCopy(matrixArray, 8 * columns * row, target, 0, 8 * columns);
+            double[] target = new double[Columns];
+            Buffer.BlockCopy(matrixArray, 8 * Columns * row, target, 0, 8 * Columns);
             return target;
         }
 
@@ -58,11 +54,11 @@ namespace MatrixDesign
             }
 
             column -= 1;
-            double[] target = new double[rows];
+            double[] target = new double[Rows];
             int columnOffset = 8 * column;
-            for (int i = 0; i < rows; i++)
+            for (int i = 0; i < Rows; i++)
             {
-                Buffer.BlockCopy(matrixArray, columnOffset + i * columns * 8, target, i * 8, 8);
+                Buffer.BlockCopy(matrixArray, columnOffset + i * Columns * 8, target, i * 8, 8);
             }
             return target;
         }
@@ -102,8 +98,8 @@ namespace MatrixDesign
                 throw new Exception("Matrix cannot have 0 or negative-value rows/columns.");
             }
 
-            this.rows = rows;
-            this.columns = columns;
+            Rows = rows;
+            Columns = columns;
             matrixArray = new double[rows, columns];
 
             SetAllValuesTo(initialValue);
@@ -122,59 +118,32 @@ namespace MatrixDesign
                 throw new Exception("Matrix rows and columns must match matrix given.");
             }
 
-            this.rows = rows;
-            this.columns = columns;
+            Rows = rows;
+            Columns = columns;
             matrixArray = matrix;
         }
 
 
         #endregion
 
+        #region Mathematical Operations
 
-        // Transpose the current matrix.
-        public Matrix Transpose()
+        public static Matrix operator *(Matrix vec, double value)
         {
-            // switch the row/column value around
-            Matrix temp = new Matrix(columns, rows);
+            Matrix resultantMatrix = new Matrix(vec.Rows, vec.Columns);
 
-            temp.ApplyOperation((matrixRow, matrixColumn) => this[matrixColumn, matrixRow]);
-
-            return temp;
-        }
-
-
-        // Find the determinant of the current matrix. (Currently only for 2x2)
-        public double Determinant()
-        {
-            double determinant;
-            if (rows == columns && rows < 3)
-            {
-                determinant = (this[1, 1] * this[2, 2]) - (this[2, 1] * this[1, 2]);
-            }
-            else
-            {
-                throw new Exception("Cannot find determinant. Matrix needs to be square.");
-            }
-
-            return determinant;
-        }
-
-
-        // Multiply the current matrix by a number.
-        public Matrix Multiply(double value)
-        {
-            Matrix resultantMatrix = new Matrix(rows, columns);
-
-            resultantMatrix.ApplyOperation((matrixRow, matrixColumn) => this[matrixRow, matrixColumn] * value);
+            resultantMatrix.ApplyOperation((matrixRow, matrixColumn) => vec[matrixRow, matrixColumn] * value);
 
             return resultantMatrix;
         }
 
-
-        // Multiply the current matrix by another matrix.
-        public Matrix Multiply(Matrix matrix2)
+        public static Matrix operator *(double value, Matrix vec)
         {
-            Matrix matrix1 = this;
+            return vec * value;
+        }
+
+        public static Matrix operator *(Matrix matrix1, Matrix matrix2)
+        {
             Matrix resultantMatrix = new Matrix(matrix1.Rows, matrix2.Columns);
 
             if (matrix1.Columns != matrix2.Rows)
@@ -209,54 +178,81 @@ namespace MatrixDesign
             return resultantMatrix;
         }
 
-
-        // Add to the current matrix a number
-        public Matrix Add(double value)
+        public static Matrix operator +(Matrix vec, double value)
         {
-            Matrix resultantMatrix = new Matrix(rows, columns);
+            Matrix resultantMatrix = new Matrix(vec.Rows, vec.Columns);
 
-            resultantMatrix.ApplyOperation((matrixRow, matrixColumn) => this[matrixRow, matrixColumn] + value);
+            resultantMatrix.ApplyOperation((matrixRow, matrixColumn) => vec[matrixRow, matrixColumn] + value);
 
             return resultantMatrix;
         }
 
-
-        // Add to the current matrix another matrix
-        public Matrix Add(Matrix matrix)
+        public static Matrix operator +(Matrix matrix1, Matrix matrix2)
         {
-            if (matrix.Rows != rows && matrix.Columns != columns)
+            if (matrix1.Rows != matrix2.Rows && matrix1.Columns != matrix2.Columns)
             {
                 throw new Exception("Invalid matrices");
             }
 
-            Matrix resultantMatrix = new Matrix(rows, columns);
+            Matrix resultantMatrix = new Matrix(matrix1.Rows, matrix1.Columns);
 
-            resultantMatrix.ApplyOperation((matrixRow, matrixColumn) => this[matrixRow, matrixColumn] + matrix[matrixRow, matrixColumn]);
+            resultantMatrix.ApplyOperation((matrixRow, matrixColumn) => matrix1[matrixRow, matrixColumn] + matrix2[matrixRow, matrixColumn]);
 
             return resultantMatrix;
         }
 
-
-        // Subtract from the current matrix another matrix
-        public Matrix Subtract(Matrix matrix)
+        public static Matrix operator -(Matrix vec, double value)
         {
-            if (matrix.Rows != rows && matrix.Columns != columns)
+            Matrix resultantMatrix = new Matrix(vec.Rows, vec.Columns);
+
+            resultantMatrix.ApplyOperation((matrixRow, matrixColumn) => vec[matrixRow, matrixColumn] - value);
+
+            return resultantMatrix;
+        }
+
+        public static Matrix operator -(Matrix matrix1, Matrix matrix2)
+        {
+            if (matrix1.Rows != matrix2.Rows && matrix1.Columns != matrix2.Columns)
             {
                 throw new Exception("Invalid matrices");
             }
 
-            Matrix resultantMatrix = new Matrix(rows, columns);
+            Matrix resultantMatrix = new Matrix(matrix1.Rows, matrix1.Columns);
 
-            resultantMatrix.ApplyOperation((matrixRow, matrixColumn) => this[matrixRow, matrixColumn] - matrix[matrixRow, matrixColumn]);
+            resultantMatrix.ApplyOperation((matrixRow, matrixColumn) => matrix1[matrixRow, matrixColumn] - matrix2[matrixRow, matrixColumn]);
 
             return resultantMatrix;
         }
 
+        #endregion
 
-        // Subtract from the current matrix a number
-        public Matrix Subtract(double value)
+
+        // Transpose the current matrix.
+        public Matrix Transpose()
         {
-            return Add(value * -1);
+            // switch the row/column value around
+            Matrix temp = new Matrix(Columns, Rows);
+
+            temp.ApplyOperation((matrixRow, matrixColumn) => this[matrixColumn, matrixRow]);
+
+            return temp;
+        }
+
+
+        // Find the determinant of the current matrix. (Currently only for 2x2)
+        public double Determinant()
+        {
+            double determinant;
+            if (Rows == Columns && Rows < 3)
+            {
+                determinant = (this[1, 1] * this[2, 2]) - (this[2, 1] * this[1, 2]);
+            }
+            else
+            {
+                throw new Exception("Cannot find determinant. Matrix needs to be square.");
+            }
+
+            return determinant;
         }
 
 
@@ -269,9 +265,9 @@ namespace MatrixDesign
 
         private void ApplyOperation(Func<int, int, double> operation)
         {
-            for (int rowIndex = 1; rowIndex <= rows; rowIndex++)
+            for (int rowIndex = 1; rowIndex <= Rows; rowIndex++)
             {
-                for (int columnIndex = 1; columnIndex <= columns; columnIndex++)
+                for (int columnIndex = 1; columnIndex <= Columns; columnIndex++)
                 {
                     this[rowIndex, columnIndex] = operation(rowIndex, columnIndex);
                 }
@@ -283,9 +279,9 @@ namespace MatrixDesign
         public override string ToString()
         {
             string outputString = "";
-            for (int rowIndex = 1; rowIndex <= rows; rowIndex++)
+            for (int rowIndex = 1; rowIndex <= Rows; rowIndex++)
             {
-                for (int columnIndex = 1; columnIndex <= columns; columnIndex++)
+                for (int columnIndex = 1; columnIndex <= Columns; columnIndex++)
                 {
                     outputString += this[rowIndex, columnIndex].ToString("F3") + "\t";
                 }
