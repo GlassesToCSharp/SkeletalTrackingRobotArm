@@ -8,46 +8,11 @@ namespace KinectSkeletalTracking
 {
     public class Vector3
     {
-        private double x = 0.0;
-        private double y = 0.0;
-        private double z = 0.0;
-        private double magnitude = 0.0;
+        public double X { get; set; } = 0.0;
+        public double Y { get; set; } = 0.0;
+        public double Z { get; set; } = 0.0;
 
-        public double X
-        {
-            get { return x; }
-            set
-            {
-                x = value;
-                magnitude = Math.Sqrt((x * x) + (y * y) + (z * z));
-            }
-        }
-        public double Y
-        {
-            get { return y; }
-            set
-            {
-                y = value;
-                magnitude = Math.Sqrt((x * x) + (y * y) + (z * z));
-            }
-        }
-        public double Z
-        {
-            get { return z; }
-            set
-            {
-                z = value;
-                magnitude = Math.Sqrt((x * x) + (y * y) + (z * z));
-            }
-        }
-
-        public double Magnitude
-        {
-            get
-            {
-                return (this is Plane ? Double.NaN : magnitude);
-            }
-        }
+        public virtual double Magnitude => Math.Sqrt((X * X) + (Y * Y) + (Z * Z));
 
         public static Vector3 operator *(Vector3 vec, double c)
         {
@@ -125,5 +90,7 @@ namespace KinectSkeletalTracking
     public class Plane : Vector3
     {
         public double D { get; set; } = 0.0;
+
+        override public double Magnitude => Double.NaN;
     }
 }
