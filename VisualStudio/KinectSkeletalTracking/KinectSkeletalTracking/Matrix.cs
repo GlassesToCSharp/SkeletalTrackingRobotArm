@@ -150,9 +150,9 @@ namespace MatrixDesign
             }
             else
             {
-                for (int matrix1Row = 1; matrix1Row <= matrix1.Rows; matrix1Row++)
+                for (int matrix1Row = 0; matrix1Row < matrix1.Rows; matrix1Row++)
                 {
-                    for (int matrix2Column = 1; matrix2Column <= matrix2.Columns; matrix2Column++)
+                    for (int matrix2Column = 0; matrix2Column < matrix2.Columns; matrix2Column++)
                     {
                         var vector1 = matrix1.GetRow(matrix1Row);
                         var vector2 = matrix2.GetColumn(matrix2Column);
@@ -243,7 +243,7 @@ namespace MatrixDesign
             double determinant;
             if (Rows == Columns && Rows < 3)
             {
-                determinant = (this[1, 1] * this[2, 2]) - (this[2, 1] * this[1, 2]);
+                determinant = (this[0, 0] * this[1, 1]) - (this[1, 0] * this[0, 1]);
             }
             else
             {
@@ -263,9 +263,9 @@ namespace MatrixDesign
 
         private void ApplyOperation(Func<int, int, double> operation)
         {
-            for (int rowIndex = 1; rowIndex <= Rows; rowIndex++)
+            for (int rowIndex = 0; rowIndex < Rows; rowIndex++)
             {
-                for (int columnIndex = 1; columnIndex <= Columns; columnIndex++)
+                for (int columnIndex = 0; columnIndex < Columns; columnIndex++)
                 {
                     this[rowIndex, columnIndex] = operation(rowIndex, columnIndex);
                 }
@@ -277,9 +277,9 @@ namespace MatrixDesign
         public override string ToString()
         {
             string outputString = "";
-            for (int rowIndex = 1; rowIndex <= Rows; rowIndex++)
+            for (int rowIndex = 0; rowIndex < Rows; rowIndex++)
             {
-                for (int columnIndex = 1; columnIndex <= Columns; columnIndex++)
+                for (int columnIndex = 0; columnIndex < Columns; columnIndex++)
                 {
                     outputString += this[rowIndex, columnIndex].ToString("F3") + "\t";
                 }
