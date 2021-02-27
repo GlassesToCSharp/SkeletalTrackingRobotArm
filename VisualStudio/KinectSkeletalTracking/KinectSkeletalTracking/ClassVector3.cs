@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Kinect;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -63,6 +64,16 @@ namespace KinectSkeletalTracking
             };
         }
 
+        public CameraSpacePoint toCameraSpacePoint()
+        {
+            return new CameraSpacePoint()
+            {
+                X = (float)X,
+                Y = (float)Y,
+                Z = (float)Z,
+            };
+        }
+
         public static double GetAngleBetweenVectors(Vector3 u, Vector3 v)
         {
             // Do dot product
@@ -79,8 +90,6 @@ namespace KinectSkeletalTracking
 
             return angle;
         }
-
-
     }
 
     /// <summary>

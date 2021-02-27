@@ -1,20 +1,13 @@
-﻿using Microsoft.Kinect;
+﻿using Matrix = MatrixDesign.Matrix;
+using Microsoft.Kinect;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.IO.Ports;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Windows.Controls;
 
 namespace KinectSkeletalTracking
 {
@@ -23,10 +16,10 @@ namespace KinectSkeletalTracking
     /// </summary>
     public partial class MainWindow : Window, INotifyPropertyChanged
     {
-        private const bool SendToMotors = true;
+        private const bool SendToMotors = false;
 
         private const double Rad2Deg = 180 / Math.PI;
-        //private const double Deg2Rad = Math.PI / 180;
+        private const double Deg2Rad = Math.PI / 180;
 
         private const string SerialDataFormat = "S{0}E";
 
@@ -430,15 +423,8 @@ namespace KinectSkeletalTracking
 
                             foreach (JointType jointType in joints.Keys)
                             {
-                                // sometimes the depth(Z) of an inferred joint may show as negative
-                                // clamp down to 0.1f to prevent coordinatemapper from returning (-Infinity, -Infinity)
-                                CameraSpacePoint position = joints[jointType].Position;
-                                if (position.Z < 0)
-                                {
-                                    position.Z = InferredZPositionClamp;
-                                }
-
-                                DepthSpacePoint depthSpacePoint = this.coordinateMapper.MapCameraPointToDepthSpace(position);
+                                // Get the 2D representation of the depth point.
+                                DepthSpacePoint depthSpacePoint = this.GetDepthSpacePoint(joints[jointType].Position);
                                 jointPoints[jointType] = new Point(depthSpacePoint.X, depthSpacePoint.Y);
                             }
 
@@ -542,6 +528,12 @@ namespace KinectSkeletalTracking
         /// /// <param name="drawingPen">specifies color to draw a specific bone</param>
         private void DrawBone(IReadOnlyDictionary<JointType, Joint> joints, IDictionary<JointType, Point> jointPoints, JointType jointType0, JointType jointType1, DrawingContext drawingContext, Pen drawingPen)
         {
+            if (!joints.ContainsKey(jointType0) || !joints.ContainsKey(jointType1))
+            {
+                // If the joints aren't being drawn, don't draw the bones for them.
+                return;
+            }
+
             Joint joint0 = joints[jointType0];
             Joint joint1 = joints[jointType1];
 
@@ -626,6 +618,22 @@ namespace KinectSkeletalTracking
                     null,
                     new Rect(this.displayWidth - ClipBoundsThickness, 0, ClipBoundsThickness, this.displayHeight));
             }
+        }
+
+        /// <summary>
+        /// Sometimes the depth(Z) of an inferred joint may show as negative.
+        /// Clamp down to 0.1f to prevent coordinatemapper from returning (-Infinity, -Infinity)
+        /// </summary>
+        /// <param name="position">position of the joint</param>
+        /// <returns>The 2D representation of the position</returns>
+        private DepthSpacePoint GetDepthSpacePoint(CameraSpacePoint position)
+        {
+            if (position.Z < 0)
+            {
+                position.Z = InferredZPositionClamp;
+            }
+
+            return this.coordinateMapper.MapCameraPointToDepthSpace(position);
         }
 
         /// <summary>
@@ -728,35 +736,177 @@ namespace KinectSkeletalTracking
             //    theta2 = shoulder pitch
             //    theta3 = shoulder roll
             //    theta4 = elbow pitch
-            double theta1 = GetAngleFromSpineToElbow(ref spineToNeck, ref shoulderToElbow);
-            double theta2 = GetAngleFromCrossShoulderToElbow(ref crossShoulderVector, ref shoulderToElbow);
-            double theta3 = GetShoulderRoll(ref bodyPlane, ref shoulderToElbow, ref shoulderToWrist);
-            double theta4 = GetElbowAngle(ref shoulderToElbow, ref wristToElbow);
+            double shoulderYawAngleDegrees = GetAngleFromSpineToElbow(ref spineToNeck, ref shoulderToElbow);
+            double shoulderPitchAngleDegrees = GetAngleFromCrossShoulderToElbow(ref crossShoulderVector, ref shoulderToElbow);
+            double shoulderRollAngleDegrees = GetShoulderRoll(ref bodyPlane, ref shoulderToElbow, ref shoulderToWrist);
+            double elbowPitchAngleDegrees = GetElbowAngle(ref shoulderToElbow, ref wristToElbow);
 
             // 4. Display the angles on the screen
             using (DrawingContext dc = this.projectedGroup.Open())
             {
-                Pen drawingPen = new Pen(new SolidColorBrush(Color.FromArgb(255, 68, 192, 68)), 3);
-                Pen skeletonPen = this.inferredBonePen;
+                // Using matrices and forward kinematics.
 
-                // Use the angles to create projected vectors of joints
-                // TODO
+                // Base - right shoulder point.
+                // T01 - Translation from base to shoulder yaw (revolution about X axis)
+                // T12 - Translation from shoulder yaw to shoulder pitch (revolution about Z axis)
+                // T23 - Translation from shoulder pitch to elbow joint (translation through X axis)
+                // T03 - Translation from base to elbow joint
+                //  L1 - Length from shoulder to elbow
+
+                double l1 = shoulderToElbow.Magnitude;
+                double theta1 = shoulderYawAngleDegrees * Deg2Rad;
+                double theta2 = shoulderPitchAngleDegrees * Deg2Rad;
+                double theta3 = shoulderRollAngleDegrees * Deg2Rad;
+                double theta4 = elbowPitchAngleDegrees * Deg2Rad;
+
+                Matrix t01 = new Matrix(4, 4, new double[,] {
+                    { 1, 0, 0, 0 },
+                    { 0, Math.Cos(theta1), -Math.Sin(theta1), 0 },
+                    { 0, Math.Sin(theta1), Math.Cos(theta1), 0 },
+                    { 0, 0, 0, 1 },
+                });
+                Matrix t12 = new Matrix(4, 4, new double[,] {
+                    { Math.Cos(theta2), -Math.Sin(theta2), 0, 0 },
+                    { Math.Sin(theta2), Math.Cos(theta2), 0, 0 },
+                    { 0, 0, 1, 0 },
+                    { 0, 0, 0, 1 },
+                });
+                Matrix t23 = new Matrix(4, 4, new double[,] {
+                    { 1, 0, 0, l1 },
+                    { 0, 1, 0, 0 },
+                    { 0, 0, 1, 0 },
+                    { 0, 0, 0, 1 },
+                });
+
+                Matrix t03 = t01 * t12 * t23;
+                Vector3 elbowPosition = GetPositionVectorFromMatrix(t03);
+
+
+                // Base - elbow point.
+                // T34 - Translation from base to shoulder roll (revolution about X axis)
+                // T45 - Translation from shoulder roll to elbow pitch (revolution about Y axis)
+                // T5e - Translation from elbow pitch to end effector (translation through X axis)
+                // T3e - Translation from base to end effector
+                //  L2 - Length from elbow to end effector
+
+                double l2 = wristToElbow.Magnitude;
+
+                Matrix t34 = new Matrix(4, 4, new double[,] {
+                    { 1, 0, 0, 0 },
+                    { 0, Math.Cos(theta3), -Math.Sin(theta3), 0 },
+                    { 0, Math.Sin(theta3), Math.Cos(theta3), 0 },
+                    { 0, 0, 0, 1 },
+                });
+                Matrix t45 = new Matrix(4, 4, new double[,] {
+                    { Math.Cos(theta4), 0, -Math.Sin(theta4), 0 },
+                    { 0, 1, 0, 0 },
+                    { Math.Sin(theta4), 0, Math.Cos(theta4), 0 },
+                    { 0, 0, 0, 1 },
+                });
+                Matrix t5e = new Matrix(4, 4, new double[,] {
+                    { 1, 0, 0, l2 },
+                    { 0, 1, 0, 0 },
+                    { 0, 0, 1, 0 },
+                    { 0, 0, 0, 1 },
+                });
+
+                Matrix t3e = t34 * t45 * t5e;
+                Vector3 wristPosition = GetPositionVectorFromMatrix(t3e);
+
 
                 // Draw the skeleton (neck/spine and shoulders)
                 // Draw the projected vectors
+
+                Pen drawingPen = new Pen(new SolidColorBrush(Color.FromArgb(255, 68, 192, 68)), 3);
+                Pen skeletonPen = this.inferredBonePen;
+
+                // Use the angles to create projected vectors of joints. Use Forward Kinematics.
+                IReadOnlyDictionary<JointType, Joint> armPoints = new Dictionary<JointType, Joint>
+                {
+                    [JointType.ShoulderRight] = new Joint()
+                    {
+                        JointType = JointType.ShoulderRight,
+                        Position = pointForShoulderRight,
+                        TrackingState = TrackingState.Tracked,
+                    },
+                    [JointType.ElbowRight] = new Joint()
+                    {
+                        JointType = JointType.ElbowRight,
+                        Position = elbowPosition.toCameraSpacePoint(),
+                        TrackingState = TrackingState.Tracked,
+                    },
+                    [JointType.WristRight] = new Joint()
+                    {
+                        JointType = JointType.WristRight,
+                        Position = wristPosition.toCameraSpacePoint(),
+                        TrackingState = TrackingState.Tracked,
+                    }
+                };
+
+                // Draw a transparent background to set the render size
+                dc.DrawRectangle(Brushes.Black, null, new Rect(0.0, 0.0, this.displayWidth, this.displayHeight));
+
+                // convert the joint points to depth (display) space
+                Dictionary<JointType, Point> jointPoints = new Dictionary<JointType, Point>();
+
+                foreach (JointType jointType in armPoints.Keys)
+                {
+                    // Get the 2D representation of the depth point.
+                    DepthSpacePoint depthSpacePoint = this.GetDepthSpacePoint(armPoints[jointType].Position);
+                    jointPoints[jointType] = new Point(depthSpacePoint.X, depthSpacePoint.Y);
+                }
+
+
+                this.DrawBody(armPoints, jointPoints, dc, drawingPen);
+
+
+                // prevent drawing outside of our render area
+                this.projectedGroup.ClipGeometry = new RectangleGeometry(new Rect(0.0, 0.0, this.displayWidth, this.displayHeight));
+
+                /// ============================
+
+                //double scale = 100;
+
+                //Line rightUpperArm = new Line()
+                //{
+                //    X1 = armPoints[JointType.ShoulderRight].X * scale,
+                //    X2 = armPoints[JointType.ElbowRight].X * scale,
+                //    Y1 = armPoints[JointType.ShoulderRight].Y * scale,
+                //    Y2 = armPoints[JointType.ElbowRight].Y * scale,
+                //    Stroke = new SolidColorBrush(Colors.SeaGreen),
+                //    StrokeThickness = 15,
+                //};
+
+                //Line rightLowerArm = new Line()
+                //{
+                //    X1 = armPoints[JointType.ElbowRight].X * scale,
+                //    X2 = armPoints[JointType.WristRight].X * scale,
+                //    Y1 = armPoints[JointType.ElbowRight].Y * scale,
+                //    Y2 = armPoints[JointType.WristRight].Y * scale,
+                //    Stroke = new SolidColorBrush(Colors.Crimson),
+                //    StrokeThickness = 15,
+                //};
+
+                //Canvas.SetTop(rightUpperArm, 25);
+                //Canvas.SetLeft(rightUpperArm, 75);
+
+                //ProjectionCanvas.Children.Clear();
+                //ProjectionCanvas.Children.Add(rightUpperArm);
+                //ProjectionCanvas.Children.Add(rightLowerArm);
             }
+
             Angles.Text = String.Format("Shoulder {0}, {1}, {2}" + Environment.NewLine +
                 "Elbow {3}",
-                (int)(theta1), (int)(theta2), (int)(theta3),
-                (int)(theta4));
+                (int)shoulderYawAngleDegrees, (int)shoulderPitchAngleDegrees, (int)shoulderRollAngleDegrees,
+                (int)elbowPitchAngleDegrees);
 
             // 5. Send this angle to motors
             SerialWrite(FilterAngles(new double[]
             {
-                theta1,
-                theta2,
-                theta3,
-                theta4
+                shoulderYawAngleDegrees,
+                shoulderPitchAngleDegrees,
+                shoulderRollAngleDegrees,
+                elbowPitchAngleDegrees
             }));
         }
 
@@ -863,6 +1013,22 @@ namespace KinectSkeletalTracking
                 X = q.X - p.X,
                 Y = q.Y - p.Y,
                 Z = q.Z - p.Z
+            };
+        }
+
+
+        private Vector3 GetPositionVectorFromMatrix(Matrix matrix)
+        {
+            if (matrix.Rows < 3 || matrix.Columns < 3)
+            {
+                throw new Exception("Not enough columns or rows.");
+            }
+
+            return new Vector3
+            {
+                X = matrix.GetRow(0).Last(),
+                Y = matrix.GetRow(1).Last(),
+                Z = matrix.GetRow(2).Last()
             };
         }
 

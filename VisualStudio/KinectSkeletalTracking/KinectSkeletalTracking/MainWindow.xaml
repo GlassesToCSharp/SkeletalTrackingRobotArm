@@ -71,12 +71,18 @@
             </Viewbox>
 
             <Viewbox 
-                Grid.Column="0" 
+                Grid.Column="1" 
                 HorizontalAlignment="Center">
                 <Image 
                     Source="{Binding ProjectionSource}" 
                     Stretch="UniformToFill" />
             </Viewbox>
+
+            <!--<Canvas
+                x:Name="ProjectionCanvas"
+                Grid.Column="0" 
+                HorizontalAlignment="Center"
+                Background="Black"/>-->
         </Grid>
 
         <Grid
