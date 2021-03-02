@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace MatrixDesign
 {
-    public class Matrix
+    public class Matrix : IEquatable<Matrix>
     {
         private readonly double[,] matrixArray;
 
@@ -126,6 +126,27 @@ namespace MatrixDesign
 
         #region Mathematical Operations
 
+        public static bool operator ==(Matrix thisMatrix, Matrix otherMatrix)
+        {
+            bool doesEqual = true;
+
+            thisMatrix.ApplyOperation((row, col) => {
+                if (thisMatrix[row, col] != otherMatrix[row, col] && doesEqual)
+                {
+                    doesEqual = false;
+                }
+
+                return thisMatrix[row, col];
+            });
+
+            return doesEqual;
+        }
+
+        public static bool operator !=(Matrix thisMatrix, Matrix otherMatrix)
+        {
+            return !(thisMatrix == otherMatrix);
+        }
+
         public static Matrix operator *(Matrix vec, double value)
         {
             Matrix resultantMatrix = new Matrix(vec.Rows, vec.Columns);
@@ -220,6 +241,28 @@ namespace MatrixDesign
             resultantMatrix.ApplyOperation((matrixRow, matrixColumn) => matrix1[matrixRow, matrixColumn] - matrix2[matrixRow, matrixColumn]);
 
             return resultantMatrix;
+        }
+
+        public override bool Equals(object obj)
+        {
+            return obj != null && obj is Matrix && Equals(obj as Matrix);
+        }
+
+        public bool Equals(Matrix other)
+        {
+            return this == other;
+        }
+
+        public override int GetHashCode()
+        {
+            unchecked // Overflow is fine, just wrap
+            {
+                int hash = 17;
+                hash = hash * 23 + Rows.GetHashCode();
+                hash = hash * 23 + Columns.GetHashCode();
+                hash = hash * 23 + matrixArray.GetHashCode();
+                return hash;
+            }
         }
 
         #endregion
