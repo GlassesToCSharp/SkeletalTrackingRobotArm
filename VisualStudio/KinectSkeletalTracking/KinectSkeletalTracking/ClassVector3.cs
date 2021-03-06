@@ -74,7 +74,7 @@ namespace KinectSkeletalTracking
             };
         }
 
-        public static double GetAngleBetweenVectors(Vector3 u, Vector3 v, bool inDegrees = false)
+        public static double GetAngleBetweenVectors(Vector3 u, Vector3 v, bool inRadians = false)
         {
             // Do dot product
             double dotProductResult = u.Dot(v);
@@ -82,7 +82,7 @@ namespace KinectSkeletalTracking
             // arccose of [dot] / (||u|| * ||v||)
             double angle = Math.Acos(dotProductResult / (u.Magnitude * v.Magnitude));
 
-            if (inDegrees)
+            if (!inRadians)
             {
                 angle = angle * (180 / Math.PI);
             }

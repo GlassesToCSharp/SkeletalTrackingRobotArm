@@ -115,7 +115,7 @@ namespace VectorTests
                 Y = 1
             };
 
-            double angleDegrees = Vector3.GetAngleBetweenVectors(vector1, vector2, inDegrees: true);
+            double angleDegrees = Vector3.GetAngleBetweenVectors(vector1, vector2);
 
             // Test fails when `angleDegrees` comes back as 45.0000000000000001,
             // as it is not 45 exact. Either cast `angleDegrees` to an int, or

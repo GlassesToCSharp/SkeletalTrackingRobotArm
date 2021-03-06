@@ -676,7 +676,7 @@ namespace KinectSkeletalTracking
             Vector3 wristToElbow = GetVectorFromPoints(pointForElbow, pointForWrist);
 
             // 3. Get angle between vectors
-            double elbowAngle = GetAngleBetweenVectors(shoulderToElbow, wristToElbow);
+            double elbowAngle = Vector3.GetAngleBetweenVectors(shoulderToElbow, wristToElbow);
 
             // 4. Send this angle to motors
             SerialWrite(elbowAngle);
@@ -699,7 +699,7 @@ namespace KinectSkeletalTracking
             Vector3 shoulderLeftToShoulderRight = GetVectorFromPoints(pointForShoulderLeft, pointForShoulderRight);
 
             // 3. Get angle between vectors
-            double elbowAngle = GetAngleBetweenVectors(shoulderLeftToShoulderRight, shoulderRightToElbow);
+            double elbowAngle = Vector3.GetAngleBetweenVectors(shoulderLeftToShoulderRight, shoulderRightToElbow);
 
             // 4. Send this angle to motors
             SerialWrite(elbowAngle);
@@ -942,7 +942,7 @@ namespace KinectSkeletalTracking
         /// </summary>
         private double GetAngleFromCrossShoulderToElbow(ref Vector3 crossShoulder, ref Vector3 shoulderElbow)
         {
-            return GetAngleBetweenVectors(crossShoulder, shoulderElbow) * Rad2Deg;
+            return -Vector3.GetAngleBetweenVectors(crossShoulder, shoulderElbow);
         }
 
 
@@ -984,7 +984,7 @@ namespace KinectSkeletalTracking
             };
 
             // 4. Calculate angle between orthogonal vector of Body and orthogonal vector of Arm
-            return GetAngleBetweenVectors(bodyOrthogonal, armOrthogonal) * Rad2Deg;
+            return Vector3.GetAngleBetweenVectors(bodyOrthogonal, armOrthogonal);
         }
 
 
@@ -993,7 +993,7 @@ namespace KinectSkeletalTracking
         /// </summary>
         private double GetElbowAngle(ref Vector3 shoulderToElbow, ref Vector3 wristToElbow)
         {
-            return GetAngleBetweenVectors(shoulderToElbow, wristToElbow) * Rad2Deg;
+            return Vector3.GetAngleBetweenVectors(shoulderToElbow, wristToElbow);
         }
 
 
@@ -1030,12 +1030,6 @@ namespace KinectSkeletalTracking
                 Y = matrix.GetRow(1).Last(),
                 Z = matrix.GetRow(2).Last()
             };
-        }
-
-
-        private double GetAngleBetweenVectors(Vector3 u, Vector3 v)
-        {
-            return Vector3.GetAngleBetweenVectors(u, v);
         }
 
 
