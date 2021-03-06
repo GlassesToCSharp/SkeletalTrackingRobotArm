@@ -74,19 +74,18 @@ namespace KinectSkeletalTracking
             };
         }
 
-        public static double GetAngleBetweenVectors(Vector3 u, Vector3 v)
+        public static double GetAngleBetweenVectors(Vector3 u, Vector3 v, bool inDegrees = false)
         {
             // Do dot product
             double dotProductResult = u.Dot(v);
 
-            // Magnitude of u
-            double magnitudeOfU = Math.Sqrt((u.X * u.X) + (u.Y * u.Y) + (u.Z * u.Z));
-
-            // Magnitude of v
-            double magnitudeOfV = Math.Sqrt((v.X * v.X) + (v.Y * v.Y) + (v.Z * v.Z));
-
             // arccose of [dot] / (||u|| * ||v||)
-            double angle = Math.Acos(dotProductResult / (magnitudeOfU * magnitudeOfV));
+            double angle = Math.Acos(dotProductResult / (u.Magnitude * v.Magnitude));
+
+            if (inDegrees)
+            {
+                angle = angle * (180 / Math.PI);
+            }
 
             return angle;
         }
