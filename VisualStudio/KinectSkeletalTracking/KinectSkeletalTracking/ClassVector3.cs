@@ -7,13 +7,63 @@ using System.Threading.Tasks;
 
 namespace KinectSkeletalTracking
 {
-    public class Vector3
+    class Constants
+    {
+        /// <summary>
+        /// Constant for clamping Z values of camera space points from being negative
+        /// </summary>
+        public const float InferredZPositionClamp = 0.1f;
+    }
+
+    public class Vector3 : IEquatable<Vector3>
     {
         public double X { get; set; } = 0.0;
         public double Y { get; set; } = 0.0;
         public double Z { get; set; } = 0.0;
 
         public virtual double Magnitude => Math.Sqrt((X * X) + (Y * Y) + (Z * Z));
+
+        public Vector3(double x = 0.0, double y = 0.0, double z = 0.0)
+        {
+            X = x;
+            Y = y;
+            Z = z;
+        }
+
+        public static Vector3 FromPoints(CameraSpacePoint p, CameraSpacePoint q, float zPositionclamp = Constants.InferredZPositionClamp)
+        {
+            if (p.Z < 0)
+            {
+                p.Z = zPositionclamp;
+            }
+            if (q.Z < 0)
+            {
+                q.Z = zPositionclamp;
+            }
+
+            return new Vector3
+            {
+                X = q.X - p.X,
+                Y = q.Y - p.Y,
+                Z = q.Z - p.Z
+            };
+        }
+
+        public static Vector3 FromVector(Vector3 vector)
+        {
+            return new Vector3(vector.X, vector.Y, vector.Z);
+        }
+
+        #region Operators
+        public static bool operator ==(Vector3 thisVector, Vector3 otherVector)
+        {
+            return thisVector.X == otherVector.X && thisVector.Y == otherVector.Y && thisVector.Z == otherVector.Z;
+        }
+
+        public static bool operator !=(Vector3 thisVector, Vector3 otherVector)
+        {
+            return !(thisVector == otherVector);
+        }
 
         public static Vector3 operator *(Vector3 vec, double c)
         {
@@ -44,6 +94,30 @@ namespace KinectSkeletalTracking
             return ret;
         }
 
+        public override bool Equals(object obj)
+        {
+            return obj != null && obj is Vector3 && Equals(obj as Vector3);
+        }
+
+        public bool Equals(Vector3 other)
+        {
+            return this == other;
+        }
+
+        public override int GetHashCode()
+        {
+            unchecked // Overflow is fine, just wrap
+            {
+                int hash = 17;
+                hash = hash * 23 + X.GetHashCode();
+                hash = hash * 23 + Y.GetHashCode();
+                hash = hash * 23 + Z.GetHashCode();
+                return hash;
+            }
+        }
+
+        #endregion
+
         public double Dot(Vector3 vec)
         {
             double dotProductResult =
@@ -64,7 +138,7 @@ namespace KinectSkeletalTracking
             };
         }
 
-        public CameraSpacePoint toCameraSpacePoint()
+        public CameraSpacePoint ToCameraSpacePoint()
         {
             return new CameraSpacePoint()
             {
@@ -84,10 +158,15 @@ namespace KinectSkeletalTracking
 
             if (!inRadians)
             {
-                angle = angle * (180 / Math.PI);
+                angle *= (180 / Math.PI);
             }
 
             return angle;
+        }
+
+        public override string ToString()
+        {
+            return String.Format("[X:{0}, Y:{1}, Z:{2}]", X, Y, Z);
         }
     }
 
@@ -100,5 +179,60 @@ namespace KinectSkeletalTracking
         public double D { get; set; } = 0.0;
 
         override public double Magnitude => Double.NaN;
+
+        public static Plane FromPoints(params CameraSpacePoint[] points)
+        {
+            // minimum 3 points are required
+            if (points.Length < 3)
+            {
+                return null;
+            }
+
+            // Only 3 points are needed to make a plane
+            CameraSpacePoint A = points[0];
+            CameraSpacePoint B = points[1];
+            CameraSpacePoint C = points[2];
+
+            Vector3 AB = Vector3.FromPoints(A, B);
+            Vector3 AC = Vector3.FromPoints(A, C);
+
+            // Do the cross product
+            Vector3 normal = AB.Cross(AC);
+
+            // Return the normal with the ammended D value. This is the Plane equation.
+            return new Plane
+            {
+                X = normal.X,
+                Y = normal.Y,
+                Z = normal.Z,
+                D = -((normal.X * (-A.X)) + (normal.Y * (-A.Y)) + (normal.Z * (-A.Z)))
+            };
+        }
+
+
+        public static Plane FromVectors(params Vector3[] vectors)
+        {
+            // minimum 2 vectors are required
+            if (vectors.Length < 2)
+            {
+                return null;
+            }
+
+            // Only 2 vectors are needed to make a plane
+            Vector3 u = vectors[0];
+            Vector3 v = vectors[1];
+
+            // Do the cross product
+            Vector3 orthogonal = u.Cross(v);
+
+            // Return the normal with the ammended D value. This is the Plane equation.
+            return new Plane
+            {
+                X = orthogonal.X,
+                Y = orthogonal.Y,
+                Z = orthogonal.Z,
+                D = -((orthogonal.X * (-u.X)) + (orthogonal.Y * (-u.Y)) + (orthogonal.Z * (-u.Z)))
+            };
+        }
     }
 }

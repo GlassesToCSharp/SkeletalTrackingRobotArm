@@ -6,6 +6,30 @@ namespace VectorTests
     [TestClass]
     public class Vector3Operations
     {
+        [TestClass]
+        public class Equality
+        {
+            private static readonly Vector3 comp = new Vector3(1, 1, 1);
+            private static readonly Vector3 equal = new Vector3(1, 1, 1);
+            private static readonly Vector3 notEqual = new Vector3(2, 2, 2);
+
+            [TestMethod]
+            public void EqualOperator()
+            {
+                Assert.IsTrue(comp == equal);
+                Assert.IsTrue(comp != notEqual);
+                Assert.IsFalse(comp == notEqual);
+            }
+
+            [TestMethod]
+            public void EqualMethod()
+            {
+                Assert.IsTrue(comp.Equals(equal));
+                Assert.IsFalse(comp.Equals(notEqual));
+                Assert.IsFalse(comp.Equals(2)); // Random number, not a vector.
+            }
+        }
+
         [TestMethod]
         public void MultiplyValue()
         {
