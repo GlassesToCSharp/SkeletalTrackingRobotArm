@@ -408,7 +408,7 @@ namespace KinectSkeletalTracking
                     {
                         Body body = bodies[bodyIndex];
 
-                        Pen drawPen = this.bodyColors[bodyIndex];
+                        Pen drawPen = bodyColors[3];// this.bodyColors[bodyIndex];
 
                         if (body.IsTracked)
                         {
@@ -714,22 +714,22 @@ namespace KinectSkeletalTracking
         {
             // 1. Get elbow and shoulder points
             CameraSpacePoint pointForShoulderRight = joints[JointType.ShoulderRight].Position;
-            CameraSpacePoint pointForShoulderleft = joints[JointType.ShoulderLeft].Position;
+            CameraSpacePoint pointForShoulderLeft = joints[JointType.ShoulderLeft].Position;
             CameraSpacePoint pointForElbow = joints[JointType.ElbowRight].Position;
             CameraSpacePoint pointForWrist = joints[JointType.WristRight].Position;
 
             // 2. Created necessary planes and vectors
-            Plane bodyPlane = GetPlaneFromPoints(joints[JointType.ShoulderRight].Position, joints[JointType.Neck].Position, joints[JointType.SpineShoulder].Position);
+            Plane bodyPlane = Plane.FromPoints(joints[JointType.ShoulderRight].Position, joints[JointType.Neck].Position, joints[JointType.SpineShoulder].Position);
             Vector3 spineToNeck = new Vector3()
             {
                 X = bodyPlane.X,
                 Y = bodyPlane.Y,
                 Z = bodyPlane.Z
             };
-            Vector3 crossShoulderVector = GetVectorFromPoints(pointForShoulderRight, pointForShoulderleft);
-            Vector3 shoulderToElbow = GetVectorFromPoints(pointForShoulderRight, pointForElbow);
-            Vector3 shoulderToWrist = GetVectorFromPoints(pointForShoulderRight, pointForWrist);
-            Vector3 wristToElbow = GetVectorFromPoints(pointForElbow, pointForWrist);
+            Vector3 crossShoulderVector = Vector3.FromPoints(pointForShoulderRight, pointForShoulderLeft);
+            Vector3 shoulderToElbow = Vector3.FromPoints(pointForShoulderRight, pointForElbow);
+            Vector3 shoulderToWrist = Vector3.FromPoints(pointForShoulderRight, pointForWrist);
+            Vector3 elbowToWrist = Vector3.FromPoints(pointForElbow, pointForWrist);
 
             // 3. Calculate the anngles of each degree of freedom, here
             //    theta1 = shoulder yaw
@@ -789,7 +789,7 @@ namespace KinectSkeletalTracking
                 // T3e - Translation from base to end effector
                 //  L2 - Length from elbow to end effector
 
-                double l2 = wristToElbow.Magnitude;
+                double l2 = elbowToWrist.Magnitude;
 
                 Matrix t34 = new Matrix(4, 4, new double[,] {
                     { 1, 0, 0, 0 },
@@ -811,18 +811,26 @@ namespace KinectSkeletalTracking
                 });
 
                 Matrix t3e = t34 * t45 * t5e;
-                Vector3 wristPosition = GetPositionVectorFromMatrix(t3e);
+                Matrix t0e = t03 * t3e;
+                Vector3 wristPosition = GetPositionVectorFromMatrix(t0e);
+                wristPosition -= elbowPosition;
 
 
                 // Draw the skeleton (neck/spine and shoulders)
                 // Draw the projected vectors
 
-                Pen drawingPen = new Pen(new SolidColorBrush(Color.FromArgb(255, 68, 192, 68)), 3);
+                Pen drawingPen = bodyColors[2]; // new Pen(new SolidColorBrush(Color.FromArgb(255, 68, 192, 68)), 3);
                 Pen skeletonPen = this.inferredBonePen;
 
                 // Use the angles to create projected vectors of joints. Use Forward Kinematics.
                 IReadOnlyDictionary<JointType, Joint> armPoints = new Dictionary<JointType, Joint>
                 {
+                    [JointType.ShoulderLeft] = new Joint()
+                    {
+                        JointType = JointType.ShoulderLeft,
+                        Position = pointForShoulderLeft,
+                        TrackingState = TrackingState.Tracked,
+                    },
                     [JointType.ShoulderRight] = new Joint()
                     {
                         JointType = JointType.ShoulderRight,
@@ -832,13 +840,13 @@ namespace KinectSkeletalTracking
                     [JointType.ElbowRight] = new Joint()
                     {
                         JointType = JointType.ElbowRight,
-                        Position = elbowPosition.toCameraSpacePoint(),
+                        Position = elbowPosition.ToCameraSpacePoint(),
                         TrackingState = TrackingState.Tracked,
                     },
                     [JointType.WristRight] = new Joint()
                     {
                         JointType = JointType.WristRight,
-                        Position = wristPosition.toCameraSpacePoint(),
+                        Position = wristPosition.ToCameraSpacePoint(),
                         TrackingState = TrackingState.Tracked,
                     }
                 };
@@ -857,48 +865,42 @@ namespace KinectSkeletalTracking
                 }
 
 
-                this.DrawBody(armPoints, jointPoints, dc, drawingPen);
+                this.DrawBody(new Dictionary<JointType, Joint>
+                {
+                    [JointType.ShoulderLeft] = armPoints[JointType.ShoulderLeft],
+                    [JointType.ShoulderRight] = armPoints[JointType.ShoulderRight]
+                }, jointPoints, dc, inferredBonePen);
+                this.DrawBody(new Dictionary<JointType, Joint>
+                {
+                    [JointType.ShoulderRight] = armPoints[JointType.ShoulderRight],
+                    [JointType.ElbowRight] = armPoints[JointType.ElbowRight]
+                }, jointPoints, dc, bodyColors[4]);
+                this.DrawBody(new Dictionary<JointType, Joint>
+                {
+                    [JointType.ElbowRight] = armPoints[JointType.ElbowRight],
+                    [JointType.WristRight] = armPoints[JointType.WristRight],
+                }, jointPoints, dc, bodyColors[1]);
 
 
                 // prevent drawing outside of our render area
                 this.projectedGroup.ClipGeometry = new RectangleGeometry(new Rect(0.0, 0.0, this.displayWidth, this.displayHeight));
 
-                /// ============================
-
-                //double scale = 100;
-
-                //Line rightUpperArm = new Line()
-                //{
-                //    X1 = armPoints[JointType.ShoulderRight].X * scale,
-                //    X2 = armPoints[JointType.ElbowRight].X * scale,
-                //    Y1 = armPoints[JointType.ShoulderRight].Y * scale,
-                //    Y2 = armPoints[JointType.ElbowRight].Y * scale,
-                //    Stroke = new SolidColorBrush(Colors.SeaGreen),
-                //    StrokeThickness = 15,
-                //};
-
-                //Line rightLowerArm = new Line()
-                //{
-                //    X1 = armPoints[JointType.ElbowRight].X * scale,
-                //    X2 = armPoints[JointType.WristRight].X * scale,
-                //    Y1 = armPoints[JointType.ElbowRight].Y * scale,
-                //    Y2 = armPoints[JointType.WristRight].Y * scale,
-                //    Stroke = new SolidColorBrush(Colors.Crimson),
-                //    StrokeThickness = 15,
-                //};
-
-                //Canvas.SetTop(rightUpperArm, 25);
-                //Canvas.SetLeft(rightUpperArm, 75);
-
-                //ProjectionCanvas.Children.Clear();
-                //ProjectionCanvas.Children.Add(rightUpperArm);
-                //ProjectionCanvas.Children.Add(rightLowerArm);
+                Angles.Text = String.Format(
+                    "Shoulder " + SpacePointToString(armPoints[JointType.ShoulderRight].Position) + Environment.NewLine +
+                    "Elbow    " + SpacePointToString(armPoints[JointType.ElbowRight].Position) + Environment.NewLine +
+                    "Wrist    " + SpacePointToString(armPoints[JointType.WristRight].Position) + Environment.NewLine +
+                    "U Arm L  " + l1 + Environment.NewLine +
+                    "L Arm L  " + l2 + Environment.NewLine +
+                    "Shoulder {0}, {1}, {2}" + Environment.NewLine +
+                    "Elbow {3}",
+                    (int)shoulderYawAngleDegrees, (int)shoulderPitchAngleDegrees, (int)shoulderRollAngleDegrees,
+                    (int)elbowPitchAngleDegrees);
             }
 
-            Angles.Text = String.Format("Shoulder {0}, {1}, {2}" + Environment.NewLine +
-                "Elbow {3}",
-                (int)shoulderYawAngleDegrees, (int)shoulderPitchAngleDegrees, (int)shoulderRollAngleDegrees,
-                (int)elbowPitchAngleDegrees);
+            //Angles.Text = String.Format("Shoulder {0}, {1}, {2}" + Environment.NewLine +
+            //    "Elbow {3}",
+            //    (int)shoulderYawAngleDegrees, (int)shoulderPitchAngleDegrees, (int)shoulderRollAngleDegrees,
+            //    (int)elbowPitchAngleDegrees);
 
             // 5. Send this angle to motors
             SerialWrite(FilterAngles(new double[]
@@ -999,21 +1001,7 @@ namespace KinectSkeletalTracking
 
         private Vector3 GetVectorFromPoints(CameraSpacePoint p, CameraSpacePoint q)
         {
-            if (p.Z < 0)
-            {
-                p.Z = InferredZPositionClamp;
-            }
-            if (q.Z < 0)
-            {
-                q.Z = InferredZPositionClamp;
-            }
-
-            return new Vector3
-            {
-                X = q.X - p.X,
-                Y = q.Y - p.Y,
-                Z = q.Z - p.Z
-            };
+            return Vector3.FromPoints(p, q, InferredZPositionClamp);
         }
 
 
