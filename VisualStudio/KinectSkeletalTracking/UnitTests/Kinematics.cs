@@ -104,7 +104,7 @@ namespace KinematicsTests
         {
             private const double upperArmLength = 1;
             private const double lowerArmLength = 1;
-            private static readonly Vector3 shoulderPosition = new Vector3(10, 10, 10);
+            private static readonly Point3 shoulderPosition = new Point3(10, 10, 10);
             private const double _90Deg = 90 * (Math.PI / 180);
 
             [TestClass]

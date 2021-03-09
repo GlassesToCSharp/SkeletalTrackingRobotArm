@@ -55,6 +55,17 @@ namespace VectorTests
                 Assert.AreEqual(otherVector.Y, vector.Y);
                 Assert.AreEqual(otherVector.Z, vector.Z);
             }
+
+            [TestMethod]
+            public void ConstructorFromPoints()
+            {
+                Point3 point1 = new Point3(1, 1, 1);
+                Point3 point2 = new Point3(2, 2, 2);
+                Vector3 expectedVector = new Vector3(1, 1, 1);
+                Vector3 vector = Vector3.FromPoints(point1, point2);
+
+                Assert.AreEqual(expectedVector, vector);
+            }
         }
 
         [TestMethod]

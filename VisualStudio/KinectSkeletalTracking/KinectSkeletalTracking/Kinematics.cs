@@ -11,12 +11,12 @@ namespace KinectSkeletalTracking
         /// Calculates the shoulder pitch.
         /// </summary>
         /// <param name="crossShoulder">The vector from left to right shoulder (or right to left).</param>
-        /// <param name="shoulderElbow">The vector from the shoulder (left or right) to the joining elbow.</param>
+        /// <param name="shoulderToElbow">The vector from the shoulder (left or right) to the joining elbow.</param>
         /// <param name="inRadians">Whether to get the angle in radians instead of degrees. Defaults to false.</param>
         /// <returns>The angle of the shoulder pitch.</returns>
-        public static double GetShoulderPitch(Vector3 crossShoulder, Vector3 shoulderElbow, bool inRadians = false)
+        public static double GetShoulderPitch(Vector3 crossShoulder, Vector3 shoulderToElbow, bool inRadians = false)
         {
-            return Vector3.GetAngleBetweenVectors(crossShoulder, shoulderElbow, inRadians);
+            return Vector3.GetAngleBetweenVectors(crossShoulder, shoulderToElbow, inRadians);
         }
 
 
@@ -25,10 +25,10 @@ namespace KinectSkeletalTracking
         /// </summary>
         /// <param name="spine">The vector of the spine.</param>
         /// <param name="crossShoulder">The vector from left to right shoulder (or right to left).</param>
-        /// <param name="shoulderElbow">The vector from the shoulder (left or right) to the joining elbow.</param>
+        /// <param name="shoulderToElbow">The vector from the shoulder (left or right) to the joining elbow.</param>
         /// <param name="inRadians">Whether to get the angle in radians instead of degrees. Defaults to false.</param>
         /// <returns>The angle of the shoulder yaw.</returns>
-        public static double GetShoulderYaw(Vector3 spine, Vector3 crossShoulder, Vector3 shoulderElbow, bool inRadians = false)
+        public static double GetShoulderYaw(Vector3 spine, Vector3 crossShoulder, Vector3 shoulderToElbow, bool inRadians = false)
         {
             // 1. Get perpendicular vector of the cross-shoulder and shoulderElbow vectors.
             // 2. Get perpendicular vector of body plane.
@@ -37,7 +37,7 @@ namespace KinectSkeletalTracking
 
             // Get perpendicular vector by doing cross product of crossShoulder and spine
             Vector3 bodyPerpendicular = crossShoulder.Cross(spine) * -1;
-            Vector3 armPerpendicular = crossShoulder.Cross(shoulderElbow);
+            Vector3 armPerpendicular = crossShoulder.Cross(shoulderToElbow);
 
             double yaw = Vector3.GetAngleBetweenVectors(bodyPerpendicular, armPerpendicular, inRadians);
 
@@ -108,12 +108,12 @@ namespace KinectSkeletalTracking
         /// <summary>
         /// Gets the vector of the elbow from the given shoulder position, and the given angles and arm length.
         /// </summary>
-        /// <param name="shoulderPosition">The vector to the shoulder associated to the arm.</param>
+        /// <param name="shoulderPosition">The point to the shoulder associated to the arm.</param>
         /// <param name="upperArmLength">The length of the upper arm.</param>
         /// <param name="shoulderYawRadians">The angle of the shoulder yaw in radians.</param>
         /// <param name="shoulderPitchRadians">The angle of the shoulder pitch in radians.</param>
         /// <returns>The vector of the elbow from the shoulder.</returns>
-        public static Vector3 GetElbowVector(Vector3 shoulderPosition, double upperArmLength, double shoulderYawRadians, double shoulderPitchRadians)
+        public static Vector3 GetElbowVector(Point3 shoulderPosition, double upperArmLength, double shoulderYawRadians, double shoulderPitchRadians)
         {
             Matrix t03 = GetElbowTranslationMatrix(shoulderPosition, upperArmLength, shoulderYawRadians, shoulderPitchRadians);
             return GetPositionVectorFromMatrix(t03);
@@ -173,12 +173,12 @@ namespace KinectSkeletalTracking
         /// <summary>
         /// Gets the DH Matrix required to translate from the base to the elbow joint.
         /// </summary>
-        /// <param name="shoulderPosition">The vector to the shoulder associated to the arm.</param>
+        /// <param name="shoulderPosition">The point to the shoulder associated to the arm.</param>
         /// <param name="upperArmLength">The length of the upper arm.</param>
         /// <param name="shoulderYawRadians">The angle of the shoulder yaw in radians.</param>
         /// <param name="shoulderPitchRadians">The angle of the shoulder pitch in radians.</param>
         /// <returns>The translation matrix from base to elbow.</returns>
-        public static Matrix GetElbowTranslationMatrix(Vector3 shoulderPosition, double upperArmLength, double shoulderYawRadians, double shoulderPitchRadians)
+        public static Matrix GetElbowTranslationMatrix(Point3 shoulderPosition, double upperArmLength, double shoulderYawRadians, double shoulderPitchRadians)
         {
             // Base - right shoulder point.
             // T01 - Translation from base to shoulder yaw (revolution about X axis)
@@ -226,7 +226,7 @@ namespace KinectSkeletalTracking
         /// Retrieves the position vector from the translation matrix.
         /// </summary>
         /// <param name="matrix">The translation matrix containing the position vector. Must be at least 4x4.</param>
-        /// <returns>The position vector.</returns>
+        /// <returns>The position point.</returns>
         private static Vector3 GetPositionVectorFromMatrix(Matrix matrix)
         {
             if (matrix.Rows < 3 || matrix.Columns < 3)

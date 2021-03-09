@@ -30,7 +30,7 @@ namespace KinectSkeletalTracking
             Z = z;
         }
 
-        public static Vector3 FromPoints(CameraSpacePoint p, CameraSpacePoint q, float zPositionclamp = Constants.InferredZPositionClamp)
+        public static Vector3 FromPoints(Point3 p, Point3 q, float zPositionclamp = Constants.InferredZPositionClamp)
         {
             if (p.Z < 0)
             {
@@ -55,6 +55,7 @@ namespace KinectSkeletalTracking
         }
 
         #region Operators
+
         public static bool operator ==(Vector3 thisVector, Vector3 otherVector)
         {
             return thisVector.X == otherVector.X && thisVector.Y == otherVector.Y && thisVector.Z == otherVector.Z;
@@ -138,16 +139,6 @@ namespace KinectSkeletalTracking
             };
         }
 
-        public CameraSpacePoint ToCameraSpacePoint()
-        {
-            return new CameraSpacePoint()
-            {
-                X = (float)X,
-                Y = (float)Y,
-                Z = (float)Z,
-            };
-        }
-
         public static double GetAngleBetweenVectors(Vector3 u, Vector3 v, bool inRadians = false)
         {
             // Do dot product
@@ -166,7 +157,7 @@ namespace KinectSkeletalTracking
 
         public override string ToString()
         {
-            return String.Format("[X:{0}, Y:{1}, Z:{2}]", X, Y, Z);
+            return String.Format("Vector3[X:{0}, Y:{1}, Z:{2}]", X, Y, Z);
         }
     }
 
@@ -189,12 +180,12 @@ namespace KinectSkeletalTracking
             }
 
             // Only 3 points are needed to make a plane
-            CameraSpacePoint A = points[0];
-            CameraSpacePoint B = points[1];
-            CameraSpacePoint C = points[2];
+            Point3 A = Point3.FromCameraSpacePoint(points[0]);
+            Point3 B = Point3.FromCameraSpacePoint(points[1]);
+            Point3 C = Point3.FromCameraSpacePoint(points[2]);
 
-            Vector3 AB = Vector3.FromPoints(A, B);
-            Vector3 AC = Vector3.FromPoints(A, C);
+            Vector3 AB = FromPoints(A, B);
+            Vector3 AC = FromPoints(A, C);
 
             // Do the cross product
             Vector3 normal = AB.Cross(AC);
