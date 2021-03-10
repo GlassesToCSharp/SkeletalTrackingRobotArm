@@ -33,13 +33,27 @@ namespace KinectSkeletalTracking
             // 1. Get perpendicular vector of the cross-shoulder and shoulderElbow vectors.
             // 2. Get perpendicular vector of body plane.
             // 3. Get angle between perpendicular vectors.
-            // 4. 0 degrees => perpendicular vectors are perpendicular to each other. Negative angle => elbow is pointing to feet. Positive angle => to the sky.
+            // 4. 0 degrees => perpendicular vectors are perpendicular to each
+            //    other. Negative angle => elbow is pointing to feet. Positive
+            //    angle => to the sky.
 
             // Get perpendicular vector by doing cross product of crossShoulder and spine
             Vector3 bodyPerpendicular = crossShoulder.Cross(spine) * -1;
             Vector3 armPerpendicular = crossShoulder.Cross(shoulderToElbow);
 
             double yaw = Vector3.GetAngleBetweenVectors(bodyPerpendicular, armPerpendicular, inRadians);
+
+            if (Double.IsNaN(yaw))
+            {
+                // TODO: I'm not 100% sure on how to handle a NaN event. This
+                // would only happen if the upper arm and shoulders are lined
+                // up perfectly, resulting in trying to get a perpendicular
+                // vector of two vectors that line up exactly, which has
+                // infinite possibilities.
+                // For now, return 0, as the angle wouldn't matter if the
+                // vectors line up.
+                return 0.0;
+            }
 
             // We now need to determine if the elbow is above or below the 
             // shoulder. Get the angle between the armPerpenicular and spine
@@ -88,7 +102,21 @@ namespace KinectSkeletalTracking
             Vector3 armOrthogonal = Vector3.FromVector(armPlane);
 
             // Calculate angle between orthogonal vector of Body and orthogonal vector of Arm
-            return Vector3.GetAngleBetweenVectors(bodyOrthogonal, armOrthogonal, inRadians);
+            double roll = Vector3.GetAngleBetweenVectors(bodyOrthogonal, armOrthogonal, inRadians);
+
+            if (Double.IsNaN(roll))
+            {
+                // TODO: I'm not 100% sure on how to handle a NaN event. This
+                // would only happen if the upper arm and shoulders are lined
+                // up perfectly, resulting in trying to get a perpendicular
+                // vector of two vectors that line up exactly, which has
+                // infinite possibilities.
+                // For now, return 0, as the angle wouldn't matter if the
+                // vectors line up.
+                return 0.0;
+            }
+
+            return roll;
         }
 
 
@@ -113,10 +141,10 @@ namespace KinectSkeletalTracking
         /// <param name="shoulderYawRadians">The angle of the shoulder yaw in radians.</param>
         /// <param name="shoulderPitchRadians">The angle of the shoulder pitch in radians.</param>
         /// <returns>The vector of the elbow from the shoulder.</returns>
-        public static Vector3 GetElbowVector(Point3 shoulderPosition, double upperArmLength, double shoulderYawRadians, double shoulderPitchRadians)
+        public static Point3 GetElbowPoint(Point3 shoulderPosition, double upperArmLength, double shoulderYawRadians, double shoulderPitchRadians)
         {
             Matrix t03 = GetElbowTranslationMatrix(shoulderPosition, upperArmLength, shoulderYawRadians, shoulderPitchRadians);
-            return GetPositionVectorFromMatrix(t03);
+            return GetPositionPointFromMatrix(t03);
         }
 
 
@@ -128,7 +156,7 @@ namespace KinectSkeletalTracking
         /// <param name="elbowPitchRadians">The angle of the elbow pitch in radians</param>
         /// <param name="lowerArmLength">The length of the lower arm.</param>
         /// <returns>The vector of the wrist from the origin of the elbow translation matrix.</returns>
-        public static Vector3 GetWristVector(Matrix elbowTranslationMatrix, double shoulderRollRadians, double elbowPitchRadians, double lowerArmLength)
+        public static Point3 GetWristPoint(Matrix elbowTranslationMatrix, double shoulderRollRadians, double elbowPitchRadians, double lowerArmLength)
         {
             Matrix t03 = elbowTranslationMatrix;
 
@@ -164,7 +192,7 @@ namespace KinectSkeletalTracking
 
             Matrix t3e = t34 * t45 * t5e;
             Matrix t0e = t03 * t3e;
-            Vector3 wristPosition = GetPositionVectorFromMatrix(t0e);
+            Point3 wristPosition = GetPositionPointFromMatrix(t0e);
 
             return wristPosition;
         }
@@ -227,14 +255,14 @@ namespace KinectSkeletalTracking
         /// </summary>
         /// <param name="matrix">The translation matrix containing the position vector. Must be at least 4x4.</param>
         /// <returns>The position point.</returns>
-        private static Vector3 GetPositionVectorFromMatrix(Matrix matrix)
+        private static Point3 GetPositionPointFromMatrix(Matrix matrix)
         {
             if (matrix.Rows < 3 || matrix.Columns < 3)
             {
                 throw new Exception("Not enough columns or rows.");
             }
 
-            return new Vector3
+            return new Point3
             {
                 X = matrix.GetRow(0).Last(),
                 Y = matrix.GetRow(1).Last(),
