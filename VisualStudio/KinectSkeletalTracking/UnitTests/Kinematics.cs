@@ -76,7 +76,7 @@ namespace KinematicsTests
                 Vector3 elbowToWrist = new Vector3(0, 0, -1);
                 double roll = Kinematics.GetShoulderRoll(neckToSpine, crossShoulder, shoulderToElbow, elbowToWrist);
 
-                Assert.AreEqual(90, roll, angleTolerance);
+                Assert.AreEqual(180, roll, angleTolerance);
             }
 
             [TestMethod]
@@ -85,7 +85,7 @@ namespace KinematicsTests
                 Vector3 elbowToWrist = new Vector3(0, 1, 0);
                 double roll = Kinematics.GetShoulderRoll(neckToSpine, crossShoulder, shoulderToElbow, elbowToWrist);
 
-                Assert.AreEqual(0, roll, angleTolerance);
+                Assert.AreEqual(90, roll, angleTolerance);
             }
 
             [TestMethod]
@@ -94,7 +94,7 @@ namespace KinematicsTests
                 Vector3 elbowToWrist = new Vector3(0, -1, 0);
                 double roll = Kinematics.GetShoulderRoll(neckToSpine, crossShoulder, shoulderToElbow, elbowToWrist);
 
-                Assert.AreEqual(180, roll, angleTolerance);
+                Assert.AreEqual(270, roll, angleTolerance);
             }
         }
 

@@ -91,10 +91,15 @@ namespace KinectSkeletalTracking
             if (Double.IsNaN(roll))
             {
                 // When the arm lines up, set to the reset position.
-                roll = 90;
+                roll = 0;
             }
 
-            return roll;
+            // As we are using the angles from planes, which uses perpendicular
+            // vectors, we need to remove this perpendicularity from the angle.
+            double perpedicularityCompensatorDegrees = 90;
+            double perpedicularityCompensatorRadians = perpedicularityCompensatorDegrees * Math.PI / 180;
+
+            return roll + (inRadians ? perpedicularityCompensatorRadians : perpedicularityCompensatorDegrees);
         }
 
 
