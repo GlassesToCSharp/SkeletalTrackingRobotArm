@@ -77,43 +77,21 @@ namespace KinectSkeletalTracking
         /// <param name="elbowToWrist">The vector from the elbow (attached to joining shoulder) to the joining wrist.</param>
         /// <param name="inRadians">Whether to get the angle in radians instead of degrees. Defaults to false.</param>
         /// <returns>The angle of the shoulder roll.</returns>
-        public static double GetShoulderRoll(Vector3 crossShoulder, Vector3 shoulderToElbow, Vector3 elbowToWrist, bool inRadians = false)
+        public static double GetShoulderRoll(Vector3 neckToSpine, Vector3 crossShoulder, Vector3 shoulderToElbow, Vector3 elbowToWrist, bool inRadians = false)
         {
-            // 1. Get shoulder-shoulder-elbow plane (SSE)
-            // 2. Get shoulder-elbow-wrist plane (SEW)
-            // 3. Get SSE orthogonal vector
-            // 4. Get SEW orthogonal vector
-            // 5. Get vector angles
+            // 1. Get Body plane (neck-spine and shoulder-shoulder).
+            // 2. Get Arm plane (shoulder-elbow and elbow-wrist).
+            // 3. Get angle of planes.
 
-            // Get planes
-            Plane armPlane = Plane.FromVectors(new Vector3[]
-            {
-                shoulderToElbow * -1, // Why am I multiplying by -1??
-                elbowToWrist
-            });
-            Plane bodyPlane = Plane.FromVectors(new Vector3[]
-            {
-                crossShoulder,
-                shoulderToElbow
-            });
+            Plane bodyPlane = Plane.FromVectors(neckToSpine, crossShoulder);
+            Plane armPlane = Plane.FromVectors(shoulderToElbow, elbowToWrist);
 
-            // Get orthogonal vectors
-            Vector3 bodyOrthogonal = Vector3.FromVector(bodyPlane);
-            Vector3 armOrthogonal = Vector3.FromVector(armPlane);
-
-            // Calculate angle between orthogonal vector of Body and orthogonal vector of Arm
-            double roll = Vector3.GetAngleBetweenVectors(bodyOrthogonal, armOrthogonal, inRadians);
+            double roll = Plane.GetAngleBetweenPlanes(bodyPlane, armPlane, inRadians);
 
             if (Double.IsNaN(roll))
             {
-                // TODO: I'm not 100% sure on how to handle a NaN event. This
-                // would only happen if the upper arm and shoulders are lined
-                // up perfectly, resulting in trying to get a perpendicular
-                // vector of two vectors that line up exactly, which has
-                // infinite possibilities.
-                // For now, return 0, as the angle wouldn't matter if the
-                // vectors line up.
-                return 0.0;
+                // When the arm lines up, set to the reset position.
+                roll = 90;
             }
 
             return roll;
