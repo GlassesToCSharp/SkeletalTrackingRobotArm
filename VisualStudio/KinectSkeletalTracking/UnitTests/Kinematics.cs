@@ -117,12 +117,11 @@ namespace KinematicsTests
                     double shoulderPitch = 0;
                     Point3 point = Kinematics.GetElbowPoint(shoulderPosition, upperArmLength, shoulderYaw, shoulderPitch);
 
-                    Point3 expectedPoint = new Point3()
-                    {
-                        X = shoulderPosition.X + upperArmLength,
-                        Y = shoulderPosition.Y,
-                        Z = shoulderPosition.Z
-                    };
+                    Point3 expectedPoint = new Point3(
+                        shoulderPosition.X + upperArmLength,
+                        shoulderPosition.Y,
+                        shoulderPosition.Z
+                    );
 
                     Assert.AreEqual(expectedPoint, point);
                 }
@@ -134,12 +133,11 @@ namespace KinematicsTests
                     double shoulderPitch = -_90Deg;
                     Point3 point = Kinematics.GetElbowPoint(shoulderPosition, upperArmLength, shoulderYaw, shoulderPitch);
 
-                    Point3 expectedPoint = new Point3()
-                    {
-                        X = shoulderPosition.X,
-                        Y = shoulderPosition.Y,
-                        Z = shoulderPosition.Z - upperArmLength
-                    };
+                    Point3 expectedPoint = new Point3(
+                        shoulderPosition.X,
+                        shoulderPosition.Y,
+                        shoulderPosition.Z - upperArmLength
+                    );
 
                     Assert.AreEqual(expectedPoint, point);
                 }
@@ -151,12 +149,11 @@ namespace KinematicsTests
                     double shoulderPitch = _90Deg;
                     Point3 point = Kinematics.GetElbowPoint(shoulderPosition, upperArmLength, shoulderYaw, shoulderPitch);
 
-                    Point3 expectedPoint = new Point3()
-                    {
-                        X = shoulderPosition.X,
-                        Y = shoulderPosition.Y - upperArmLength,
-                        Z = shoulderPosition.Z
-                    };
+                    Point3 expectedPoint = new Point3(
+                        shoulderPosition.X,
+                        shoulderPosition.Y - upperArmLength,
+                        shoulderPosition.Z
+                    );
 
                     Assert.AreEqual(expectedPoint, point);
                 }
@@ -168,12 +165,11 @@ namespace KinematicsTests
                     double shoulderPitch = _90Deg;
                     Point3 point = Kinematics.GetElbowPoint(shoulderPosition, upperArmLength, shoulderYaw, shoulderPitch);
 
-                    Point3 expectedPoint = new Point3()
-                    {
-                        X = shoulderPosition.X,
-                        Y = shoulderPosition.Y + upperArmLength,
-                        Z = shoulderPosition.Z
-                    };
+                    Point3 expectedPoint = new Point3(
+                        shoulderPosition.X,
+                        shoulderPosition.Y + upperArmLength,
+                        shoulderPosition.Z
+                    );
 
                     Assert.AreEqual(expectedPoint, point);
                 }
@@ -192,12 +188,11 @@ namespace KinematicsTests
                     double elbowPitch = 0;
                     Point3 point = GetWristPoint(shoulderYaw, shoulderPitch, shoulderRoll, elbowPitch);
 
-                    Point3 expectedPoint = new Point3()
-                    {
-                        X = shoulderPosition.X + upperArmLength + lowerArmLength,
-                        Y = shoulderPosition.Y,
-                        Z = shoulderPosition.Z
-                    };
+                    Point3 expectedPoint = new Point3(
+                        shoulderPosition.X + upperArmLength + lowerArmLength,
+                        shoulderPosition.Y,
+                        shoulderPosition.Z
+                    );
 
                     Assert.AreEqual(expectedPoint, point);
                 }
@@ -211,12 +206,11 @@ namespace KinematicsTests
                     double elbowPitch = -_90Deg;
                     Point3 point = GetWristPoint(shoulderYaw, shoulderPitch, shoulderRoll, elbowPitch);
 
-                    Point3 expectedPoint = new Point3()
-                    {
-                        X = shoulderPosition.X + upperArmLength,
-                        Y = shoulderPosition.Y,
-                        Z = shoulderPosition.Z - lowerArmLength
-                    };
+                    Point3 expectedPoint = new Point3(
+                        shoulderPosition.X + upperArmLength,
+                        shoulderPosition.Y,
+                        shoulderPosition.Z - lowerArmLength
+                    );
 
                     Assert.AreEqual(expectedPoint, point);
                 }
@@ -230,12 +224,11 @@ namespace KinematicsTests
                     double elbowPitch = -_90Deg;
                     Point3 point = GetWristPoint(shoulderYaw, shoulderPitch, shoulderRoll, elbowPitch);
 
-                    Point3 expectedPoint = new Point3()
-                    {
-                        X = shoulderPosition.X + upperArmLength,
-                        Y = shoulderPosition.Y + lowerArmLength,
-                        Z = shoulderPosition.Z
-                    };
+                    Point3 expectedPoint = new Point3(
+                        shoulderPosition.X + upperArmLength,
+                        shoulderPosition.Y + lowerArmLength,
+                        shoulderPosition.Z
+                    );
 
                     Assert.AreEqual(expectedPoint, point);
                 }
@@ -249,12 +242,11 @@ namespace KinematicsTests
                     double elbowPitch = -_90Deg;
                     Point3 point = GetWristPoint(shoulderYaw, shoulderPitch, shoulderRoll, elbowPitch);
 
-                    Point3 expectedPoint = new Point3()
-                    {
-                        X = shoulderPosition.X + upperArmLength,
-                        Y = shoulderPosition.Y - lowerArmLength,
-                        Z = shoulderPosition.Z
-                    };
+                    Point3 expectedPoint = new Point3(
+                        shoulderPosition.X + upperArmLength,
+                        shoulderPosition.Y - lowerArmLength,
+                        shoulderPosition.Z
+                    );
 
                     Assert.AreEqual(expectedPoint, point);
                 }
@@ -268,12 +260,11 @@ namespace KinematicsTests
                     double elbowPitch = 0;
                     Point3 point = GetWristPoint(shoulderYaw, shoulderPitch, shoulderRoll, elbowPitch);
 
-                    Point3 expectedPoint = new Point3()
-                    {
-                        X = shoulderPosition.X,
-                        Y = shoulderPosition.Y - (upperArmLength + lowerArmLength),
-                        Z = shoulderPosition.Z
-                    };
+                    Point3 expectedPoint = new Point3(
+                        shoulderPosition.X,
+                        shoulderPosition.Y - (upperArmLength + lowerArmLength),
+                        shoulderPosition.Z
+                    );
 
                     Assert.AreEqual(expectedPoint, point);
                 }
@@ -287,12 +278,11 @@ namespace KinematicsTests
                     double elbowPitch = 0;
                     Point3 point = GetWristPoint(shoulderYaw, shoulderPitch, shoulderRoll, elbowPitch);
 
-                    Point3 expectedPoint = new Point3()
-                    {
-                        X = shoulderPosition.X,
-                        Y = shoulderPosition.Y,
-                        Z = shoulderPosition.Z - (upperArmLength + lowerArmLength)
-                    };
+                    Point3 expectedPoint = new Point3(
+                        shoulderPosition.X,
+                        shoulderPosition.Y,
+                        shoulderPosition.Z - (upperArmLength + lowerArmLength)
+                    );
 
                     Assert.AreEqual(expectedPoint, point);
                 }
@@ -306,12 +296,11 @@ namespace KinematicsTests
                     double elbowPitch = _90Deg;
                     Point3 point = GetWristPoint(shoulderYaw, shoulderPitch, shoulderRoll, elbowPitch);
 
-                    Point3 expectedPoint = new Point3()
-                    {
-                        X = shoulderPosition.X,
-                        Y = shoulderPosition.Y - upperArmLength,
-                        Z = shoulderPosition.Z - lowerArmLength
-                    };
+                    Point3 expectedPoint = new Point3(
+                        shoulderPosition.X,
+                        shoulderPosition.Y - upperArmLength,
+                        shoulderPosition.Z - lowerArmLength
+                    );
 
                     Assert.AreEqual(expectedPoint, point);
                 }
@@ -325,12 +314,11 @@ namespace KinematicsTests
                     double elbowPitch = _90Deg;
                     Point3 point = GetWristPoint(shoulderYaw, shoulderPitch, shoulderRoll, elbowPitch);
 
-                    Point3 expectedPoint = new Point3()
-                    {
-                        X = shoulderPosition.X - lowerArmLength,
-                        Y = shoulderPosition.Y - upperArmLength,
-                        Z = shoulderPosition.Z
-                    };
+                    Point3 expectedPoint = new Point3(
+                        shoulderPosition.X - lowerArmLength,
+                        shoulderPosition.Y - upperArmLength,
+                        shoulderPosition.Z
+                    );
 
                     Assert.AreEqual(expectedPoint, point);
                 }
@@ -344,12 +332,11 @@ namespace KinematicsTests
                     double elbowPitch = _90Deg;
                     Point3 point = GetWristPoint(shoulderYaw, shoulderPitch, shoulderRoll, elbowPitch);
 
-                    Point3 expectedPoint = new Point3()
-                    {
-                        X = shoulderPosition.X,
-                        Y = shoulderPosition.Y + lowerArmLength,
-                        Z = shoulderPosition.Z - upperArmLength
-                    };
+                    Point3 expectedPoint = new Point3(
+                        shoulderPosition.X,
+                        shoulderPosition.Y + lowerArmLength,
+                        shoulderPosition.Z - upperArmLength
+                    );
 
                     Assert.AreEqual(expectedPoint, point);
                 }
@@ -363,12 +350,11 @@ namespace KinematicsTests
                     double elbowPitch = _90Deg;
                     Point3 point = GetWristPoint(shoulderYaw, shoulderPitch, shoulderRoll, elbowPitch);
 
-                    Point3 expectedPoint = new Point3()
-                    {
-                        X = shoulderPosition.X - lowerArmLength,
-                        Y = shoulderPosition.Y,
-                        Z = shoulderPosition.Z - upperArmLength
-                    };
+                    Point3 expectedPoint = new Point3(
+                        shoulderPosition.X - lowerArmLength,
+                        shoulderPosition.Y,
+                        shoulderPosition.Z - upperArmLength
+                    );
 
                     Assert.AreEqual(expectedPoint, point);
                 }

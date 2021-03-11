@@ -31,21 +31,6 @@ namespace VectorTests
             }
 
             [TestMethod]
-            public void ConstructorValuesProperties()
-            {
-                Vector3 vector = new Vector3()
-                {
-                    X = 1,
-                    Y = 2,
-                    Z = 3
-                };
-
-                Assert.AreEqual(1, vector.X);
-                Assert.AreEqual(2, vector.Y);
-                Assert.AreEqual(3, vector.Z);
-            }
-
-            [TestMethod]
             public void ConstructorFromVector()
             {
                 Vector3 otherVector = new Vector3(1, 2, 3);

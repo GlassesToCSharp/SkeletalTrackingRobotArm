@@ -9,10 +9,10 @@ namespace KinectSkeletalTracking
 {
     public class Plane : IEquatable<Plane>
     {
-        public double X { get; set; } = 0.0;
-        public double Y { get; set; } = 0.0;
-        public double Z { get; set; } = 0.0;
-        public double D { get; set; } = 0.0;
+        public double X { get; private set; } = 0.0;
+        public double Y { get; private set; } = 0.0;
+        public double Z { get; private set; } = 0.0;
+        public double D { get; private set; } = 0.0;
 
         public Plane(double x = 0, double y = 0, double z = 0, double d = 0)
         {

@@ -262,12 +262,11 @@ namespace KinectSkeletalTracking
                 throw new Exception("Not enough columns or rows.");
             }
 
-            return new Point3
-            {
-                X = matrix.GetRow(0).Last(),
-                Y = matrix.GetRow(1).Last(),
-                Z = matrix.GetRow(2).Last()
-            };
+            return new Point3(
+                matrix.GetRow(0).Last(),
+                matrix.GetRow(1).Last(),
+                matrix.GetRow(2).Last()
+            );
         }
     }
 }

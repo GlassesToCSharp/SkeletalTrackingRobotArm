@@ -33,90 +33,47 @@ namespace VectorTests
         [TestMethod]
         public void MultiplyValue()
         {
-            Vector3 vector = new Vector3()
-            {
-                X = 1,
-                Y = 2,
-                Z = 3
-            };
+            Vector3 vector = new Vector3(1, 2, 3);
+            Vector3 expectedVector = new Vector3(2, 4, 6);
 
             Vector3 newVector = vector * 2;
 
-            Assert.AreEqual(2, newVector.X);
-            Assert.AreEqual(4, newVector.Y);
-            Assert.AreEqual(6, newVector.Z);
+            Assert.AreEqual(expectedVector, newVector);
 
             newVector = 2 * vector;
 
-            Assert.AreEqual(2, newVector.X);
-            Assert.AreEqual(4, newVector.Y);
-            Assert.AreEqual(6, newVector.Z);
+            Assert.AreEqual(expectedVector, newVector);
         }
 
         [TestMethod]
         public void SubtractVector()
         {
-            Vector3 vector1 = new Vector3()
-            {
-                X = 3,
-                Y = 3,
-                Z = 3
-            };
-
-            Vector3 vector2 = new Vector3()
-            {
-                X = 2,
-                Y = 2,
-                Z = 2
-            };
+            Vector3 vector1 = new Vector3(3,3,3);
+            Vector3 vector2 = new Vector3(2, 2, 2);
+            Vector3 expectedVector = new Vector3(1, 1, 1);
 
             Vector3 newVector = vector1 - vector2;
 
-            Assert.AreEqual(1, newVector.X);
-            Assert.AreEqual(1, newVector.Y);
-            Assert.AreEqual(1, newVector.Z);
+            Assert.AreEqual(expectedVector, newVector);
         }
 
         [TestMethod]
         public void Cross()
         {
-            Vector3 vector1 = new Vector3()
-            {
-                X = 1,
-                Y = 2,
-                Z = 3
-            };
-
-            Vector3 vector2 = new Vector3()
-            {
-                X = 4,
-                Y = 5,
-                Z = 6
-            };
+            Vector3 vector1 = new Vector3(1, 2, 3);
+            Vector3 vector2 = new Vector3(4, 5, 6);
+            Vector3 expectedVector = new Vector3(-3, 6, -3);
 
             Vector3 newVector = vector1.Cross(vector2);
 
-            Assert.AreEqual(-3, newVector.X);
-            Assert.AreEqual(6, newVector.Y);
-            Assert.AreEqual(-3, newVector.Z);
+            Assert.AreEqual(expectedVector, newVector);
         }
 
         [TestMethod]
         public void Dot()
         {
-            Vector3 vector1 = new Vector3()
-            {
-                X = 1,
-                Y = 2,
-                Z = 3
-            };
-
-            Vector3 vector2 = new Vector3()
-            {
-                X = 4,
-                Y = 5,
-                Z = 6
-            };
+            Vector3 vector1 = new Vector3(1, 2, 3);
+            Vector3 vector2 = new Vector3(4, 5, 6);
 
             double dotProduct = vector1.Dot(vector2);
 
@@ -126,18 +83,8 @@ namespace VectorTests
         [TestMethod]
         public void AngleBetweenVectors()
         {
-            Vector3 vector1 = new Vector3()
-            {
-                X = 1,
-                Y = 1,
-                Z = 0
-            };
-
-            // Use default values of 0
-            Vector3 vector2 = new Vector3()
-            {
-                Y = 1
-            };
+            Vector3 vector1 = new Vector3(1, 1, 0);
+            Vector3 vector2 = new Vector3(0, 1, 0);
 
             double angleDegrees = Vector3.GetAngleBetweenVectors(vector1, vector2);
 

@@ -17,9 +17,9 @@ namespace KinectSkeletalTracking
 
     public class Vector3 : IEquatable<Vector3>
     {
-        public double X { get; set; } = 0.0;
-        public double Y { get; set; } = 0.0;
-        public double Z { get; set; } = 0.0;
+        public double X { get; private set; } = 0.0;
+        public double Y { get; private set; } = 0.0;
+        public double Z { get; private set; } = 0.0;
 
         public virtual double Magnitude => Math.Sqrt((X * X) + (Y * Y) + (Z * Z));
 
@@ -32,20 +32,22 @@ namespace KinectSkeletalTracking
 
         public static Vector3 FromPoints(Point3 p, Point3 q, float zPositionclamp = Constants.InferredZPositionClamp)
         {
+            double pZ = p.Z;
+            double qZ = q.Z;
             if (p.Z < 0)
             {
-                p.Z = zPositionclamp;
+                pZ = zPositionclamp;
             }
             if (q.Z < 0)
             {
-                q.Z = zPositionclamp;
+                qZ = zPositionclamp;
             }
 
             return new Vector3
             {
                 X = q.X - p.X,
                 Y = q.Y - p.Y,
-                Z = q.Z - p.Z
+                Z = qZ - pZ
             };
         }
 

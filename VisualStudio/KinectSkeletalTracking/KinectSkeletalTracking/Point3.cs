@@ -5,9 +5,9 @@ namespace KinectSkeletalTracking
 {
     public class Point3 : IEquatable<Point3>
     {
-        public double X { get; set; } = 0.0;
-        public double Y { get; set; } = 0.0;
-        public double Z { get; set; } = 0.0;
+        public double X { get; private set; } = 0.0;
+        public double Y { get; private set; } = 0.0;
+        public double Z { get; private set; } = 0.0;
 
         public Point3(double x = 0.0, double y = 0.0, double z = 0.0)
         {
