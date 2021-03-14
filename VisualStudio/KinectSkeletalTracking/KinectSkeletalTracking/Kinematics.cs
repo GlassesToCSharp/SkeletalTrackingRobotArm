@@ -1,5 +1,4 @@
 ﻿using MatrixDesign;
-using Microsoft.Kinect;
 using System;
 using System.Linq;
 
@@ -17,23 +16,9 @@ namespace KinectSkeletalTracking
         /// <returns>The angle of the shoulder pitch.</returns>
         public static double GetShoulderPitch(Point3 shoulderL, Point3 shoulderR, Point3 elbow, bool inRadians = false)
         {
-            //Vector3 crossShoulder = Vector3.FromPoints(shoulderL, shoulderR);
+            Vector3 crossShoulder = Vector3.FromPoints(shoulderL, shoulderR);
             Vector3 shoulderToElbow = Vector3.FromPoints(shoulderR, elbow);
-            //return Vector3.GetAngleBetweenVectors(crossShoulder, shoulderToElbow, inRadians);
-
-            double theoreticalPitch = Math.Atan(shoulderToElbow.X / Math.Sqrt(shoulderToElbow.Y * shoulderToElbow.Y + shoulderToElbow.Z * shoulderToElbow.Z));
-
-            if (Double.IsNaN(theoreticalPitch))
-            {
-                return 0.0;
-            }
-
-            if (!inRadians)
-            {
-                theoreticalPitch *= (180 / Math.PI);
-            }
-
-            return theoreticalPitch;
+            return Vector3.GetAngleBetweenVectors(crossShoulder, shoulderToElbow, inRadians);
         }
 
 
@@ -50,23 +35,6 @@ namespace KinectSkeletalTracking
             Vector3 neckToSpine = Vector3.FromPoints(neck, spine);
             Vector3 crossShoulder = Vector3.FromPoints(shoulderL, shoulderR);
             Vector3 shoulderToElbow = Vector3.FromPoints(shoulderR, elbow);
-
-            // TODO: This is theoretical because it only take into account the
-            // user is facing the kinect, and does not account for the user
-            // turning.
-            double theoreticalYaw = Math.Atan(shoulderToElbow.Y / shoulderToElbow.Z);
-
-            if (Double.IsNaN(theoreticalYaw))
-            {
-                return 0.0;
-            }
-
-            if (!inRadians)
-            {
-                theoreticalYaw *= (180 / Math.PI);
-            }
-
-            return theoreticalYaw;
 
             // 1. Get perpendicular vector of the cross-shoulder and shoulderElbow vectors.
             // 2. Get perpendicular vector of body plane.
