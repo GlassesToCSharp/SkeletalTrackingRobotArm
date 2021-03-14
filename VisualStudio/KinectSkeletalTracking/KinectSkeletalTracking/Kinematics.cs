@@ -92,23 +92,29 @@ namespace KinectSkeletalTracking
             Plane bodyPlane = Plane.FromVectors(neckToSpine, crossShoulder);
             Plane armPlane = Plane.FromVectors(shoulderToElbow, elbowToWrist);
 
-            double roll = Plane.GetAngleBetweenPlanes(bodyPlane, armPlane, inRadians);
-
-            if (Double.IsNaN(roll))
+            if (armPlane.AsVector().IsEmpty)
             {
-                // When the arm lines up, set to the reset position.
-                roll = 0;
+                return 0.0;
             }
 
-            // As we are using the angles from planes, which uses perpendicular
-            // vectors, we need to remove this perpendicularity from the angle.
-            const double perpedicularityCompensatorDegrees = 90;
-            const double perpedicularityCompensatorRadians = perpedicularityCompensatorDegrees * Math.PI / 180;
-            roll += (inRadians ? perpedicularityCompensatorRadians : perpedicularityCompensatorDegrees);
+            double angleRelativeToBodyPerpendicular = Plane.GetAngleBetweenPlanes(bodyPlane, armPlane, inRadians);
+            double angleRelativeToShoulders = Vector3.GetAngleBetweenVectors(crossShoulder, elbowToWrist, inRadians);
 
-            // In additional to the perpendicularity, the angles need to be
-            // reversed (as we are turning counter clockwise). Make negative.
-            return -roll;
+            if (Double.IsNaN(angleRelativeToBodyPerpendicular))
+            {
+                // When the arm lines up, set to the reset position.
+                angleRelativeToBodyPerpendicular = 0;
+            }
+            if (Double.IsNaN(angleRelativeToShoulders))
+            {
+                // When the arm lines up, set to the reset position.
+                angleRelativeToShoulders = 0;
+            }
+
+            double roll = angleRelativeToBodyPerpendicular + angleRelativeToShoulders;
+
+            // I prefer seeing angle 180 to -180, rather than 0 to 360.
+            return roll - (inRadians ? Math.PI : 180);
         }
 
 

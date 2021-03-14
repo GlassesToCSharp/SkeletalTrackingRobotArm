@@ -21,6 +21,8 @@ namespace KinectSkeletalTracking
         public double Y { get; private set; } = 0.0;
         public double Z { get; private set; } = 0.0;
 
+        public bool IsEmpty => X == 0 && Y == 0 && Z == 0;
+
         public virtual double Magnitude => Math.Sqrt((X * X) + (Y * Y) + (Z * Z));
 
         public Vector3(double x = 0.0, double y = 0.0, double z = 0.0)
