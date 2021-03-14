@@ -10,13 +10,30 @@ namespace KinectSkeletalTracking
         /// <summary>
         /// Calculates the shoulder pitch.
         /// </summary>
-        /// <param name="crossShoulder">The vector from left to right shoulder (or right to left).</param>
-        /// <param name="shoulderToElbow">The vector from the shoulder (left or right) to the joining elbow.</param>
+        /// <param name="shoulderL">The point for the left shoulder.</param>
+        /// <param name="shoulderR">The point for the right shoulder.</param>
+        /// <param name="elbow">The point for the joining elbow.</param>
         /// <param name="inRadians">Whether to get the angle in radians instead of degrees. Defaults to false.</param>
         /// <returns>The angle of the shoulder pitch.</returns>
-        public static double GetShoulderPitch(Vector3 crossShoulder, Vector3 shoulderToElbow, bool inRadians = false)
+        public static double GetShoulderPitch(Point3 shoulderL, Point3 shoulderR, Point3 elbow, bool inRadians = false)
         {
-            return Vector3.GetAngleBetweenVectors(crossShoulder, shoulderToElbow, inRadians);
+            //Vector3 crossShoulder = Vector3.FromPoints(shoulderL, shoulderR);
+            Vector3 shoulderToElbow = Vector3.FromPoints(shoulderR, elbow);
+            //return Vector3.GetAngleBetweenVectors(crossShoulder, shoulderToElbow, inRadians);
+
+            double theoreticalPitch = Math.Atan(shoulderToElbow.X / Math.Sqrt(shoulderToElbow.Y * shoulderToElbow.Y + shoulderToElbow.Z * shoulderToElbow.Z));
+
+            if (Double.IsNaN(theoreticalPitch))
+            {
+                return 0.0;
+            }
+
+            if (!inRadians)
+            {
+                theoreticalPitch *= (180 / Math.PI);
+            }
+
+            return theoreticalPitch;
         }
 
 
@@ -28,8 +45,29 @@ namespace KinectSkeletalTracking
         /// <param name="shoulderToElbow">The vector from the shoulder (left or right) to the joining elbow.</param>
         /// <param name="inRadians">Whether to get the angle in radians instead of degrees. Defaults to false.</param>
         /// <returns>The angle of the shoulder yaw.</returns>
-        public static double GetShoulderYaw(Vector3 spine, Vector3 crossShoulder, Vector3 shoulderToElbow, bool inRadians = false)
+        public static double GetShoulderYaw(Point3 neck, Point3 spine, Point3 shoulderL, Point3 shoulderR, Point3 elbow, bool inRadians = false)
         {
+            Vector3 neckToSpine = Vector3.FromPoints(neck, spine);
+            Vector3 crossShoulder = Vector3.FromPoints(shoulderL, shoulderR);
+            Vector3 shoulderToElbow = Vector3.FromPoints(shoulderR, elbow);
+
+            // TODO: This is theoretical because it only take into account the
+            // user is facing the kinect, and does not account for the user
+            // turning.
+            double theoreticalYaw = Math.Atan(shoulderToElbow.Y / shoulderToElbow.Z);
+
+            if (Double.IsNaN(theoreticalYaw))
+            {
+                return 0.0;
+            }
+
+            if (!inRadians)
+            {
+                theoreticalYaw *= (180 / Math.PI);
+            }
+
+            return theoreticalYaw;
+
             // 1. Get perpendicular vector of the cross-shoulder and shoulderElbow vectors.
             // 2. Get perpendicular vector of body plane.
             // 3. Get angle between perpendicular vectors.
@@ -38,7 +76,7 @@ namespace KinectSkeletalTracking
             //    angle => to the sky.
 
             // Get perpendicular vector by doing cross product of crossShoulder and spine
-            Vector3 bodyPerpendicular = crossShoulder.Cross(spine) * -1;
+            Vector3 bodyPerpendicular = crossShoulder.Cross(neckToSpine) * -1;
             Vector3 armPerpendicular = crossShoulder.Cross(shoulderToElbow);
 
             double yaw = Vector3.GetAngleBetweenVectors(bodyPerpendicular, armPerpendicular, inRadians);
@@ -59,7 +97,7 @@ namespace KinectSkeletalTracking
             // shoulder. Get the angle between the armPerpenicular and spine
             // vectors. If greater than 90 degrees, elbow is below shoulder. 
             // Therefore, make negative.
-            double signDeterminant = Vector3.GetAngleBetweenVectors(armPerpendicular, spine, inRadians);
+            double signDeterminant = Vector3.GetAngleBetweenVectors(armPerpendicular, neckToSpine, inRadians);
             if (signDeterminant > (inRadians ? Math.PI / 2 : 90))
             {
                 yaw = -yaw;
@@ -96,10 +134,13 @@ namespace KinectSkeletalTracking
 
             // As we are using the angles from planes, which uses perpendicular
             // vectors, we need to remove this perpendicularity from the angle.
-            double perpedicularityCompensatorDegrees = 90;
-            double perpedicularityCompensatorRadians = perpedicularityCompensatorDegrees * Math.PI / 180;
+            const double perpedicularityCompensatorDegrees = 90;
+            const double perpedicularityCompensatorRadians = perpedicularityCompensatorDegrees * Math.PI / 180;
+            roll += (inRadians ? perpedicularityCompensatorRadians : perpedicularityCompensatorDegrees);
 
-            return roll + (inRadians ? perpedicularityCompensatorRadians : perpedicularityCompensatorDegrees);
+            // In additional to the perpendicularity, the angles need to be
+            // reversed (as we are turning counter clockwise). Make negative.
+            return -roll;
         }
 
 
