@@ -29,12 +29,30 @@ namespace KinematicsTests
             }
 
             [TestMethod]
+            public void ElbowPointingDown()
+            {
+                Point3 elbow = new Point3(10, 9, 10);
+                double yaw = Kinematics.GetShoulderYaw(neck, spine, shoulderL, shoulderR, elbow);
+
+                Assert.AreEqual(0.0, yaw, angleTolerance);
+            }
+
+            [TestMethod]
             public void ElbowPointingForward()
             {
                 Point3 elbow = new Point3(10, 10, 9);
                 double yaw = Kinematics.GetShoulderYaw(neck, spine, shoulderL, shoulderR, elbow);
 
-                Assert.AreEqual(0.0, yaw, angleTolerance);
+                Assert.AreEqual(90, yaw, angleTolerance);
+            }
+
+            [TestMethod]
+            public void ElbowPointingUp()
+            {
+                Point3 elbow = new Point3(10, 11, 10);
+                double yaw = Kinematics.GetShoulderYaw(neck, spine, shoulderL, shoulderR, elbow);
+
+                Assert.AreEqual(180, yaw, angleTolerance);
             }
         }
 
@@ -47,7 +65,7 @@ namespace KinematicsTests
                 Point3 elbow = new Point3(11, 10, 10);
                 double pitch = Kinematics.GetShoulderPitch(shoulderL, shoulderR, elbow);
 
-                Assert.AreEqual(90, pitch, angleTolerance);
+                Assert.AreEqual(0, pitch, angleTolerance);
             }
 
             [TestMethod]
@@ -56,7 +74,7 @@ namespace KinematicsTests
                 Point3 elbow = new Point3(10, 9, 10);
                 double pitch = Kinematics.GetShoulderPitch(shoulderL, shoulderR, elbow);
 
-                Assert.AreEqual(0, pitch, angleTolerance);
+                Assert.AreEqual(90, pitch, angleTolerance);
             }
         }
 

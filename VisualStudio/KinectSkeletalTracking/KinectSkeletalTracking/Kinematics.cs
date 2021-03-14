@@ -44,7 +44,7 @@ namespace KinectSkeletalTracking
             //    angle => to the sky.
 
             // Get perpendicular vector by doing cross product of crossShoulder and spine
-            Vector3 bodyPerpendicular = crossShoulder.Cross(neckToSpine) * -1;
+            Vector3 bodyPerpendicular = crossShoulder.Cross(neckToSpine);
             Vector3 armPerpendicular = crossShoulder.Cross(shoulderToElbow);
 
             double yaw = Vector3.GetAngleBetweenVectors(bodyPerpendicular, armPerpendicular, inRadians);
@@ -65,11 +65,11 @@ namespace KinectSkeletalTracking
             // shoulder. Get the angle between the armPerpenicular and spine
             // vectors. If greater than 90 degrees, elbow is below shoulder. 
             // Therefore, make negative.
-            double signDeterminant = Vector3.GetAngleBetweenVectors(armPerpendicular, neckToSpine, inRadians);
-            if (signDeterminant > (inRadians ? Math.PI / 2 : 90))
-            {
-                yaw = -yaw;
-            }
+            //double signDeterminant = Vector3.GetAngleBetweenVectors(armPerpendicular, neckToSpine, inRadians);
+            //if (signDeterminant > (inRadians ? Math.PI / 2 : 90))
+            //{
+            //    yaw = -yaw;
+            //}
 
             return yaw;
         }
