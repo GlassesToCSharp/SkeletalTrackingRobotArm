@@ -78,7 +78,7 @@ namespace KinectSkeletalTracking
                 X = normal.X,
                 Y = normal.Y,
                 Z = normal.Z,
-                D = -((normal.X * (-a.X)) + (normal.Y * (-b.Y)) + (normal.Z * (-c.Z)))
+                D = (normal.X * (-a.X)) + (normal.Y * (-b.Y)) + (normal.Z * (-c.Z))
             };
         }
 
