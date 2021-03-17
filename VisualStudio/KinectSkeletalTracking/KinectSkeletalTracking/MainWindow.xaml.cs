@@ -717,16 +717,12 @@ namespace KinectSkeletalTracking
             Point3 pointForShoulderLeft = Point3.FromCameraSpacePoint(joints[JointType.ShoulderLeft].Position);
             Point3 pointForElbow = Point3.FromCameraSpacePoint(joints[JointType.ElbowRight].Position);
             Point3 pointForWrist = Point3.FromCameraSpacePoint(joints[JointType.WristRight].Position);
+            Point3 pointForNeck = Point3.FromCameraSpacePoint(joints[JointType.Neck].Position);
+            Point3 pointForSpine = Point3.FromCameraSpacePoint(joints[JointType.SpineShoulder].Position);
 
             // 2. Created necessary planes and vectors
-            Plane bodyPlane = Plane.FromPoints(joints[JointType.ShoulderRight].Position, joints[JointType.Neck].Position, joints[JointType.SpineShoulder].Position);
-            Vector3 spineToNeck = new Vector3()
-            {
-                X = bodyPlane.X,
-                Y = bodyPlane.Y,
-                Z = bodyPlane.Z
-            };
-            Vector3 crossShoulderVector = Vector3.FromPoints(pointForShoulderRight, pointForShoulderLeft);
+            Vector3 neckToSpine = Vector3.FromPoints(pointForNeck, pointForSpine);
+            Vector3 shoulderL2R = Vector3.FromPoints(pointForShoulderLeft, pointForShoulderRight);
             Vector3 shoulderToElbow = Vector3.FromPoints(pointForShoulderRight, pointForElbow);
             Vector3 shoulderToWrist = Vector3.FromPoints(pointForShoulderRight, pointForWrist);
             Vector3 elbowToWrist = Vector3.FromPoints(pointForElbow, pointForWrist);
@@ -736,85 +732,17 @@ namespace KinectSkeletalTracking
             //    theta2 = shoulder pitch
             //    theta3 = shoulder roll
             //    theta4 = elbow pitch
-            double shoulderYawAngleDegrees = GetAngleFromSpineToElbow(ref spineToNeck, ref shoulderToElbow);
-            double shoulderPitchAngleDegrees = GetAngleFromCrossShoulderToElbow(ref crossShoulderVector, ref shoulderToElbow);
-            double shoulderRollAngleDegrees = GetShoulderRoll(ref bodyPlane, ref shoulderToElbow, ref shoulderToWrist);
-            double elbowPitchAngleDegrees = GetElbowAngle(ref shoulderToElbow, ref wristToElbow);
+            InverseKinematics inverseKinematics = InverseKinematics.GetInverseKinematics(
+                pointForNeck, pointForSpine, pointForShoulderLeft,
+                pointForShoulderRight, pointForElbow, pointForWrist);
 
             // 4. Display the angles on the screen
             using (DrawingContext dc = this.projectedGroup.Open())
             {
                 // Using matrices and forward kinematics.
 
-                // Base - right shoulder point.
-                // T01 - Translation from base to shoulder yaw (revolution about X axis)
-                // T12 - Translation from shoulder yaw to shoulder pitch (revolution about Z axis)
-                // T23 - Translation from shoulder pitch to elbow joint (translation through X axis)
-                // T03 - Translation from base to elbow joint
-                //  L1 - Length from shoulder to elbow
-
-                double l1 = shoulderToElbow.Magnitude;
-                double theta1 = shoulderYawAngleDegrees * Deg2Rad;
-                double theta2 = shoulderPitchAngleDegrees * Deg2Rad;
-                double theta3 = shoulderRollAngleDegrees * Deg2Rad;
-                double theta4 = elbowPitchAngleDegrees * Deg2Rad;
-
-                Matrix t01 = new Matrix(4, 4, new double[,] {
-                    { 1, 0, 0, 0 },
-                    { 0, Math.Cos(theta1), -Math.Sin(theta1), 0 },
-                    { 0, Math.Sin(theta1), Math.Cos(theta1), 0 },
-                    { 0, 0, 0, 1 },
-                });
-                Matrix t12 = new Matrix(4, 4, new double[,] {
-                    { Math.Cos(theta2), -Math.Sin(theta2), 0, 0 },
-                    { Math.Sin(theta2), Math.Cos(theta2), 0, 0 },
-                    { 0, 0, 1, 0 },
-                    { 0, 0, 0, 1 },
-                });
-                Matrix t23 = new Matrix(4, 4, new double[,] {
-                    { 1, 0, 0, l1 },
-                    { 0, 1, 0, 0 },
-                    { 0, 0, 1, 0 },
-                    { 0, 0, 0, 1 },
-                });
-
-                Matrix t03 = t01 * t12 * t23;
-                Point3 elbowPosition = GetPositionPointFromMatrix(t03);
-
-
-                // Base - elbow point.
-                // T34 - Translation from base to shoulder roll (revolution about X axis)
-                // T45 - Translation from shoulder roll to elbow pitch (revolution about Y axis)
-                // T5e - Translation from elbow pitch to end effector (translation through X axis)
-                // T3e - Translation from base to end effector
-                //  L2 - Length from elbow to end effector
-
-                double l2 = elbowToWrist.Magnitude;
-
-                Matrix t34 = new Matrix(4, 4, new double[,] {
-                    { 1, 0, 0, 0 },
-                    { 0, Math.Cos(theta3), -Math.Sin(theta3), 0 },
-                    { 0, Math.Sin(theta3), Math.Cos(theta3), 0 },
-                    { 0, 0, 0, 1 },
-                });
-                Matrix t45 = new Matrix(4, 4, new double[,] {
-                    { Math.Cos(theta4), 0, -Math.Sin(theta4), 0 },
-                    { 0, 1, 0, 0 },
-                    { Math.Sin(theta4), 0, Math.Cos(theta4), 0 },
-                    { 0, 0, 0, 1 },
-                });
-                Matrix t5e = new Matrix(4, 4, new double[,] {
-                    { 1, 0, 0, l2 },
-                    { 0, 1, 0, 0 },
-                    { 0, 0, 1, 0 },
-                    { 0, 0, 0, 1 },
-                });
-
-                Matrix t3e = t34 * t45 * t5e;
-                Matrix t0e = t03 * t3e;
-                Point3 wristPosition = GetPositionPointFromMatrix(t0e);
-                wristPosition -= elbowPosition;
-
+                InverseKinematics ikRadians = inverseKinematics.ToRadians();
+                ForwardKinematics fk = ForwardKinematics.GetForwardKinematics(pointForShoulderRight, ikRadians);
 
                 // Draw the skeleton (neck/spine and shoulders)
                 // Draw the projected vectors
@@ -840,13 +768,13 @@ namespace KinectSkeletalTracking
                     [JointType.ElbowRight] = new Joint()
                     {
                         JointType = JointType.ElbowRight,
-                        Position = elbowPosition.ToCameraSpacePoint(),
+                        Position = fk.Elbow.ToCameraSpacePoint(),
                         TrackingState = TrackingState.Tracked,
                     },
                     [JointType.WristRight] = new Joint()
                     {
                         JointType = JointType.WristRight,
-                        Position = wristPosition.ToCameraSpacePoint(),
+                        Position = fk.Wrist.ToCameraSpacePoint(),
                         TrackingState = TrackingState.Tracked,
                     }
                 };
@@ -889,26 +817,21 @@ namespace KinectSkeletalTracking
                     "Shoulder " + SpacePointToString(armPoints[JointType.ShoulderRight].Position) + Environment.NewLine +
                     "Elbow    " + SpacePointToString(armPoints[JointType.ElbowRight].Position) + Environment.NewLine +
                     "Wrist    " + SpacePointToString(armPoints[JointType.WristRight].Position) + Environment.NewLine +
-                    "U Arm L  " + l1 + Environment.NewLine +
-                    "L Arm L  " + l2 + Environment.NewLine +
+                    "U Arm L  " + inverseKinematics.UpperArmLength + Environment.NewLine +
+                    "L Arm L  " + inverseKinematics.LowerArmLength + Environment.NewLine +
                     "Shoulder {0}, {1}, {2}" + Environment.NewLine +
                     "Elbow {3}",
-                    (int)shoulderYawAngleDegrees, (int)shoulderPitchAngleDegrees, (int)shoulderRollAngleDegrees,
-                    (int)elbowPitchAngleDegrees);
+                    (int)inverseKinematics.ShoulderYaw, (int)inverseKinematics.ShoulderPitch, (int)inverseKinematics.ShoulderRoll,
+                    (int)inverseKinematics.ElbowPitch);
             }
-
-            //Angles.Text = String.Format("Shoulder {0}, {1}, {2}" + Environment.NewLine +
-            //    "Elbow {3}",
-            //    (int)shoulderYawAngleDegrees, (int)shoulderPitchAngleDegrees, (int)shoulderRollAngleDegrees,
-            //    (int)elbowPitchAngleDegrees);
 
             // 5. Send this angle to motors
             SerialWrite(FilterAngles(new double[]
             {
-                shoulderYawAngleDegrees,
-                shoulderPitchAngleDegrees,
-                shoulderRollAngleDegrees,
-                elbowPitchAngleDegrees
+                inverseKinematics.ShoulderYaw,
+                inverseKinematics.ShoulderPitch,
+                inverseKinematics.ShoulderRoll,
+                inverseKinematics.ElbowPitch
             }));
         }
 
@@ -952,12 +875,11 @@ namespace KinectSkeletalTracking
                 throw new Exception("Not enough columns or rows.");
             }
 
-            return new Point3
-            {
-                X = matrix.GetRow(0).Last(),
-                Y = matrix.GetRow(1).Last(),
-                Z = matrix.GetRow(2).Last()
-            };
+            return new Point3(
+                matrix.GetRow(0).Last(),
+                matrix.GetRow(1).Last(),
+                matrix.GetRow(2).Last()
+            );
         }
 
         #endregion
