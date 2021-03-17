@@ -75,7 +75,11 @@ namespace VectorTests
             Vector3 vector1 = new Vector3(1, 2, 3);
             Vector3 vector2 = new Vector3(4, 5, 6);
 
-            double dotProduct = vector1.Dot(vector2);
+            double dotProduct = vector1.Dot(vector2.X, vector2.Y, vector2.Z);
+
+            Assert.AreEqual(32, dotProduct);
+
+            dotProduct = vector1.Dot(vector2);
 
             Assert.AreEqual(32, dotProduct);
         }

@@ -125,10 +125,15 @@ namespace KinectSkeletalTracking
 
         public double Dot(Vector3 vec)
         {
+            return Dot(vec.X, vec.Y, vec.Z);
+        }
+
+        public double Dot(double x, double y, double z)
+        {
             double dotProductResult =
-                (X * vec.X) +
-                (Y * vec.Y) +
-                (Z * vec.Z);
+                (X * x) +
+                (Y * y) +
+                (Z * z);
 
             return dotProductResult;
         }
