@@ -9,9 +9,9 @@ namespace KinematicsTests
     public class BodyAngles
     {
         const double angleTolerance = 0.000000001;
-        private static readonly Point3 neck = new Point3(9.5, 10, 10);
-        private static readonly Point3 spine = new Point3(9.5, 9, 10);
-        private static readonly Point3 shoulderL = new Point3(9, 10, 10);
+        private static readonly Point3 neck = new Point3(9, 12, 10);
+        private static readonly Point3 spine = new Point3(9, 8, 10);
+        private static readonly Point3 shoulderL = new Point3(8, 10, 10);
         private static readonly Point3 shoulderR = new Point3(10, 10, 10);
         private static readonly Vector3 neckToSpine = Vector3.FromPoints(neck, spine);
         private static readonly Vector3 shoulderL2R = Vector3.FromPoints(shoulderL, shoulderR);
