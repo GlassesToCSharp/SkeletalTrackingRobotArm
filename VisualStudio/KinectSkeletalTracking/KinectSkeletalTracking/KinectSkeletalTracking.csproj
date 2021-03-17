@@ -65,7 +65,8 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="ClassVector3.cs" />
-    <Compile Include="Kinematics.cs" />
+    <Compile Include="InverseKinematics.cs" />
+    <Compile Include="ForwardKinematics.cs" />
     <Compile Include="LibrarySerialInterface.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
