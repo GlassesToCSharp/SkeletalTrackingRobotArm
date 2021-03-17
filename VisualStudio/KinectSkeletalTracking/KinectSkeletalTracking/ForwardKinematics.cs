@@ -10,6 +10,12 @@ namespace KinectSkeletalTracking
         public Point3 Elbow { get; private set; }
         public Point3 Wrist { get; private set; }
 
+        /// <summary>
+        /// Creates an instance of <c>ForwardKinematics</c>.
+        /// </summary>
+        /// <param name="s">The shoulder point.</param>
+        /// <param name="e">The elbow point.</param>
+        /// <param name="w">The wrist point.</param>
         public ForwardKinematics(Point3 s, Point3 e, Point3 w)
         {
             Shoulder = s;
@@ -55,11 +61,31 @@ namespace KinectSkeletalTracking
 
         #endregion
 
+        /// <summary>
+        /// Retrieves the forward kinematics given the shoulder position and the inverse kinematics.
+        /// </summary>
+        /// <param name="shoulderPosition">The position of the "base" shoulder.</param>
+        /// <param name="ik">The inverse kinematics containing the angles of the joints.</param>
+        /// <returns>The forward kinamtic result given the inverse kinematic angles.</returns>
         public static ForwardKinematics GetForwardKinematics(Point3 shoulderPosition, InverseKinematics ik)
         {
-            return GetForwardKinematics(shoulderPosition, ik.ShoulderYaw, ik.ShoulderPitch, ik.ShoulderRoll, ik.ElbowPitch, ik.UpperArmLength, ik.LowerArmLength);
+            // The angles are required to be in radians. Just in case they are not, convert to radians.
+            InverseKinematics inRadians = ik.ToRadians();
+
+            return GetForwardKinematics(shoulderPosition, inRadians.ShoulderYaw, inRadians.ShoulderPitch, inRadians.ShoulderRoll, inRadians.ElbowPitch, inRadians.UpperArmLength, inRadians.LowerArmLength);
         }
 
+        /// <summary>
+        /// Retrieves the forward kinematics given the shoulder position and the given angles.
+        /// </summary>
+        /// <param name="shoulderPosition">The position of the "base" shoulder.</param>
+        /// <param name="shoulderYawRadians">The angle of the shoulder yaw in radians.</param>
+        /// <param name="shoulderPitchRadians">The angle of the shoulder pitch in radians.</param>
+        /// <param name="shoulderRollRadians">The angle of the shoulder roll in radians.</param>
+        /// <param name="elbowPitchRadians">The angle of the elbow pitch in radians</param>
+        /// <param name="upperArmLength">The length of the upper arm.</param>
+        /// <param name="lowerArmLength">The length of the lower arm.</param>
+        /// <returns></returns>
         public static ForwardKinematics GetForwardKinematics(Point3 shoulderPosition, double shoulderYawRadians, double shoulderPitchRadians, double shoulderRollRadians, double elbowPitchRadians, double upperArmLength, double lowerArmLength)
         {
             Matrix elbowMatrix = GetElbowTranslationMatrix(shoulderPosition, upperArmLength, shoulderYawRadians, shoulderPitchRadians);
@@ -70,13 +96,14 @@ namespace KinectSkeletalTracking
         }
 
         /// <summary>
-        /// Gets the vector of the elbow from the given shoulder position, and the given angles and arm length.
+        /// Gets the point of the elbow from the given shoulder position, and the given angles and arm length.
         /// </summary>
         /// <param name="shoulderPosition">The point to the shoulder associated to the arm.</param>
         /// <param name="upperArmLength">The length of the upper arm.</param>
         /// <param name="shoulderYawRadians">The angle of the shoulder yaw in radians.</param>
         /// <param name="shoulderPitchRadians">The angle of the shoulder pitch in radians.</param>
-        /// <returns>The vector of the elbow from the shoulder.</returns>
+        /// <param name="elbowMatrix">[Optional] The forward kinematic matrix to get to the elbow position.</param>
+        /// <returns>The point of the elbow from the shoulder.</returns>
         public static Point3 GetElbowPoint(Point3 shoulderPosition, double upperArmLength, double shoulderYawRadians, double shoulderPitchRadians, Matrix elbowMatrix = null)
         {
             Matrix matrix = elbowMatrix ?? GetElbowTranslationMatrix(shoulderPosition, upperArmLength, shoulderYawRadians, shoulderPitchRadians);
@@ -85,13 +112,13 @@ namespace KinectSkeletalTracking
 
 
         /// <summary>
-        /// Gets the vector of the elbow from the given elbow translation matrix, and the given angles and arm length.
+        /// Gets the point of the elbow from the given elbow translation matrix, and the given angles and arm length.
         /// </summary>
         /// <param name="elbowTranslationMatrix">The translation matrix from base to elbow.</param>
         /// <param name="shoulderRollRadians">The angle of the shoulder roll in radians.</param>
         /// <param name="elbowPitchRadians">The angle of the elbow pitch in radians</param>
         /// <param name="lowerArmLength">The length of the lower arm.</param>
-        /// <returns>The vector of the wrist from the origin of the elbow translation matrix.</returns>
+        /// <returns>The point of the wrist from the origin of the elbow translation matrix.</returns>
         public static Point3 GetWristPoint(Matrix elbowTranslationMatrix, double shoulderRollRadians, double elbowPitchRadians, double lowerArmLength)
         {
             Matrix t03 = elbowTranslationMatrix;
@@ -187,9 +214,9 @@ namespace KinectSkeletalTracking
 
 
         /// <summary>
-        /// Retrieves the position vector from the translation matrix.
+        /// Retrieves the position from the translation matrix.
         /// </summary>
-        /// <param name="matrix">The translation matrix containing the position vector. Must be at least 4x4.</param>
+        /// <param name="matrix">The translation matrix containing the position. Must be at least 4x4.</param>
         /// <returns>The position point.</returns>
         private static Point3 GetPositionPointFromMatrix(Matrix matrix)
         {

@@ -19,6 +19,16 @@ namespace KinectSkeletalTracking
         public double UpperArmLength { get; private set; }
         public double LowerArmLength { get; private set; }
 
+        /// <summary>
+        /// Creates an instance of <c>InverseKinematics</c>.
+        /// </summary>
+        /// <param name="sy">Shoulder yaw</param>
+        /// <param name="sp">Shoulder pitch</param>
+        /// <param name="sr">Shoulder roll</param>
+        /// <param name="ep">Elbow pitch</param>
+        /// <param name="ual">Upper arm length</param>
+        /// <param name="lal">Lower arm length</param>
+        /// <param name="isInRadians">Whether the angles provided are in radians.</param>
         public InverseKinematics(double sy, double sp, double sr, double ep, double ual, double lal, bool isInRadians = true)
         {
             IsInRadians = isInRadians;
@@ -72,6 +82,10 @@ namespace KinectSkeletalTracking
 
         #endregion
 
+        /// <summary>
+        /// Converts angles to radians, if they are not already in radians.
+        /// </summary>
+        /// <returns>Returns a new instance with the radian-equivalent angles.</returns>
         public InverseKinematics ToRadians()
         {
             if (IsInRadians)
@@ -82,6 +96,10 @@ namespace KinectSkeletalTracking
             return new InverseKinematics(ShoulderYaw * deg2rad, ShoulderPitch * deg2rad, ShoulderRoll * deg2rad, ElbowPitch * deg2rad, UpperArmLength, LowerArmLength, isInRadians: true);
         }
 
+        /// <summary>
+        /// Converts angles to degrees, if they are not already in degrees.
+        /// </summary>
+        /// <returns>Returns a new instance with the degree-equivalent angles.</returns>
         public InverseKinematics ToDegrees()
         {
             if (!IsInRadians)
@@ -92,6 +110,17 @@ namespace KinectSkeletalTracking
             return new InverseKinematics(ShoulderYaw * rad2deg, ShoulderPitch * rad2deg, ShoulderRoll * rad2deg, ElbowPitch * rad2deg, UpperArmLength, LowerArmLength, isInRadians: false);
         }
 
+        /// <summary>
+        /// Retreives the inverse kinematic angles given the points of the joints.
+        /// </summary>
+        /// <param name="neck">Neck point</param>
+        /// <param name="spine">Spine point</param>
+        /// <param name="shoulderL">Left shoulder point</param>
+        /// <param name="shoulderR">Right shoulder point</param>
+        /// <param name="elbow">Elbow point</param>
+        /// <param name="wrist">Wrist point</param>
+        /// <param name="inRadians">Whether the <c>InverseKinematics</c> should be in radians.</param>
+        /// <returns>An instance of <c>InverseKinematics</c> with the determined angles.</returns>
         public static InverseKinematics GetInverseKinematics(Point3 neck, Point3 spine, Point3 shoulderL, Point3 shoulderR, Point3 elbow, Point3 wrist, bool inRadians = false)
         {
             Plane body = Plane.FromPoints(shoulderR, shoulderL, spine);
