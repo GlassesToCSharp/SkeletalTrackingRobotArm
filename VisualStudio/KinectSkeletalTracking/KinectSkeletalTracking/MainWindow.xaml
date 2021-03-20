@@ -61,28 +61,40 @@
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
-            
-            <Viewbox 
-                Grid.Column="0" 
-                HorizontalAlignment="Center">
-                <Image 
-                    Source="{Binding ImageSource}" 
-                    Stretch="UniformToFill" />
-            </Viewbox>
 
-            <Viewbox 
-                Grid.Column="1" 
-                HorizontalAlignment="Center">
-                <Image 
-                    Source="{Binding ProjectionSource}" 
-                    Stretch="UniformToFill" />
-            </Viewbox>
+            <StackPanel
+                Orientation="Vertical"
+                Grid.Column="0">
+                <TextBlock
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center"
+                    Text="Sensor output"
+                    FontFamily="Segoe UI" 
+                    FontSize="18"/>
+                <Viewbox 
+                    HorizontalAlignment="Center">
+                    <Image 
+                        Source="{Binding ImageSource}" 
+                        Stretch="UniformToFill" />
+                </Viewbox>
+            </StackPanel>
 
-            <!--<Canvas
-                x:Name="ProjectionCanvas"
-                Grid.Column="0" 
-                HorizontalAlignment="Center"
-                Background="Black"/>-->
+            <StackPanel
+                Orientation="Vertical"
+                Grid.Column="1">
+                <TextBlock
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center"
+                    Text="Projected output"
+                    FontFamily="Segoe UI" 
+                    FontSize="18"/>
+                <Viewbox 
+                    HorizontalAlignment="Center">
+                    <Image 
+                        Source="{Binding ProjectionSource}" 
+                        Stretch="UniformToFill" />
+                </Viewbox>
+            </StackPanel>
         </Grid>
 
         <Grid
