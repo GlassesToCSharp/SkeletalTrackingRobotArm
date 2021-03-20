@@ -720,23 +720,12 @@ namespace KinectSkeletalTracking
             Point3 pointForNeck = Point3.FromCameraSpacePoint(joints[JointType.Neck].Position);
             Point3 pointForSpine = Point3.FromCameraSpacePoint(joints[JointType.SpineShoulder].Position);
 
-            // 2. Created necessary planes and vectors
-            Vector3 neckToSpine = Vector3.FromPoints(pointForNeck, pointForSpine);
-            Vector3 shoulderL2R = Vector3.FromPoints(pointForShoulderLeft, pointForShoulderRight);
-            Vector3 shoulderToElbow = Vector3.FromPoints(pointForShoulderRight, pointForElbow);
-            Vector3 shoulderToWrist = Vector3.FromPoints(pointForShoulderRight, pointForWrist);
-            Vector3 elbowToWrist = Vector3.FromPoints(pointForElbow, pointForWrist);
-
-            // 3. Calculate the anngles of each degree of freedom, here
-            //    theta1 = shoulder yaw
-            //    theta2 = shoulder pitch
-            //    theta3 = shoulder roll
-            //    theta4 = elbow pitch
+            // 2. Calculate the inverse kinematics (angles of each joint).
             InverseKinematics inverseKinematics = InverseKinematics.GetInverseKinematics(
                 pointForNeck, pointForSpine, pointForShoulderLeft,
                 pointForShoulderRight, pointForElbow, pointForWrist);
 
-            // 4. Display the angles on the screen
+            // 3. Display the angles on the screen
             using (DrawingContext dc = this.projectedGroup.Open())
             {
                 // Using matrices and forward kinematics.
@@ -792,7 +781,6 @@ namespace KinectSkeletalTracking
                     jointPoints[jointType] = new Point(depthSpacePoint.X, depthSpacePoint.Y);
                 }
 
-
                 this.DrawBody(new Dictionary<JointType, Joint>
                 {
                     [JointType.ShoulderLeft] = armPoints[JointType.ShoulderLeft],
@@ -814,18 +802,20 @@ namespace KinectSkeletalTracking
                 this.projectedGroup.ClipGeometry = new RectangleGeometry(new Rect(0.0, 0.0, this.displayWidth, this.displayHeight));
 
                 Angles.Text = String.Format(
-                    "Shoulder " + SpacePointToString(armPoints[JointType.ShoulderRight].Position) + Environment.NewLine +
-                    "Elbow    " + SpacePointToString(armPoints[JointType.ElbowRight].Position) + Environment.NewLine +
-                    "Wrist    " + SpacePointToString(armPoints[JointType.WristRight].Position) + Environment.NewLine +
-                    "U Arm L  " + inverseKinematics.UpperArmLength + Environment.NewLine +
-                    "L Arm L  " + inverseKinematics.LowerArmLength + Environment.NewLine +
-                    "Shoulder {0}, {1}, {2}" + Environment.NewLine +
-                    "Elbow {3}",
+                    "Shoulder {0}" + Environment.NewLine +
+                    "Elbow    {1}" + Environment.NewLine +
+                    "Wrist    {2}" + Environment.NewLine +
+                    "U Arm L  {3}" + Environment.NewLine +
+                    "L Arm L  {4}" + Environment.NewLine +
+                    "Shoulder {5}, {6}, {7}" + Environment.NewLine +
+                    "Elbow {8}", 
+                    SpacePointToString(armPoints[JointType.ShoulderRight].Position), SpacePointToString(armPoints[JointType.ElbowRight].Position),
+                    SpacePointToString(armPoints[JointType.WristRight].Position), inverseKinematics.UpperArmLength, inverseKinematics.LowerArmLength,
                     (int)inverseKinematics.ShoulderYaw, (int)inverseKinematics.ShoulderPitch, (int)inverseKinematics.ShoulderRoll,
                     (int)inverseKinematics.ElbowPitch);
             }
 
-            // 5. Send this angle to motors
+            // 4. Send the angles to the motors
             SerialWrite(FilterAngles(new double[]
             {
                 inverseKinematics.ShoulderYaw,
