@@ -121,7 +121,7 @@ namespace KinectSkeletalTracking
         /// <param name="wrist">Wrist point</param>
         /// <param name="inRadians">Whether the <c>InverseKinematics</c> should be in radians.</param>
         /// <returns>An instance of <c>InverseKinematics</c> with the determined angles.</returns>
-        public static InverseKinematics GetInverseKinematics(Point3 neck, Point3 spine, Point3 shoulderL, Point3 shoulderR, Point3 elbow, Point3 wrist, bool inRadians = false)
+        public static InverseKinematics GetInverseKinematicsRight(Point3 neck, Point3 spine, Point3 shoulderL, Point3 shoulderR, Point3 elbow, Point3 wrist, bool inRadians = false)
         {
             Plane body = Plane.FromPoints(shoulderR, shoulderL, spine);
             Vector3 neckToSpine = Vector3.FromPoints(neck, spine);
@@ -135,8 +135,28 @@ namespace KinectSkeletalTracking
             double shoulderYaw = GetShoulderYaw(neckToSpine, shoulderL2R, shoulderToElbow, inRadians: inRadians);
             double shoulderPitch = GetShoulderPitch(shoulderL2R, shoulderToElbow, inRadians: inRadians);
             double forwardFacingRatio = (elbowDistanceFromBody / shoulderToElbow.Magnitude) * -1; // Multiply by -1 to account for negative perpedicularity.
-            double shoulderRoll = GetShoulderRoll(neckToSpine, shoulderL2R, shoulderToElbow, elbowToWrist, forwardFacingRatio, inRadians: inRadians);
+            double shoulderRoll = GetShoulderRollRight(neckToSpine, shoulderL2R, shoulderToElbow, elbowToWrist, forwardFacingRatio, inRadians: inRadians);
             double elbowPitch = GetElbowAngle(shoulderToElbow, elbowToWrist, inRadians: inRadians);
+
+            return new InverseKinematics(shoulderYaw, shoulderPitch, shoulderRoll, elbowPitch, shoulderToElbow.Magnitude, elbowToWrist.Magnitude, isInRadians: inRadians);
+        }
+
+        public static InverseKinematics GetInverseKinematicsLeft(Point3 neck, Point3 spine, Point3 shoulderL, Point3 shoulderR, Point3 elbow, Point3 wrist, bool inRadians = false)
+        {
+            Plane body = Plane.FromPoints(shoulderR, shoulderL, spine);
+            Vector3 neckToSpine = Vector3.FromPoints(neck, spine);
+            Vector3 shoulderR2L = Vector3.FromPoints(shoulderR, shoulderL);
+            Vector3 shoulderToElbow = Vector3.FromPoints(shoulderL, elbow);
+            Vector3 elbowToWrist = Vector3.FromPoints(elbow, wrist);
+            double elbowDistanceFromBody = body.AsVector().Dot(elbow.X, elbow.Y, elbow.Z);
+            elbowDistanceFromBody += body.D;
+            elbowDistanceFromBody /= body.AsVector().Magnitude;
+
+            double shoulderYaw = GetShoulderYaw(neckToSpine, shoulderR2L, shoulderToElbow, inRadians: inRadians);
+            double shoulderPitch = -GetShoulderPitch(shoulderR2L, shoulderToElbow, inRadians: inRadians);
+            double forwardFacingRatio = (elbowDistanceFromBody / shoulderToElbow.Magnitude) * -1; // Multiply by -1 to account for negative perpedicularity.
+            double shoulderRoll = GetShoulderRollLeft(neckToSpine, shoulderR2L, shoulderToElbow, elbowToWrist, forwardFacingRatio, inRadians: inRadians);
+            double elbowPitch = -GetElbowAngle(shoulderToElbow, elbowToWrist, inRadians: inRadians);
 
             return new InverseKinematics(shoulderYaw, shoulderPitch, shoulderRoll, elbowPitch, shoulderToElbow.Magnitude, elbowToWrist.Magnitude, isInRadians: inRadians);
         }
@@ -196,17 +216,16 @@ namespace KinectSkeletalTracking
 
 
         /// <summary>
-        /// Calculates the shoulder roll.
+        /// Calculates the shoulder roll for the right arm.
         /// </summary>
         /// <param name="neckToSpine">The vector from the neck point to the spine point.</param>
-        /// <param name="shoulderL2R">The vector from left to right shoulder (or right to left).</param>
-        /// <param name="shoulderToElbow">The vector from the shoulder (left or right) to the joining elbow.</param>
-        /// <param name="elbowToWrist">The vector from the elbow (attached to joining shoulder) to the joining wrist.</param>
+        /// <param name="shoulderL2R">The vector from left to right shoulder.</param>
+        /// <param name="shoulderToElbow">The vector from the right shoulder to the right elbow.</param>
+        /// <param name="elbowToWrist">The vector from the right elbow to the right wrist.</param>
         /// <param name="inRadians">Whether to get the angle in radians instead of degrees. Defaults to false.</param>
         /// <returns>The angle of the shoulder roll.</returns>
-        public static double GetShoulderRoll(Vector3 neckToSpine, Vector3 shoulderL2R, Vector3 shoulderToElbow, Vector3 elbowToWrist, double forwardFacingRatio, bool inRadians = false)
+        public static double GetShoulderRollRight(Vector3 neckToSpine, Vector3 shoulderL2R, Vector3 shoulderToElbow, Vector3 elbowToWrist, double forwardFacingRatio, bool inRadians = false)
         {
-            double _90Deg = inRadians ? Math.PI / 2 : 90;
             // 1. Get Body plane 1 (neck-spine and shoulder-shoulder).
             // 2. Get Body plane 2 (shoulder-shoulder and Body Plane 1 perpendicular).
             // 3. Get Arm plane (shoulder-elbow and elbow-wrist).
@@ -231,8 +250,8 @@ namespace KinectSkeletalTracking
             Vector3 bodyPlane1Perpendicular = bodyPlane1.AsVector();
             double angleRelativeToBodyPerpendicular = Vector3.GetAngleBetweenVectors(bodyPlane1Perpendicular * -1, armPlane.AsVector(), inRadians);
             angleRelativeToBodyPerpendicular = Double.IsNaN(angleRelativeToBodyPerpendicular)
-                ? _90Deg
-                : angleRelativeToBodyPerpendicular - _90Deg;
+                ? _90Deg(inRadians)
+                : angleRelativeToBodyPerpendicular - _90Deg(inRadians);
 
             // For when the elbow is pointing forward, in the range of 90
             // (pointing up) and -90 (pointing down).
@@ -241,7 +260,68 @@ namespace KinectSkeletalTracking
             if (Double.IsNaN(angleRelativeToShoulders))
             {
                 // When the arm lines up, set to the reset position.
-                angleRelativeToShoulders = _90Deg;
+                angleRelativeToShoulders = _90Deg(inRadians);
+            }
+
+            if (forwardFacingRatio > 1)
+            {
+                forwardFacingRatio = 1;
+            }
+            else if (forwardFacingRatio < -1)
+            {
+                forwardFacingRatio = -1;
+            }
+
+            return ((1 - forwardFacingRatio) * angleRelativeToBodyPerpendicular) + (forwardFacingRatio * angleRelativeToShoulders);
+        }
+
+
+        /// <summary>
+        /// Calculates the shoulder roll for the left arm.
+        /// </summary>
+        /// <param name="neckToSpine">The vector from the neck point to the spine point.</param>
+        /// <param name="shoulderR2L">The vector from right to left shoulder.</param>
+        /// <param name="shoulderToElbow">The vector from the left shoulder to the left elbow.</param>
+        /// <param name="elbowToWrist">The vector from the left elbow to the left wrist.</param>
+        /// <param name="inRadians">Whether to get the angle in radians instead of degrees. Defaults to false.</param>
+        /// <returns>The angle of the shoulder roll.</returns>
+        public static double GetShoulderRollLeft(Vector3 neckToSpine, Vector3 shoulderR2L, Vector3 shoulderToElbow, Vector3 elbowToWrist, double forwardFacingRatio, bool inRadians = false)
+        {
+            // 1. Get Body plane 1 (neck-spine and shoulder-shoulder).
+            // 2. Get Body plane 2 (shoulder-shoulder and Body Plane 1 perpendicular).
+            // 3. Get Arm plane (shoulder-elbow and elbow-wrist).
+            // 4. Get angle of planes.
+            // 5. Adapt angle to be in the range of 90 deg (pointing up) to -90
+            // (pointing down).
+
+            Plane bodyPlane1 = Plane.FromVectors(neckToSpine, shoulderR2L);
+            Plane bodyPlane2 = Plane.FromVectors(bodyPlane1.AsVector(), shoulderR2L);
+            Plane armPlane = Plane.FromVectors(shoulderToElbow, elbowToWrist);
+
+            if (armPlane.AsVector().IsEmpty)
+            {
+                return 0;
+            }
+
+            // For when elbow is pointing to the side or down, in the range of
+            // 90 (pointing up) and -90 (pointing down). We need to use the
+            // opposite direction of the plane perpendicular. This gives the
+            // right polarity of the angles. In addition, we need to subtract
+            // the initial perpendicularity of the arm plane.
+            Vector3 bodyPlane1Perpendicular = bodyPlane1.AsVector();
+            double angleRelativeToBodyPerpendicular = Vector3.GetAngleBetweenVectors(bodyPlane1Perpendicular * -1, armPlane.AsVector(), inRadians);
+            angleRelativeToBodyPerpendicular = Double.IsNaN(angleRelativeToBodyPerpendicular)
+                ? _90Deg(inRadians)
+                : angleRelativeToBodyPerpendicular - _90Deg(inRadians);
+
+            // For when the elbow is pointing forward, in the range of 90
+            // (pointing up) and -90 (pointing down).
+            double angleRelativeToShoulders = Vector3.GetAngleBetweenVectors(bodyPlane2.AsVector() * -1, armPlane.AsVector(), inRadians);
+
+            if (Double.IsNaN(angleRelativeToShoulders))
+            {
+                // When the arm lines up, set to the reset position.
+                angleRelativeToShoulders = _90Deg(inRadians);
             }
 
             if (forwardFacingRatio > 1)
@@ -269,6 +349,11 @@ namespace KinectSkeletalTracking
             // For forward kinematics, this needs to be from 0 (extended) to
             // -180 (overly-contracted).
             return -Vector3.GetAngleBetweenVectors(shoulderToElbow, elbowToWrist, inRadians);
+        }
+
+        private static double _90Deg(bool inRadians)
+        {
+            return inRadians ? 90 * deg2rad : 90;
         }
     }
 }
