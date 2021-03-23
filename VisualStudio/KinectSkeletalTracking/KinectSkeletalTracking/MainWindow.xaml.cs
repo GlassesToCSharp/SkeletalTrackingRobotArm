@@ -18,9 +18,6 @@ namespace KinectSkeletalTracking
     {
         private const bool SendToMotors = false;
 
-        private const double Rad2Deg = 180 / Math.PI;
-        private const double Deg2Rad = Math.PI / 180;
-
         private const string SerialDataFormat = "S{0}E";
 
         /// <summary>
@@ -715,23 +712,30 @@ namespace KinectSkeletalTracking
             // 1. Get elbow and shoulder points
             Point3 pointForShoulderRight = Point3.FromCameraSpacePoint(joints[JointType.ShoulderRight].Position);
             Point3 pointForShoulderLeft = Point3.FromCameraSpacePoint(joints[JointType.ShoulderLeft].Position);
-            Point3 pointForElbow = Point3.FromCameraSpacePoint(joints[JointType.ElbowRight].Position);
-            Point3 pointForWrist = Point3.FromCameraSpacePoint(joints[JointType.WristRight].Position);
+            Point3 pointForElbowRight = Point3.FromCameraSpacePoint(joints[JointType.ElbowRight].Position);
+            Point3 pointForElbowLeft = Point3.FromCameraSpacePoint(joints[JointType.ElbowLeft].Position);
+            Point3 pointForWristRight = Point3.FromCameraSpacePoint(joints[JointType.WristRight].Position);
+            Point3 pointForWristLeft = Point3.FromCameraSpacePoint(joints[JointType.WristLeft].Position);
             Point3 pointForNeck = Point3.FromCameraSpacePoint(joints[JointType.Neck].Position);
             Point3 pointForSpine = Point3.FromCameraSpacePoint(joints[JointType.SpineShoulder].Position);
 
             // 2. Calculate the inverse kinematics (angles of each joint).
-            InverseKinematics inverseKinematics = InverseKinematics.GetInverseKinematics(
+            InverseKinematics inverseKinematicsRight = InverseKinematics.GetInverseKinematicsRight(
                 pointForNeck, pointForSpine, pointForShoulderLeft,
-                pointForShoulderRight, pointForElbow, pointForWrist);
+                pointForShoulderRight, pointForElbowRight, pointForWristRight);
+            InverseKinematics inverseKinematicsLeft = InverseKinematics.GetInverseKinematicsLeft(
+                pointForNeck, pointForSpine, pointForShoulderLeft,
+                pointForShoulderRight, pointForElbowLeft, pointForWristLeft);
 
             // 3. Display the angles on the screen
             using (DrawingContext dc = this.projectedGroup.Open())
             {
                 // Using matrices and forward kinematics.
 
-                InverseKinematics ikRadians = inverseKinematics.ToRadians();
-                ForwardKinematics fk = ForwardKinematics.GetForwardKinematics(pointForShoulderRight, ikRadians);
+                InverseKinematics ikRadiansRight = inverseKinematicsRight.ToRadians();
+                InverseKinematics ikRadiansLeft = inverseKinematicsLeft.ToRadians();
+                ForwardKinematics fkRight = ForwardKinematics.GetForwardKinematicsRight(pointForShoulderRight, ikRadiansRight);
+                ForwardKinematics fkLeft = ForwardKinematics.GetForwardKinematicsLeft(pointForShoulderLeft, ikRadiansLeft);
 
                 // Draw the skeleton (neck/spine and shoulders)
                 // Draw the projected vectors
@@ -740,14 +744,8 @@ namespace KinectSkeletalTracking
                 Pen skeletonPen = this.inferredBonePen;
 
                 // Use the angles to create projected vectors of joints. Use Forward Kinematics.
-                IReadOnlyDictionary<JointType, Joint> armPoints = new Dictionary<JointType, Joint>
+                IReadOnlyDictionary<JointType, Joint> rightArmPoints = new Dictionary<JointType, Joint>
                 {
-                    [JointType.ShoulderLeft] = new Joint()
-                    {
-                        JointType = JointType.ShoulderLeft,
-                        Position = pointForShoulderLeft.ToCameraSpacePoint(),
-                        TrackingState = TrackingState.Tracked,
-                    },
                     [JointType.ShoulderRight] = new Joint()
                     {
                         JointType = JointType.ShoulderRight,
@@ -757,13 +755,34 @@ namespace KinectSkeletalTracking
                     [JointType.ElbowRight] = new Joint()
                     {
                         JointType = JointType.ElbowRight,
-                        Position = fk.Elbow.ToCameraSpacePoint(),
+                        Position = fkRight.Elbow.ToCameraSpacePoint(),
                         TrackingState = TrackingState.Tracked,
                     },
                     [JointType.WristRight] = new Joint()
                     {
                         JointType = JointType.WristRight,
-                        Position = fk.Wrist.ToCameraSpacePoint(),
+                        Position = fkRight.Wrist.ToCameraSpacePoint(),
+                        TrackingState = TrackingState.Tracked,
+                    }
+                };
+                IReadOnlyDictionary<JointType, Joint> leftArmPoints = new Dictionary<JointType, Joint>
+                {
+                    [JointType.ShoulderLeft] = new Joint()
+                    {
+                        JointType = JointType.ShoulderLeft,
+                        Position = pointForShoulderLeft.ToCameraSpacePoint(),
+                        TrackingState = TrackingState.Tracked,
+                    },
+                    [JointType.ElbowLeft] = new Joint()
+                    {
+                        JointType = JointType.ElbowLeft,
+                        Position = fkLeft.Elbow.ToCameraSpacePoint(),
+                        TrackingState = TrackingState.Tracked,
+                    },
+                    [JointType.WristLeft] = new Joint()
+                    {
+                        JointType = JointType.WristLeft,
+                        Position = fkLeft.Wrist.ToCameraSpacePoint(),
                         TrackingState = TrackingState.Tracked,
                     }
                 };
@@ -774,28 +793,26 @@ namespace KinectSkeletalTracking
                 // convert the joint points to depth (display) space
                 Dictionary<JointType, Point> jointPoints = new Dictionary<JointType, Point>();
 
-                foreach (JointType jointType in armPoints.Keys)
+                foreach (JointType jointType in rightArmPoints.Keys)
                 {
                     // Get the 2D representation of the depth point.
-                    DepthSpacePoint depthSpacePoint = this.GetDepthSpacePoint(armPoints[jointType].Position);
+                    DepthSpacePoint depthSpacePoint = this.GetDepthSpacePoint(rightArmPoints[jointType].Position);
+                    jointPoints[jointType] = new Point(depthSpacePoint.X, depthSpacePoint.Y);
+                }
+                foreach (JointType jointType in leftArmPoints.Keys)
+                {
+                    // Get the 2D representation of the depth point.
+                    DepthSpacePoint depthSpacePoint = this.GetDepthSpacePoint(leftArmPoints[jointType].Position);
                     jointPoints[jointType] = new Point(depthSpacePoint.X, depthSpacePoint.Y);
                 }
 
                 this.DrawBody(new Dictionary<JointType, Joint>
                 {
-                    [JointType.ShoulderLeft] = armPoints[JointType.ShoulderLeft],
-                    [JointType.ShoulderRight] = armPoints[JointType.ShoulderRight]
+                    [JointType.ShoulderLeft] = leftArmPoints[JointType.ShoulderLeft],
+                    [JointType.ShoulderRight] = rightArmPoints[JointType.ShoulderRight]
                 }, jointPoints, dc, inferredBonePen);
-                this.DrawBody(new Dictionary<JointType, Joint>
-                {
-                    [JointType.ShoulderRight] = armPoints[JointType.ShoulderRight],
-                    [JointType.ElbowRight] = armPoints[JointType.ElbowRight]
-                }, jointPoints, dc, bodyColors[4]);
-                this.DrawBody(new Dictionary<JointType, Joint>
-                {
-                    [JointType.ElbowRight] = armPoints[JointType.ElbowRight],
-                    [JointType.WristRight] = armPoints[JointType.WristRight],
-                }, jointPoints, dc, bodyColors[1]);
+                this.DrawBody(rightArmPoints, jointPoints, dc, bodyColors[4]);
+                this.DrawBody(leftArmPoints, jointPoints, dc, bodyColors[1]);
 
 
                 // prevent drawing outside of our render area
@@ -809,19 +826,19 @@ namespace KinectSkeletalTracking
                     "L Arm L  {4}" + Environment.NewLine +
                     "Shoulder {5}, {6}, {7}" + Environment.NewLine +
                     "Elbow {8}", 
-                    SpacePointToString(armPoints[JointType.ShoulderRight].Position), SpacePointToString(armPoints[JointType.ElbowRight].Position),
-                    SpacePointToString(armPoints[JointType.WristRight].Position), inverseKinematics.UpperArmLength, inverseKinematics.LowerArmLength,
-                    (int)inverseKinematics.ShoulderYaw, (int)inverseKinematics.ShoulderPitch, (int)inverseKinematics.ShoulderRoll,
-                    (int)inverseKinematics.ElbowPitch);
+                    SpacePointToString(rightArmPoints[JointType.ShoulderRight].Position), SpacePointToString(rightArmPoints[JointType.ElbowRight].Position),
+                    SpacePointToString(rightArmPoints[JointType.WristRight].Position), inverseKinematicsRight.UpperArmLength, inverseKinematicsRight.LowerArmLength,
+                    (int)inverseKinematicsRight.ShoulderYaw, (int)inverseKinematicsRight.ShoulderPitch, (int)inverseKinematicsRight.ShoulderRoll,
+                    (int)inverseKinematicsRight.ElbowPitch);
             }
 
             // 4. Send the angles to the motors
             SerialWrite(FilterAngles(new double[]
             {
-                inverseKinematics.ShoulderYaw,
-                inverseKinematics.ShoulderPitch,
-                inverseKinematics.ShoulderRoll,
-                inverseKinematics.ElbowPitch
+                inverseKinematicsRight.ShoulderYaw,
+                inverseKinematicsRight.ShoulderPitch,
+                inverseKinematicsRight.ShoulderRoll,
+                inverseKinematicsRight.ElbowPitch
             }));
         }
 
@@ -855,21 +872,6 @@ namespace KinectSkeletalTracking
         private Vector3 GetVectorFromPoints(Point3 p, Point3 q)
         {
             return Vector3.FromPoints(p, q, InferredZPositionClamp);
-        }
-
-
-        private Point3 GetPositionPointFromMatrix(Matrix matrix)
-        {
-            if (matrix.Rows < 3 || matrix.Columns < 3)
-            {
-                throw new Exception("Not enough columns or rows.");
-            }
-
-            return new Point3(
-                matrix.GetRow(0).Last(),
-                matrix.GetRow(1).Last(),
-                matrix.GetRow(2).Last()
-            );
         }
 
         #endregion
