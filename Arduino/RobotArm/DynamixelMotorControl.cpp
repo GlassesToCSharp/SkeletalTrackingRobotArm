@@ -4,15 +4,26 @@
 #include <DynamixelSerial.h>
 #include <stdint.h>
 
-void MoveToAngle(uint8_t id, uint16_t inputAngle, bool setTimerCount = true)
+uint16_t ConvertToServoPosition(const int* angle, const bool reverse = false);
+
+void MoveToAngle(const uint8_t id, int16_t inputAngle, bool setTimerCount = true)
 {
-    Dynamixel.moveSpeed(id, inputAngle, defaultMotorSpeed);
+    if (inputAngle > SERVO_MAX_POSITION)
+    {
+        inputAngle = SERVO_MAX_POSITION;
+    }
+    else if (inputAngle < SERVO_MIN_POSITION)
+    {
+        inputAngle = SERVO_MIN_POSITION;
+    }
+    
+    Dynamixel.moveSpeed(id, inputAngle, DEFAULT_MOTOR_SPEED);
 }
 
 void ResetDynamixelSerial()
 {
     Dynamixel.setSerial(&Serial2);
-    Dynamixel.begin(1000000, 15);
+    Dynamixel.begin(1000000, DIRECTION_PIN);
 }
 
 void DynamixelInit()
@@ -24,73 +35,64 @@ void DynamixelInit()
 //    Dynamixel.setMaxTorque(254,512);        // 50% of Torque
 //    Dynamixel.setSRL(254,2);                // Set the SRL to Return All
 
-    Dynamixel.setCMargin(254, 0, 0);
-    Dynamixel.setCSlope(254, 50, 50);
-    Dynamixel.setPunch(254, 0);
+    Dynamixel.setCMargin(BROADCAST_ID, 0, 0);
+    Dynamixel.setCSlope(BROADCAST_ID, 50, 50);
+    Dynamixel.setPunch(BROADCAST_ID, 0);
   
     // Set the initial position
-    MoveToAngle(SHOULDER_YAW, ID1_NAT);
-    MoveToAngle(SHOULDER_PITCH, ID2_NAT);
-    MoveToAngle(SHOULDER_ROLL, ID3_NAT);
-    MoveToAngle(ELBOW_PITCH, ID4_NAT);
+    MoveToAngle(BROADCAST_ID, SERVO_RESET_POSITION);
 }
 
 void SetShoulderYaw(const int* shoulderYaw)
 {
-    int16_t dynamixelPosition = map(*shoulderYaw, 70, 180, ID1_MIN, ID1_MAX);
-    if (dynamixelPosition > ID1_MAX)
-    {
-        dynamixelPosition = ID1_MAX;
-    }
-    else if (dynamixelPosition < ID1_MIN)
-    {
-        dynamixelPosition = ID1_MIN;
-    }
-    
-    MoveToAngle(SHOULDER_YAW, dynamixelPosition);
+    int16_t dynamixelPosition = ConvertToServoPosition(*shoulderYaw);    
+    MoveToAngle(RIGHT_SHOULDER_YAW_ID, dynamixelPosition);
 }
 
 void SetShoulderPitch(const int* shoulderPitch)
 {
-    int16_t dynamixelPosition = map(*shoulderPitch, 90, 180, ID2_MIN, ID2_MAX);
-    if (dynamixelPosition > ID2_MAX)
-    {
-        dynamixelPosition = ID2_MAX;
-    }
-    else if (dynamixelPosition < ID2_MIN)
-    {
-        dynamixelPosition = ID2_MIN;
-    }
-    
-    MoveToAngle(SHOULDER_PITCH, dynamixelPosition);
+    int16_t dynamixelPosition = ConvertToServoPosition(*shoulderPitch);
+    MoveToAngle(RIGHT_SHOULDER_PITCH_ID, dynamixelPosition);
 }
 
 void SetShoulderRoll(const int* shoulderRoll)
 {
-    int16_t dynamixelPosition = map(*shoulderRoll, 0, 180, ID3_MIN, ID3_MAX);
-    if (dynamixelPosition > ID3_MAX)
-    {
-        dynamixelPosition = ID3_MAX;
-    }
-    else if (dynamixelPosition < ID3_MIN)
-    {
-        dynamixelPosition = ID3_MIN;
-    }
-    
-    MoveToAngle(SHOULDER_ROLL, dynamixelPosition);
+    int16_t dynamixelPosition = ConvertToServoPosition(*shoulderRoll);
+    MoveToAngle(RIGHT_SHOULDER_ROLL_ID, dynamixelPosition);
 }
 
 void SetElbowPitch(const int* elbowPitch)
 {
-    int16_t dynamixelPosition = map(*elbowPitch, 150, 0, ID4_MIN, ID4_MAX);
-    if (dynamixelPosition > ID4_MAX)
+    int16_t dynamixelPosition = ConvertToServoPosition(*elbowPitch);
+    MoveToAngle(RIGHT_ELBOW_PITCH_ID, dynamixelPosition);
+}
+
+uint16_t ConvertToServoPosition(const int* angle, const bool reverse)
+{
+    uint16_t position = SERVO_RESET_POSITION;
+    uint16_t servoAngle = *angle / SERVO_RESOLUTION;
+    if (*angle > 0)
     {
-        dynamixelPosition = ID4_MAX;
+        if (reverse)
+        {
+            position += servoAngle;
+        }
+        else
+        {
+            position -= servoAngle;
+        }
     }
-    else if (dynamixelPosition < ID4_MIN)
+    else if (*angle < 0)
     {
-        dynamixelPosition = ID4_MIN;
+        if (reverse)
+        {
+            position -= servoAngle;
+        }
+        else
+        {
+            position += servoAngle;
+        }
     }
-    
-    MoveToAngle(ELBOW_PITCH, dynamixelPosition);
+
+    return position;
 }

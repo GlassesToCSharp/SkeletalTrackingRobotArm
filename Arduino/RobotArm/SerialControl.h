@@ -29,9 +29,9 @@ void ProcessIncomingByte(char* readByte);
 
 void RequestData()
 {
-  Serial.write(startByte);
-  Serial.write('R');
-  Serial.write(endByte);
+  Serial.write(START_BYTE);
+  Serial.write(READY_BYTE);
+  Serial.write(END_BYTE);
 }
 
 void SerialInit()
@@ -136,9 +136,9 @@ void AssignToJointAngle(char* readByte)
 }
 
 
-void ProcessIncomingByte(char* readByte)
+void ProcessIncomingByte(char* const readByte)
 {
-  if (*readByte == startByte)
+  if (*readByte == START_BYTE)
   {
     hasStartMessageBeenReceived = true;
     isCurrentValueNegative = false;
@@ -150,7 +150,7 @@ void ProcessIncomingByte(char* readByte)
   }
   else if (hasStartMessageBeenReceived)
   {
-    if (*readByte == separator)
+    if (*readByte == SEPARATOR)
     {
       PrepareForNextJoint();
     }
@@ -158,7 +158,7 @@ void ProcessIncomingByte(char* readByte)
     {
       isCurrentValueNegative = true;
     }
-    else if (*readByte == endByte)
+    else if (*readByte == END_BYTE)
     {
       // Move servos to position.
       SetShoulderYaw(&shoulderYaw);
