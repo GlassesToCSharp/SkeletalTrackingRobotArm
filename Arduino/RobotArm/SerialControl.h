@@ -25,7 +25,7 @@ MessageIndex currentMessageIndex = EndByte; // Expecting a start byte
 /* ---------------------------- */
 
 void FlushReceiveBuffer();
-void ProcessIncomingByte(char* readByte);
+void ProcessIncomingByte(const char* const readByte);
 
 void RequestData()
 {
@@ -57,7 +57,7 @@ void CheckAndHandleSerialInput()
 {
   while (Serial.available() > 0)
   {
-    char readByte = Serial.read();
+    const char readByte = Serial.read();
     ProcessIncomingByte(&readByte);
   }
 }
@@ -108,7 +108,7 @@ void PrepareForNextJoint()
 }
 
 
-void AssignToJointAngle(char* readByte)
+void AssignToJointAngle(const char* readByte)
 {
   // Assume not negative
   switch (currentMessageIndex)
@@ -136,7 +136,7 @@ void AssignToJointAngle(char* readByte)
 }
 
 
-void ProcessIncomingByte(char* const readByte)
+void ProcessIncomingByte(const char* const readByte)
 {
   if (*readByte == START_BYTE)
   {
@@ -154,7 +154,7 @@ void ProcessIncomingByte(char* const readByte)
     {
       PrepareForNextJoint();
     }
-    else if (*readByte == '-')
+    else if (*readByte == NEGATIVE_SYMBOL)
     {
       isCurrentValueNegative = true;
     }

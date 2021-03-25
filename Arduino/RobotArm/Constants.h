@@ -19,6 +19,7 @@ const uint16_t SERVO_MAX_POSITION = 1023;
 const float SERVO_RESOLUTION = 0.29; // Degrees per step count
 
 const char SEPARATOR = ',';
+const char NEGATIVE_SYMBOL = '-';
 const char START_BYTE = 'S';
 const char END_BYTE = 'E';
 const char READY_BYTE = 'E';
