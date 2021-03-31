@@ -525,386 +525,6 @@ In this library the device names are the same as the pin names of the symbols, t
 </deviceset>
 </devicesets>
 </library>
-<library name="74xx-eu" urn="urn:adsk.eagle:library:85">
-<description>&lt;b&gt;TTL Devices, 74xx Series with European Symbols&lt;/b&gt;&lt;p&gt;
-Based on the following sources:
-&lt;ul&gt;
-&lt;li&gt;Texas Instruments &lt;i&gt;TTL Data Book&lt;/i&gt;&amp;nbsp;&amp;nbsp;&amp;nbsp;Volume 1, 1996.
-&lt;li&gt;TTL Data Book, Volume 2 , 1993
-&lt;li&gt;National Seminconductor Databook 1990, ALS/LS Logic
-&lt;li&gt;ttl 74er digital data dictionary, ECA Electronic + Acustic GmbH, ISBN 3-88109-032-0
-&lt;li&gt;http://icmaster.com/ViewCompare.asp
-&lt;/ul&gt;
-&lt;author&gt;Created by librarian@cadsoft.de&lt;/author&gt;</description>
-<packages>
-<package name="DIL20" urn="urn:adsk.eagle:footprint:16206/1" library_version="2">
-<description>&lt;b&gt;Dual In Line Package&lt;/b&gt;</description>
-<wire x1="12.7" y1="2.921" x2="-12.7" y2="2.921" width="0.1524" layer="21"/>
-<wire x1="-12.7" y1="-2.921" x2="12.7" y2="-2.921" width="0.1524" layer="21"/>
-<wire x1="12.7" y1="2.921" x2="12.7" y2="-2.921" width="0.1524" layer="21"/>
-<wire x1="-12.7" y1="2.921" x2="-12.7" y2="1.016" width="0.1524" layer="21"/>
-<wire x1="-12.7" y1="-2.921" x2="-12.7" y2="-1.016" width="0.1524" layer="21"/>
-<wire x1="-12.7" y1="1.016" x2="-12.7" y2="-1.016" width="0.1524" layer="21" curve="-180"/>
-<pad name="1" x="-11.43" y="-3.81" drill="0.8128" shape="long" rot="R90"/>
-<pad name="2" x="-8.89" y="-3.81" drill="0.8128" shape="long" rot="R90"/>
-<pad name="7" x="3.81" y="-3.81" drill="0.8128" shape="long" rot="R90"/>
-<pad name="8" x="6.35" y="-3.81" drill="0.8128" shape="long" rot="R90"/>
-<pad name="3" x="-6.35" y="-3.81" drill="0.8128" shape="long" rot="R90"/>
-<pad name="4" x="-3.81" y="-3.81" drill="0.8128" shape="long" rot="R90"/>
-<pad name="6" x="1.27" y="-3.81" drill="0.8128" shape="long" rot="R90"/>
-<pad name="5" x="-1.27" y="-3.81" drill="0.8128" shape="long" rot="R90"/>
-<pad name="9" x="8.89" y="-3.81" drill="0.8128" shape="long" rot="R90"/>
-<pad name="10" x="11.43" y="-3.81" drill="0.8128" shape="long" rot="R90"/>
-<pad name="11" x="11.43" y="3.81" drill="0.8128" shape="long" rot="R90"/>
-<pad name="12" x="8.89" y="3.81" drill="0.8128" shape="long" rot="R90"/>
-<pad name="13" x="6.35" y="3.81" drill="0.8128" shape="long" rot="R90"/>
-<pad name="14" x="3.81" y="3.81" drill="0.8128" shape="long" rot="R90"/>
-<pad name="15" x="1.27" y="3.81" drill="0.8128" shape="long" rot="R90"/>
-<pad name="16" x="-1.27" y="3.81" drill="0.8128" shape="long" rot="R90"/>
-<pad name="17" x="-3.81" y="3.81" drill="0.8128" shape="long" rot="R90"/>
-<pad name="18" x="-6.35" y="3.81" drill="0.8128" shape="long" rot="R90"/>
-<pad name="19" x="-8.89" y="3.81" drill="0.8128" shape="long" rot="R90"/>
-<pad name="20" x="-11.43" y="3.81" drill="0.8128" shape="long" rot="R90"/>
-<text x="-13.081" y="-3.048" size="1.27" layer="25" rot="R90">&gt;NAME</text>
-<text x="-9.779" y="-0.381" size="1.27" layer="27">&gt;VALUE</text>
-</package>
-<package name="SO20W" urn="urn:adsk.eagle:footprint:1732/1" library_version="1">
-<description>&lt;b&gt;Wide Small Outline package&lt;/b&gt; 300 mil</description>
-<wire x1="6.1214" y1="3.7338" x2="-6.1214" y2="3.7338" width="0.1524" layer="51"/>
-<wire x1="6.1214" y1="-3.7338" x2="6.5024" y2="-3.3528" width="0.1524" layer="21" curve="90"/>
-<wire x1="-6.5024" y1="3.3528" x2="-6.1214" y2="3.7338" width="0.1524" layer="21" curve="-90"/>
-<wire x1="6.1214" y1="3.7338" x2="6.5024" y2="3.3528" width="0.1524" layer="21" curve="-90"/>
-<wire x1="-6.5024" y1="-3.3528" x2="-6.1214" y2="-3.7338" width="0.1524" layer="21" curve="90"/>
-<wire x1="-6.1214" y1="-3.7338" x2="6.1214" y2="-3.7338" width="0.1524" layer="51"/>
-<wire x1="6.5024" y1="-3.3528" x2="6.5024" y2="3.3528" width="0.1524" layer="21"/>
-<wire x1="-6.5024" y1="3.3528" x2="-6.5024" y2="1.27" width="0.1524" layer="21"/>
-<wire x1="-6.5024" y1="1.27" x2="-6.5024" y2="-1.27" width="0.1524" layer="21"/>
-<wire x1="-6.5024" y1="-1.27" x2="-6.5024" y2="-3.3528" width="0.1524" layer="21"/>
-<wire x1="-6.477" y1="-3.3782" x2="6.477" y2="-3.3782" width="0.0508" layer="21"/>
-<wire x1="-6.5024" y1="1.27" x2="-6.5024" y2="-1.27" width="0.1524" layer="21" curve="-180"/>
-<smd name="1" x="-5.715" y="-5.0292" dx="0.6604" dy="2.032" layer="1"/>
-<smd name="2" x="-4.445" y="-5.0292" dx="0.6604" dy="2.032" layer="1"/>
-<smd name="3" x="-3.175" y="-5.0292" dx="0.6604" dy="2.032" layer="1"/>
-<smd name="4" x="-1.905" y="-5.0292" dx="0.6604" dy="2.032" layer="1"/>
-<smd name="5" x="-0.635" y="-5.0292" dx="0.6604" dy="2.032" layer="1"/>
-<smd name="6" x="0.635" y="-5.0292" dx="0.6604" dy="2.032" layer="1"/>
-<smd name="7" x="1.905" y="-5.0292" dx="0.6604" dy="2.032" layer="1"/>
-<smd name="8" x="3.175" y="-5.0292" dx="0.6604" dy="2.032" layer="1"/>
-<smd name="13" x="3.175" y="5.0292" dx="0.6604" dy="2.032" layer="1"/>
-<smd name="14" x="1.905" y="5.0292" dx="0.6604" dy="2.032" layer="1"/>
-<smd name="15" x="0.635" y="5.0292" dx="0.6604" dy="2.032" layer="1"/>
-<smd name="16" x="-0.635" y="5.0292" dx="0.6604" dy="2.032" layer="1"/>
-<smd name="17" x="-1.905" y="5.0292" dx="0.6604" dy="2.032" layer="1"/>
-<smd name="18" x="-3.175" y="5.0292" dx="0.6604" dy="2.032" layer="1"/>
-<smd name="19" x="-4.445" y="5.0292" dx="0.6604" dy="2.032" layer="1"/>
-<smd name="20" x="-5.715" y="5.0292" dx="0.6604" dy="2.032" layer="1"/>
-<smd name="9" x="4.445" y="-5.0292" dx="0.6604" dy="2.032" layer="1"/>
-<smd name="10" x="5.715" y="-5.0292" dx="0.6604" dy="2.032" layer="1"/>
-<smd name="12" x="4.445" y="5.0292" dx="0.6604" dy="2.032" layer="1"/>
-<smd name="11" x="5.715" y="5.0292" dx="0.6604" dy="2.032" layer="1"/>
-<text x="-3.81" y="-1.778" size="1.27" layer="27" ratio="10">&gt;VALUE</text>
-<text x="-6.858" y="-3.175" size="1.27" layer="25" ratio="10" rot="R90">&gt;NAME</text>
-<rectangle x1="-5.969" y1="-3.8608" x2="-5.461" y2="-3.7338" layer="51"/>
-<rectangle x1="-5.969" y1="-5.334" x2="-5.461" y2="-3.8608" layer="51"/>
-<rectangle x1="-4.699" y1="-3.8608" x2="-4.191" y2="-3.7338" layer="51"/>
-<rectangle x1="-4.699" y1="-5.334" x2="-4.191" y2="-3.8608" layer="51"/>
-<rectangle x1="-3.429" y1="-3.8608" x2="-2.921" y2="-3.7338" layer="51"/>
-<rectangle x1="-3.429" y1="-5.334" x2="-2.921" y2="-3.8608" layer="51"/>
-<rectangle x1="-2.159" y1="-3.8608" x2="-1.651" y2="-3.7338" layer="51"/>
-<rectangle x1="-2.159" y1="-5.334" x2="-1.651" y2="-3.8608" layer="51"/>
-<rectangle x1="-0.889" y1="-5.334" x2="-0.381" y2="-3.8608" layer="51"/>
-<rectangle x1="-0.889" y1="-3.8608" x2="-0.381" y2="-3.7338" layer="51"/>
-<rectangle x1="0.381" y1="-3.8608" x2="0.889" y2="-3.7338" layer="51"/>
-<rectangle x1="0.381" y1="-5.334" x2="0.889" y2="-3.8608" layer="51"/>
-<rectangle x1="1.651" y1="-3.8608" x2="2.159" y2="-3.7338" layer="51"/>
-<rectangle x1="1.651" y1="-5.334" x2="2.159" y2="-3.8608" layer="51"/>
-<rectangle x1="2.921" y1="-3.8608" x2="3.429" y2="-3.7338" layer="51"/>
-<rectangle x1="2.921" y1="-5.334" x2="3.429" y2="-3.8608" layer="51"/>
-<rectangle x1="-5.969" y1="3.8608" x2="-5.461" y2="5.334" layer="51"/>
-<rectangle x1="-5.969" y1="3.7338" x2="-5.461" y2="3.8608" layer="51"/>
-<rectangle x1="-4.699" y1="3.7338" x2="-4.191" y2="3.8608" layer="51"/>
-<rectangle x1="-4.699" y1="3.8608" x2="-4.191" y2="5.334" layer="51"/>
-<rectangle x1="-3.429" y1="3.7338" x2="-2.921" y2="3.8608" layer="51"/>
-<rectangle x1="-3.429" y1="3.8608" x2="-2.921" y2="5.334" layer="51"/>
-<rectangle x1="-2.159" y1="3.7338" x2="-1.651" y2="3.8608" layer="51"/>
-<rectangle x1="-2.159" y1="3.8608" x2="-1.651" y2="5.334" layer="51"/>
-<rectangle x1="-0.889" y1="3.7338" x2="-0.381" y2="3.8608" layer="51"/>
-<rectangle x1="-0.889" y1="3.8608" x2="-0.381" y2="5.334" layer="51"/>
-<rectangle x1="0.381" y1="3.7338" x2="0.889" y2="3.8608" layer="51"/>
-<rectangle x1="0.381" y1="3.8608" x2="0.889" y2="5.334" layer="51"/>
-<rectangle x1="1.651" y1="3.7338" x2="2.159" y2="3.8608" layer="51"/>
-<rectangle x1="1.651" y1="3.8608" x2="2.159" y2="5.334" layer="51"/>
-<rectangle x1="2.921" y1="3.7338" x2="3.429" y2="3.8608" layer="51"/>
-<rectangle x1="2.921" y1="3.8608" x2="3.429" y2="5.334" layer="51"/>
-<rectangle x1="4.191" y1="3.7338" x2="4.699" y2="3.8608" layer="51"/>
-<rectangle x1="5.461" y1="3.7338" x2="5.969" y2="3.8608" layer="51"/>
-<rectangle x1="4.191" y1="3.8608" x2="4.699" y2="5.334" layer="51"/>
-<rectangle x1="5.461" y1="3.8608" x2="5.969" y2="5.334" layer="51"/>
-<rectangle x1="4.191" y1="-3.8608" x2="4.699" y2="-3.7338" layer="51"/>
-<rectangle x1="5.461" y1="-3.8608" x2="5.969" y2="-3.7338" layer="51"/>
-<rectangle x1="4.191" y1="-5.334" x2="4.699" y2="-3.8608" layer="51"/>
-<rectangle x1="5.461" y1="-5.334" x2="5.969" y2="-3.8608" layer="51"/>
-</package>
-<package name="LCC20" urn="urn:adsk.eagle:footprint:1641/1" library_version="1">
-<description>&lt;b&gt;Leadless Chip Carrier&lt;/b&gt;&lt;p&gt; Ceramic Package</description>
-<wire x1="-0.4001" y1="4.4" x2="-0.87" y2="4.4" width="0.2032" layer="51"/>
-<wire x1="-3.3" y1="4.4" x2="-4.4" y2="3.3" width="0.2032" layer="51"/>
-<wire x1="-0.4001" y1="4.3985" x2="0.4001" y2="4.3985" width="0.2032" layer="51" curve="180"/>
-<wire x1="-1.6701" y1="4.3985" x2="-0.8699" y2="4.3985" width="0.2032" layer="51" curve="180"/>
-<wire x1="-4.3985" y1="2.14" x2="-4.3985" y2="2.94" width="0.2032" layer="51" curve="180"/>
-<wire x1="-2.9401" y1="4.4" x2="-3.3" y2="4.4" width="0.2032" layer="51"/>
-<wire x1="0.87" y1="4.4" x2="0.4001" y2="4.4" width="0.2032" layer="51"/>
-<wire x1="0.87" y1="4.3985" x2="1.67" y2="4.3985" width="0.2032" layer="51" curve="180"/>
-<wire x1="-4.4" y1="3.3" x2="-4.4" y2="2.9401" width="0.2032" layer="51"/>
-<wire x1="-4.4" y1="2.14" x2="-4.4" y2="1.6701" width="0.2032" layer="51"/>
-<wire x1="-4.3985" y1="0.87" x2="-4.3985" y2="1.67" width="0.2032" layer="51" curve="180"/>
-<wire x1="-4.3985" y1="-0.4001" x2="-4.3985" y2="0.4001" width="0.2032" layer="51" curve="180"/>
-<wire x1="-4.3985" y1="-1.6701" x2="-4.3985" y2="-0.8699" width="0.2032" layer="51" curve="180"/>
-<wire x1="-4.4" y1="0.87" x2="-4.4" y2="0.4001" width="0.2032" layer="51"/>
-<wire x1="-4.4" y1="-0.4001" x2="-4.4" y2="-0.87" width="0.2032" layer="51"/>
-<wire x1="-4.4" y1="-2.9401" x2="-4.4" y2="-4.4" width="0.2032" layer="51"/>
-<wire x1="-4.4" y1="-4.4" x2="-4.4" y2="-4.4099" width="0.2032" layer="51"/>
-<wire x1="2.14" y1="4.3985" x2="2.94" y2="4.3985" width="0.2032" layer="51" curve="180"/>
-<wire x1="2.14" y1="4.4" x2="1.6701" y2="4.4" width="0.2032" layer="51"/>
-<wire x1="4.4" y1="4.4" x2="2.9401" y2="4.4" width="0.2032" layer="51"/>
-<wire x1="0.4001" y1="-4.4" x2="0.87" y2="-4.4" width="0.2032" layer="51"/>
-<wire x1="-0.4001" y1="-4.3985" x2="0.4001" y2="-4.3985" width="0.2032" layer="51" curve="-180"/>
-<wire x1="0.87" y1="-4.3985" x2="1.67" y2="-4.3985" width="0.2032" layer="51" curve="-180"/>
-<wire x1="2.9401" y1="-4.4" x2="4.4" y2="-4.4" width="0.2032" layer="51"/>
-<wire x1="-0.87" y1="-4.4" x2="-0.4001" y2="-4.4" width="0.2032" layer="51"/>
-<wire x1="-1.6701" y1="-4.3985" x2="-0.8699" y2="-4.3985" width="0.2032" layer="51" curve="-180"/>
-<wire x1="-2.9401" y1="-4.3985" x2="-2.1399" y2="-4.3985" width="0.2032" layer="51" curve="-180"/>
-<wire x1="-2.14" y1="-4.4" x2="-1.6701" y2="-4.4" width="0.2032" layer="51"/>
-<wire x1="-4.4" y1="-4.4" x2="-2.9401" y2="-4.4" width="0.2032" layer="51"/>
-<wire x1="4.4" y1="0.4001" x2="4.4" y2="0.87" width="0.2032" layer="51"/>
-<wire x1="4.3985" y1="0.4001" x2="4.3985" y2="-0.4001" width="0.2032" layer="51" curve="180"/>
-<wire x1="4.3985" y1="1.6701" x2="4.3985" y2="0.8699" width="0.2032" layer="51" curve="180"/>
-<wire x1="4.4" y1="2.9401" x2="4.4" y2="4.4" width="0.2032" layer="51"/>
-<wire x1="4.4" y1="-0.87" x2="4.4" y2="-0.4001" width="0.2032" layer="51"/>
-<wire x1="4.3985" y1="-0.87" x2="4.3985" y2="-1.67" width="0.2032" layer="51" curve="180"/>
-<wire x1="4.3985" y1="-2.14" x2="4.3985" y2="-2.94" width="0.2032" layer="51" curve="180"/>
-<wire x1="4.4" y1="-2.14" x2="4.4" y2="-1.6701" width="0.2032" layer="51"/>
-<wire x1="4.4" y1="-4.4" x2="4.4" y2="-2.9401" width="0.2032" layer="51"/>
-<wire x1="-2.9401" y1="4.3985" x2="-2.1399" y2="4.3985" width="0.2032" layer="51" curve="180"/>
-<wire x1="-1.6701" y1="4.4" x2="-2.14" y2="4.4" width="0.2032" layer="51"/>
-<wire x1="-4.3985" y1="-2.9401" x2="-4.3985" y2="-2.1399" width="0.2032" layer="51" curve="180"/>
-<wire x1="-4.4" y1="-1.6701" x2="-4.4" y2="-2.14" width="0.2032" layer="51"/>
-<wire x1="1.6701" y1="-4.4" x2="2.14" y2="-4.4" width="0.2032" layer="51"/>
-<wire x1="2.14" y1="-4.3985" x2="2.94" y2="-4.3985" width="0.2032" layer="51" curve="-180"/>
-<wire x1="4.3985" y1="2.9401" x2="4.3985" y2="2.1399" width="0.2032" layer="51" curve="180"/>
-<wire x1="4.4" y1="1.6701" x2="4.4" y2="2.14" width="0.2032" layer="51"/>
-<wire x1="-3.3" y1="4.4" x2="-4.4" y2="3.3" width="0.2032" layer="21"/>
-<wire x1="-4.4" y1="-3.1941" x2="-4.4" y2="-4.4" width="0.2032" layer="21"/>
-<wire x1="-4.4" y1="-4.4" x2="-3.1941" y2="-4.4" width="0.2032" layer="21"/>
-<wire x1="3.1941" y1="-4.4" x2="4.4" y2="-4.4" width="0.2032" layer="21"/>
-<wire x1="4.4" y1="-4.4" x2="4.4" y2="-3.1941" width="0.2032" layer="21"/>
-<wire x1="4.4" y1="3.1941" x2="4.4" y2="4.4" width="0.2032" layer="21"/>
-<wire x1="4.4" y1="4.4" x2="3.1941" y2="4.4" width="0.2032" layer="21"/>
-<smd name="2" x="-1.27" y="4.5001" dx="0.8" dy="2" layer="1"/>
-<smd name="1" x="0" y="3.8001" dx="0.8" dy="3.4" layer="1"/>
-<smd name="3" x="-2.54" y="4.5001" dx="0.8" dy="2" layer="1"/>
-<smd name="4" x="-4.5001" y="2.54" dx="2" dy="0.8" layer="1"/>
-<smd name="5" x="-4.5001" y="1.27" dx="2" dy="0.8" layer="1"/>
-<smd name="6" x="-4.5001" y="0" dx="2" dy="0.8" layer="1"/>
-<smd name="7" x="-4.5001" y="-1.27" dx="2" dy="0.8" layer="1"/>
-<smd name="8" x="-4.5001" y="-2.54" dx="2" dy="0.8" layer="1"/>
-<smd name="9" x="-2.54" y="-4.5001" dx="0.8" dy="2" layer="1"/>
-<smd name="10" x="-1.27" y="-4.5001" dx="0.8" dy="2" layer="1"/>
-<smd name="11" x="0" y="-4.5001" dx="0.8" dy="2" layer="1"/>
-<smd name="12" x="1.27" y="-4.5001" dx="0.8" dy="2" layer="1"/>
-<smd name="13" x="2.54" y="-4.5001" dx="0.8" dy="2" layer="1"/>
-<smd name="14" x="4.5001" y="-2.54" dx="2" dy="0.8" layer="1"/>
-<smd name="15" x="4.5001" y="-1.27" dx="2" dy="0.8" layer="1"/>
-<smd name="16" x="4.5001" y="0" dx="2" dy="0.8" layer="1"/>
-<smd name="17" x="4.5001" y="1.27" dx="2" dy="0.8" layer="1"/>
-<smd name="18" x="4.5001" y="2.54" dx="2" dy="0.8" layer="1"/>
-<smd name="19" x="2.54" y="4.5001" dx="0.8" dy="2" layer="1"/>
-<smd name="20" x="1.27" y="4.5001" dx="0.8" dy="2" layer="1"/>
-<text x="-4.0051" y="6.065" size="1.778" layer="25">&gt;NAME</text>
-<text x="-3.9751" y="-7.5601" size="1.778" layer="27">&gt;VALUE</text>
-</package>
-</packages>
-<packages3d>
-<package3d name="DIL20" urn="urn:adsk.eagle:package:16429/2" type="model" library_version="2">
-<description>Dual In Line Package</description>
-<packageinstances>
-<packageinstance name="DIL20"/>
-</packageinstances>
-</package3d>
-<package3d name="SO20W" urn="urn:adsk.eagle:package:2018/1" type="box" library_version="1">
-<description>Wide Small Outline package 300 mil</description>
-<packageinstances>
-<packageinstance name="SO20W"/>
-</packageinstances>
-</package3d>
-<package3d name="LCC20" urn="urn:adsk.eagle:package:2012/1" type="box" library_version="1">
-<description>Leadless Chip Carrier Ceramic Package</description>
-<packageinstances>
-<packageinstance name="LCC20"/>
-</packageinstances>
-</package3d>
-</packages3d>
-<symbols>
-<symbol name="74241" urn="urn:adsk.eagle:symbol:1733/1" library_version="1">
-<wire x1="-7.62" y1="-10.16" x2="7.62" y2="-10.16" width="0.4064" layer="94"/>
-<wire x1="7.62" y1="-10.16" x2="7.62" y2="7.62" width="0.4064" layer="94"/>
-<wire x1="7.62" y1="7.62" x2="-7.62" y2="7.62" width="0.4064" layer="94"/>
-<wire x1="-7.62" y1="7.62" x2="-7.62" y2="-10.16" width="0.4064" layer="94"/>
-<text x="-7.62" y="8.255" size="1.778" layer="95">&gt;NAME</text>
-<text x="-7.62" y="-12.7" size="1.778" layer="96">&gt;VALUE</text>
-<pin name="G" x="-12.7" y="-7.62" length="middle" direction="in" function="dot"/>
-<pin name="A1" x="-12.7" y="5.08" length="middle" direction="in"/>
-<pin name="A2" x="-12.7" y="2.54" length="middle" direction="in"/>
-<pin name="A3" x="-12.7" y="0" length="middle" direction="in"/>
-<pin name="A4" x="-12.7" y="-2.54" length="middle" direction="in"/>
-<pin name="Y4" x="12.7" y="-2.54" length="middle" direction="hiz" rot="R180"/>
-<pin name="Y3" x="12.7" y="0" length="middle" direction="hiz" rot="R180"/>
-<pin name="Y2" x="12.7" y="2.54" length="middle" direction="hiz" rot="R180"/>
-<pin name="Y1" x="12.7" y="5.08" length="middle" direction="hiz" rot="R180"/>
-</symbol>
-<symbol name="PWRN" urn="urn:adsk.eagle:symbol:1632/1" library_version="1">
-<text x="-0.635" y="-0.635" size="1.778" layer="95">&gt;NAME</text>
-<text x="1.905" y="-5.842" size="1.27" layer="95" rot="R90">GND</text>
-<text x="1.905" y="2.54" size="1.27" layer="95" rot="R90">VCC</text>
-<pin name="GND" x="0" y="-7.62" visible="pad" length="middle" direction="pwr" rot="R90"/>
-<pin name="VCC" x="0" y="7.62" visible="pad" length="middle" direction="pwr" rot="R270"/>
-</symbol>
-<symbol name="74241A" urn="urn:adsk.eagle:symbol:1734/1" library_version="1">
-<wire x1="-7.62" y1="-10.16" x2="7.62" y2="-10.16" width="0.4064" layer="94"/>
-<wire x1="7.62" y1="-10.16" x2="7.62" y2="7.62" width="0.4064" layer="94"/>
-<wire x1="7.62" y1="7.62" x2="-7.62" y2="7.62" width="0.4064" layer="94"/>
-<wire x1="-7.62" y1="7.62" x2="-7.62" y2="-10.16" width="0.4064" layer="94"/>
-<text x="-7.62" y="8.255" size="1.778" layer="95">&gt;NAME</text>
-<text x="-7.62" y="-12.7" size="1.778" layer="96">&gt;VALUE</text>
-<pin name="G" x="-12.7" y="-7.62" length="middle" direction="in"/>
-<pin name="A1" x="-12.7" y="5.08" length="middle" direction="in"/>
-<pin name="A2" x="-12.7" y="2.54" length="middle" direction="in"/>
-<pin name="A3" x="-12.7" y="0" length="middle" direction="in"/>
-<pin name="A4" x="-12.7" y="-2.54" length="middle" direction="in"/>
-<pin name="Y4" x="12.7" y="-2.54" length="middle" direction="hiz" rot="R180"/>
-<pin name="Y3" x="12.7" y="0" length="middle" direction="hiz" rot="R180"/>
-<pin name="Y2" x="12.7" y="2.54" length="middle" direction="hiz" rot="R180"/>
-<pin name="Y1" x="12.7" y="5.08" length="middle" direction="hiz" rot="R180"/>
-</symbol>
-</symbols>
-<devicesets>
-<deviceset name="74*241" urn="urn:adsk.eagle:component:2309/2" prefix="IC" library_version="2">
-<description>Octal &lt;b&gt;BUFFER&lt;/b&gt; and &lt;b&gt;LINE DRIVER&lt;/b&gt;, 3-state</description>
-<gates>
-<gate name="A" symbol="74241" x="20.32" y="10.16"/>
-<gate name="P" symbol="PWRN" x="-5.08" y="0" addlevel="request"/>
-<gate name="B" symbol="74241A" x="20.32" y="-15.24"/>
-</gates>
-<devices>
-<device name="N" package="DIL20">
-<connects>
-<connect gate="A" pin="A1" pad="2"/>
-<connect gate="A" pin="A2" pad="4"/>
-<connect gate="A" pin="A3" pad="6"/>
-<connect gate="A" pin="A4" pad="8"/>
-<connect gate="A" pin="G" pad="1"/>
-<connect gate="A" pin="Y1" pad="18"/>
-<connect gate="A" pin="Y2" pad="16"/>
-<connect gate="A" pin="Y3" pad="14"/>
-<connect gate="A" pin="Y4" pad="12"/>
-<connect gate="B" pin="A1" pad="11"/>
-<connect gate="B" pin="A2" pad="13"/>
-<connect gate="B" pin="A3" pad="15"/>
-<connect gate="B" pin="A4" pad="17"/>
-<connect gate="B" pin="G" pad="19"/>
-<connect gate="B" pin="Y1" pad="9"/>
-<connect gate="B" pin="Y2" pad="7"/>
-<connect gate="B" pin="Y3" pad="5"/>
-<connect gate="B" pin="Y4" pad="3"/>
-<connect gate="P" pin="GND" pad="10"/>
-<connect gate="P" pin="VCC" pad="20"/>
-</connects>
-<package3dinstances>
-<package3dinstance package3d_urn="urn:adsk.eagle:package:16429/2"/>
-</package3dinstances>
-<technologies>
-<technology name="AC"/>
-<technology name="ACT"/>
-<technology name="HC"/>
-<technology name="HCT"/>
-<technology name="LS"/>
-<technology name="S"/>
-</technologies>
-</device>
-<device name="DW" package="SO20W">
-<connects>
-<connect gate="A" pin="A1" pad="2"/>
-<connect gate="A" pin="A2" pad="4"/>
-<connect gate="A" pin="A3" pad="6"/>
-<connect gate="A" pin="A4" pad="8"/>
-<connect gate="A" pin="G" pad="1"/>
-<connect gate="A" pin="Y1" pad="18"/>
-<connect gate="A" pin="Y2" pad="16"/>
-<connect gate="A" pin="Y3" pad="14"/>
-<connect gate="A" pin="Y4" pad="12"/>
-<connect gate="B" pin="A1" pad="11"/>
-<connect gate="B" pin="A2" pad="13"/>
-<connect gate="B" pin="A3" pad="15"/>
-<connect gate="B" pin="A4" pad="17"/>
-<connect gate="B" pin="G" pad="19"/>
-<connect gate="B" pin="Y1" pad="9"/>
-<connect gate="B" pin="Y2" pad="7"/>
-<connect gate="B" pin="Y3" pad="5"/>
-<connect gate="B" pin="Y4" pad="3"/>
-<connect gate="P" pin="GND" pad="10"/>
-<connect gate="P" pin="VCC" pad="20"/>
-</connects>
-<package3dinstances>
-<package3dinstance package3d_urn="urn:adsk.eagle:package:2018/1"/>
-</package3dinstances>
-<technologies>
-<technology name="AC"/>
-<technology name="ACT"/>
-<technology name="HC"/>
-<technology name="HCT"/>
-<technology name="LS"/>
-<technology name="S"/>
-</technologies>
-</device>
-<device name="FK" package="LCC20">
-<connects>
-<connect gate="A" pin="A1" pad="2"/>
-<connect gate="A" pin="A2" pad="4"/>
-<connect gate="A" pin="A3" pad="6"/>
-<connect gate="A" pin="A4" pad="8"/>
-<connect gate="A" pin="G" pad="1"/>
-<connect gate="A" pin="Y1" pad="18"/>
-<connect gate="A" pin="Y2" pad="16"/>
-<connect gate="A" pin="Y3" pad="14"/>
-<connect gate="A" pin="Y4" pad="12"/>
-<connect gate="B" pin="A1" pad="11"/>
-<connect gate="B" pin="A2" pad="13"/>
-<connect gate="B" pin="A3" pad="15"/>
-<connect gate="B" pin="A4" pad="17"/>
-<connect gate="B" pin="G" pad="19"/>
-<connect gate="B" pin="Y1" pad="9"/>
-<connect gate="B" pin="Y2" pad="7"/>
-<connect gate="B" pin="Y3" pad="5"/>
-<connect gate="B" pin="Y4" pad="3"/>
-<connect gate="P" pin="GND" pad="10"/>
-<connect gate="P" pin="VCC" pad="20"/>
-</connects>
-<package3dinstances>
-<package3dinstance package3d_urn="urn:adsk.eagle:package:2012/1"/>
-</package3dinstances>
-<technologies>
-<technology name="AC"/>
-<technology name="ACT"/>
-<technology name="HC"/>
-<technology name="HCT"/>
-<technology name="LS"/>
-<technology name="S"/>
-</technologies>
-</device>
-</devices>
-</deviceset>
-</devicesets>
-</library>
 <library name="resistor" urn="urn:adsk.eagle:library:348">
 <description>&lt;b&gt;Resistors, Capacitors, Inductors&lt;/b&gt;&lt;p&gt;
 Based on the previous libraries:
@@ -18663,6 +18283,10 @@ fast recovery rectifier, 1A</description>
 </sheets>
 </module>
 </modules>
+<groups>
+<schematic_group name="TTL_COMMS"/>
+<schematic_group name="RS485_COMMS"/>
+</groups>
 <parts>
 <part name="FRAME1" library="frames" library_urn="urn:adsk.eagle:library:229" deviceset="DINA4_L" device=""/>
 <part name="IC1" library="maxim" library_urn="urn:adsk.eagle:library:269" deviceset="MAX34*" device="PA" package3d_urn="urn:adsk.eagle:package:29519/2" technology="68C"/>
@@ -18671,11 +18295,6 @@ fast recovery rectifier, 1A</description>
 <part name="SUPPLY2" library="supply2" library_urn="urn:adsk.eagle:library:372" deviceset="GND" device=""/>
 <part name="P+1" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="VCC" device=""/>
 <part name="P+2" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="VCC" device=""/>
-<part name="IC2" library="74xx-eu" library_urn="urn:adsk.eagle:library:85" deviceset="74*241" device="N" package3d_urn="urn:adsk.eagle:package:16429/2" technology="LS"/>
-<part name="P+3" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="VCC" device=""/>
-<part name="SUPPLY3" library="supply2" library_urn="urn:adsk.eagle:library:372" deviceset="GND" device=""/>
-<part name="P+4" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="VCC" device=""/>
-<part name="SUPPLY4" library="supply2" library_urn="urn:adsk.eagle:library:372" deviceset="GND" device=""/>
 <part name="P+5" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="VCC" device=""/>
 <part name="J1" library="con-jack" library_urn="urn:adsk.eagle:library:154" deviceset="DCJ0303" device="" package3d_urn="urn:adsk.eagle:package:7493/1" value="12V"/>
 <part name="SUPPLY5" library="supply2" library_urn="urn:adsk.eagle:library:372" deviceset="GND" device=""/>
@@ -18685,7 +18304,6 @@ fast recovery rectifier, 1A</description>
 <part name="U$1" library="DynamixelLibrary" deviceset="DYN-RA-3" device=""/>
 <part name="U$2" library="DynamixelLibrary" deviceset="DYN-RA-4" device=""/>
 <part name="SUPPLY7" library="supply2" library_urn="urn:adsk.eagle:library:372" deviceset="GND" device=""/>
-<part name="SUPPLY8" library="supply2" library_urn="urn:adsk.eagle:library:372" deviceset="GND" device=""/>
 <part name="LED1" library="eagle-ltspice" library_urn="urn:adsk.eagle:library:217" deviceset="LED_E" device="LD260" package3d_urn="urn:adsk.eagle:package:13313/1"/>
 <part name="LED2" library="eagle-ltspice" library_urn="urn:adsk.eagle:library:217" deviceset="LED_E" device="LD260" package3d_urn="urn:adsk.eagle:package:13313/1"/>
 <part name="SUPPLY9" library="supply2" library_urn="urn:adsk.eagle:library:372" deviceset="GND" device=""/>
@@ -18719,7 +18337,7 @@ fast recovery rectifier, 1A</description>
 <attribute name="SHEET" x="116.84" y="-95.25" size="2.54" layer="94"/>
 <attribute name="DRAWING_NAME" x="48.26" y="-77.47" size="2.54" layer="94"/>
 </instance>
-<instance part="IC1" gate="G$1" x="-5.08" y="25.4" smashed="yes">
+<instance part="IC1" gate="G$1" x="-5.08" y="25.4" smashed="yes" grouprefs="RS485_COMMS">
 <attribute name="NAME" x="-12.7" y="41.91" size="1.778" layer="95"/>
 <attribute name="VALUE" x="-12.7" y="12.7" size="1.778" layer="96"/>
 </instance>
@@ -18730,33 +18348,17 @@ fast recovery rectifier, 1A</description>
 <instance part="SUPPLY1" gate="GND" x="-76.2" y="-12.7" smashed="yes">
 <attribute name="VALUE" x="-78.105" y="-15.875" size="1.778" layer="96"/>
 </instance>
-<instance part="SUPPLY2" gate="GND" x="20.32" y="12.7" smashed="yes">
+<instance part="SUPPLY2" gate="GND" x="20.32" y="12.7" smashed="yes" grouprefs="RS485_COMMS">
 <attribute name="VALUE" x="18.415" y="9.525" size="1.778" layer="96"/>
 </instance>
 <instance part="P+1" gate="VCC" x="-76.2" y="12.7" smashed="yes">
 <attribute name="VALUE" x="-78.74" y="10.16" size="1.778" layer="96" rot="R90"/>
 </instance>
-<instance part="P+2" gate="VCC" x="20.32" y="45.72" smashed="yes">
+<instance part="P+2" gate="VCC" x="20.32" y="45.72" smashed="yes" grouprefs="RS485_COMMS">
 <attribute name="VALUE" x="17.78" y="43.18" size="1.778" layer="96" rot="R90"/>
 </instance>
-<instance part="IC2" gate="A" x="-15.24" y="-27.94" smashed="yes">
-<attribute name="NAME" x="-22.86" y="-19.685" size="1.778" layer="95"/>
-<attribute name="VALUE" x="-22.86" y="-40.64" size="1.778" layer="96"/>
-</instance>
-<instance part="P+3" gate="VCC" x="-111.76" y="-58.42" smashed="yes">
-<attribute name="VALUE" x="-114.3" y="-60.96" size="1.778" layer="96" rot="R90"/>
-</instance>
-<instance part="SUPPLY3" gate="GND" x="-111.76" y="-81.28" smashed="yes">
-<attribute name="VALUE" x="-113.665" y="-84.455" size="1.778" layer="96"/>
-</instance>
-<instance part="P+4" gate="VCC" x="-101.6" y="-58.42" smashed="yes">
-<attribute name="VALUE" x="-104.14" y="-60.96" size="1.778" layer="96" rot="R90"/>
-</instance>
-<instance part="SUPPLY4" gate="GND" x="-101.6" y="-81.28" smashed="yes">
-<attribute name="VALUE" x="-103.505" y="-84.455" size="1.778" layer="96"/>
-</instance>
-<instance part="P+5" gate="VCC" x="-30.48" y="58.42" smashed="yes" rot="R90">
-<attribute name="VALUE" x="-27.94" y="55.88" size="1.778" layer="96" rot="R180"/>
+<instance part="P+5" gate="VCC" x="-43.18" y="58.42" smashed="yes" rot="R90">
+<attribute name="VALUE" x="-40.64" y="55.88" size="1.778" layer="96" rot="R180"/>
 </instance>
 <instance part="J1" gate="G$1" x="-109.22" y="55.88" smashed="yes">
 <attribute name="NAME" x="-111.76" y="59.69" size="1.778" layer="95"/>
@@ -18780,9 +18382,6 @@ fast recovery rectifier, 1A</description>
 <instance part="U$2" gate="G$1" x="109.22" y="63.5" smashed="yes"/>
 <instance part="SUPPLY7" gate="GND" x="91.44" y="40.64" smashed="yes">
 <attribute name="VALUE" x="89.535" y="37.465" size="1.778" layer="96"/>
-</instance>
-<instance part="SUPPLY8" gate="GND" x="-30.48" y="-43.18" smashed="yes">
-<attribute name="VALUE" x="-32.385" y="-46.355" size="1.778" layer="96"/>
 </instance>
 <instance part="LED1" gate="G$1" x="-76.2" y="-60.96" smashed="yes">
 <attribute name="NAME" x="-72.644" y="-65.532" size="1.778" layer="95" rot="R90"/>
@@ -18813,30 +18412,30 @@ fast recovery rectifier, 1A</description>
 <attribute name="NAME" x="67.0814" y="59.69" size="1.778" layer="95" rot="R90"/>
 <attribute name="VALUE" x="71.882" y="59.69" size="1.778" layer="96" rot="R90"/>
 </instance>
-<instance part="R8" gate="G$1" x="-22.86" y="48.26" smashed="yes" rot="R90">
-<attribute name="NAME" x="-24.3586" y="44.45" size="1.778" layer="95" rot="R90"/>
-<attribute name="VALUE" x="-19.558" y="44.45" size="1.778" layer="96" rot="R90"/>
+<instance part="R8" gate="G$1" x="-35.56" y="48.26" smashed="yes" rot="R90">
+<attribute name="NAME" x="-37.0586" y="44.45" size="1.778" layer="95" rot="R90"/>
+<attribute name="VALUE" x="-32.258" y="44.45" size="1.778" layer="96" rot="R90"/>
 </instance>
-<instance part="C4" gate="G$1" x="-111.76" y="-68.58" smashed="yes">
-<attribute name="NAME" x="-110.236" y="-68.199" size="1.778" layer="95"/>
-<attribute name="VALUE" x="-110.236" y="-73.279" size="1.778" layer="96"/>
+<instance part="C4" gate="G$1" x="-15.24" y="-68.58" smashed="yes" rot="R90" grouprefs="TTL_COMMS">
+<attribute name="NAME" x="-15.621" y="-69.596" size="1.778" layer="95" rot="R180"/>
+<attribute name="VALUE" x="-8.001" y="-69.596" size="1.778" layer="96" rot="R180"/>
 </instance>
-<instance part="C5" gate="G$1" x="-101.6" y="-68.58" smashed="yes">
-<attribute name="NAME" x="-100.076" y="-68.199" size="1.778" layer="95"/>
-<attribute name="VALUE" x="-100.076" y="-73.279" size="1.778" layer="96"/>
+<instance part="C5" gate="G$1" x="33.02" y="30.48" smashed="yes" grouprefs="RS485_COMMS">
+<attribute name="NAME" x="34.544" y="30.861" size="1.778" layer="95"/>
+<attribute name="VALUE" x="34.544" y="25.781" size="1.778" layer="96"/>
 </instance>
 <instance part="C1" gate="G$1" x="-93.98" y="50.8" smashed="yes">
 <attribute name="NAME" x="-92.837" y="51.2826" size="1.778" layer="95"/>
 <attribute name="VALUE" x="-92.837" y="46.2026" size="1.778" layer="96"/>
 </instance>
-<instance part="U3" gate="G$1" x="55.88" y="-22.86" smashed="yes">
-<attribute name="NAME" x="48.26" y="-5.08" size="1.778" layer="95"/>
+<instance part="U3" gate="G$1" x="-12.7" y="-43.18" smashed="yes" grouprefs="TTL_COMMS">
+<attribute name="NAME" x="-20.32" y="-25.4" size="1.778" layer="95"/>
 </instance>
-<instance part="SUPPLY6" gate="GND" x="71.12" y="-48.26" smashed="yes">
-<attribute name="VALUE" x="69.215" y="-51.435" size="1.778" layer="96"/>
+<instance part="SUPPLY6" gate="GND" x="5.08" y="-76.2" smashed="yes" grouprefs="TTL_COMMS">
+<attribute name="VALUE" x="3.175" y="-79.375" size="1.778" layer="96"/>
 </instance>
-<instance part="P+8" gate="VCC" x="35.56" y="-30.48" smashed="yes">
-<attribute name="VALUE" x="33.02" y="-33.02" size="1.778" layer="96" rot="R90"/>
+<instance part="P+8" gate="VCC" x="-30.48" y="-50.8" smashed="yes" grouprefs="TTL_COMMS">
+<attribute name="VALUE" x="-33.02" y="-53.34" size="1.778" layer="96" rot="R90"/>
 </instance>
 </instances>
 <busses>
@@ -18845,25 +18444,19 @@ fast recovery rectifier, 1A</description>
 <net name="GND" class="0">
 <segment>
 <pinref part="SUPPLY2" gate="GND" pin="GND"/>
-<wire x1="20.32" y1="15.24" x2="20.32" y2="17.78" width="0.1524" layer="91"/>
+<wire x1="20.32" y1="15.24" x2="20.32" y2="17.78" width="0.1524" layer="91" grouprefs="RS485_COMMS"/>
 <pinref part="IC1" gate="G$1" pin="GND"/>
-<wire x1="20.32" y1="17.78" x2="15.24" y2="17.78" width="0.1524" layer="91"/>
+<wire x1="20.32" y1="17.78" x2="15.24" y2="17.78" width="0.1524" layer="91" grouprefs="RS485_COMMS"/>
+<pinref part="C5" gate="G$1" pin="2"/>
+<wire x1="33.02" y1="25.4" x2="33.02" y2="17.78" width="0.1524" layer="91" grouprefs="RS485_COMMS"/>
+<wire x1="33.02" y1="17.78" x2="20.32" y2="17.78" width="0.1524" layer="91" grouprefs="RS485_COMMS"/>
+<junction x="20.32" y="17.78" grouprefs="RS485_COMMS"/>
 </segment>
 <segment>
 <pinref part="SUPPLY1" gate="GND" pin="GND"/>
 <wire x1="-76.2" y1="-10.16" x2="-76.2" y2="2.54" width="0.1524" layer="91"/>
 <pinref part="SV1" gate="G$1" pin="4"/>
 <wire x1="-76.2" y1="2.54" x2="-83.82" y2="2.54" width="0.1524" layer="91"/>
-</segment>
-<segment>
-<pinref part="SUPPLY3" gate="GND" pin="GND"/>
-<wire x1="-111.76" y1="-78.74" x2="-111.76" y2="-73.66" width="0.1524" layer="91"/>
-<pinref part="C4" gate="G$1" pin="2"/>
-</segment>
-<segment>
-<pinref part="SUPPLY4" gate="GND" pin="GND"/>
-<wire x1="-101.6" y1="-78.74" x2="-101.6" y2="-73.66" width="0.1524" layer="91"/>
-<pinref part="C5" gate="G$1" pin="2"/>
 </segment>
 <segment>
 <pinref part="SUPPLY5" gate="GND" pin="GND"/>
@@ -18879,16 +18472,6 @@ fast recovery rectifier, 1A</description>
 <pinref part="C1" gate="G$1" pin="-"/>
 <wire x1="-93.98" y1="45.72" x2="-93.98" y2="40.64" width="0.1524" layer="91"/>
 <junction x="-93.98" y="40.64"/>
-</segment>
-<segment>
-<pinref part="SUPPLY8" gate="GND" pin="GND"/>
-<pinref part="IC2" gate="A" pin="A3"/>
-<wire x1="-30.48" y1="-27.94" x2="-30.48" y2="-30.48" width="0.1524" layer="91"/>
-<wire x1="-30.48" y1="-30.48" x2="-30.48" y2="-40.64" width="0.1524" layer="91"/>
-<wire x1="-27.94" y1="-27.94" x2="-30.48" y2="-27.94" width="0.1524" layer="91"/>
-<pinref part="IC2" gate="A" pin="A4"/>
-<wire x1="-27.94" y1="-30.48" x2="-30.48" y2="-30.48" width="0.1524" layer="91"/>
-<junction x="-30.48" y="-30.48"/>
 </segment>
 <segment>
 <pinref part="R6" gate="G$1" pin="1"/>
@@ -18913,8 +18496,12 @@ fast recovery rectifier, 1A</description>
 <segment>
 <pinref part="U3" gate="G$1" pin="GND"/>
 <pinref part="SUPPLY6" gate="GND" pin="GND"/>
-<wire x1="68.58" y1="-38.1" x2="71.12" y2="-38.1" width="0.1524" layer="91"/>
-<wire x1="71.12" y1="-38.1" x2="71.12" y2="-45.72" width="0.1524" layer="91"/>
+<wire x1="0" y1="-58.42" x2="5.08" y2="-58.42" width="0.1524" layer="91" grouprefs="TTL_COMMS"/>
+<wire x1="5.08" y1="-58.42" x2="5.08" y2="-68.58" width="0.1524" layer="91" grouprefs="TTL_COMMS"/>
+<pinref part="C4" gate="G$1" pin="2"/>
+<wire x1="5.08" y1="-68.58" x2="5.08" y2="-73.66" width="0.1524" layer="91" grouprefs="TTL_COMMS_CHIP TTL_COMMS"/>
+<wire x1="-10.16" y1="-68.58" x2="5.08" y2="-68.58" width="0.1524" layer="91" grouprefs="TTL_COMMS"/>
+<junction x="5.08" y="-68.58" grouprefs="TTL_COMMS"/>
 </segment>
 </net>
 <net name="VCC" class="0">
@@ -18926,19 +18513,13 @@ fast recovery rectifier, 1A</description>
 </segment>
 <segment>
 <pinref part="IC1" gate="G$1" pin="VCC"/>
-<wire x1="15.24" y1="38.1" x2="20.32" y2="38.1" width="0.1524" layer="91"/>
+<wire x1="15.24" y1="38.1" x2="20.32" y2="38.1" width="0.1524" layer="91" grouprefs="RS485_COMMS"/>
 <pinref part="P+2" gate="VCC" pin="VCC"/>
-<wire x1="20.32" y1="38.1" x2="20.32" y2="43.18" width="0.1524" layer="91"/>
-</segment>
-<segment>
-<pinref part="P+3" gate="VCC" pin="VCC"/>
-<wire x1="-111.76" y1="-60.96" x2="-111.76" y2="-66.04" width="0.1524" layer="91"/>
-<pinref part="C4" gate="G$1" pin="1"/>
-</segment>
-<segment>
-<pinref part="P+4" gate="VCC" pin="VCC"/>
-<wire x1="-101.6" y1="-60.96" x2="-101.6" y2="-66.04" width="0.1524" layer="91"/>
+<wire x1="20.32" y1="38.1" x2="20.32" y2="43.18" width="0.1524" layer="91" grouprefs="RS485_COMMS"/>
 <pinref part="C5" gate="G$1" pin="1"/>
+<wire x1="20.32" y1="38.1" x2="33.02" y2="38.1" width="0.1524" layer="91" grouprefs="RS485_COMMS"/>
+<wire x1="33.02" y1="38.1" x2="33.02" y2="33.02" width="0.1524" layer="91" grouprefs="RS485_COMMS"/>
+<junction x="20.32" y="38.1" grouprefs="RS485_COMMS"/>
 </segment>
 <segment>
 <pinref part="P+7" gate="VCC" pin="VCC"/>
@@ -18948,8 +18529,8 @@ fast recovery rectifier, 1A</description>
 <segment>
 <pinref part="P+5" gate="VCC" pin="VCC"/>
 <pinref part="R8" gate="G$1" pin="2"/>
-<wire x1="-27.94" y1="58.42" x2="-22.86" y2="58.42" width="0.1524" layer="91"/>
-<wire x1="-22.86" y1="58.42" x2="-22.86" y2="53.34" width="0.1524" layer="91"/>
+<wire x1="-40.64" y1="58.42" x2="-35.56" y2="58.42" width="0.1524" layer="91"/>
+<wire x1="-35.56" y1="58.42" x2="-35.56" y2="53.34" width="0.1524" layer="91"/>
 </segment>
 <segment>
 <pinref part="R7" gate="G$1" pin="2"/>
@@ -18958,9 +18539,13 @@ fast recovery rectifier, 1A</description>
 </segment>
 <segment>
 <pinref part="P+8" gate="VCC" pin="VCC"/>
-<wire x1="35.56" y1="-33.02" x2="35.56" y2="-38.1" width="0.1524" layer="91"/>
+<wire x1="-30.48" y1="-53.34" x2="-30.48" y2="-58.42" width="0.1524" layer="91" grouprefs="TTL_COMMS"/>
 <pinref part="U3" gate="G$1" pin="VCC"/>
-<wire x1="35.56" y1="-38.1" x2="43.18" y2="-38.1" width="0.1524" layer="91"/>
+<wire x1="-30.48" y1="-58.42" x2="-25.4" y2="-58.42" width="0.1524" layer="91" grouprefs="TTL_COMMS"/>
+<pinref part="C4" gate="G$1" pin="1"/>
+<wire x1="-30.48" y1="-58.42" x2="-30.48" y2="-68.58" width="0.1524" layer="91" grouprefs="TTL_COMMS"/>
+<wire x1="-30.48" y1="-68.58" x2="-17.78" y2="-68.58" width="0.1524" layer="91" grouprefs="TTL_COMMS"/>
+<junction x="-30.48" y="-58.42" grouprefs="TTL_COMMS"/>
 </segment>
 </net>
 <net name="DIR" class="0">
@@ -18969,27 +18554,23 @@ fast recovery rectifier, 1A</description>
 <wire x1="-83.82" y1="-5.08" x2="-38.1" y2="-5.08" width="0.1524" layer="91"/>
 <wire x1="-38.1" y1="-5.08" x2="-38.1" y2="25.4" width="0.1524" layer="91"/>
 <pinref part="IC1" gate="G$1" pin="DE"/>
-<wire x1="-38.1" y1="25.4" x2="-22.86" y2="25.4" width="0.1524" layer="91"/>
+<wire x1="-38.1" y1="25.4" x2="-22.86" y2="25.4" width="0.1524" layer="91" grouprefs="RS485_COMMS"/>
 <pinref part="IC1" gate="G$1" pin="RE/"/>
-<wire x1="-22.86" y1="25.4" x2="-17.78" y2="25.4" width="0.1524" layer="91"/>
-<wire x1="-17.78" y1="30.48" x2="-22.86" y2="30.48" width="0.1524" layer="91"/>
-<wire x1="-22.86" y1="30.48" x2="-22.86" y2="25.4" width="0.1524" layer="91"/>
-<junction x="-22.86" y="25.4"/>
-<pinref part="IC2" gate="A" pin="G"/>
-<wire x1="-27.94" y1="-35.56" x2="-38.1" y2="-35.56" width="0.1524" layer="91"/>
-<wire x1="-38.1" y1="-35.56" x2="-38.1" y2="-5.08" width="0.1524" layer="91"/>
-<junction x="-38.1" y="-5.08"/>
+<wire x1="-22.86" y1="25.4" x2="-17.78" y2="25.4" width="0.1524" layer="91" grouprefs="RS485_COMMS"/>
+<wire x1="-17.78" y1="30.48" x2="-22.86" y2="30.48" width="0.1524" layer="91" grouprefs="RS485_COMMS"/>
+<wire x1="-22.86" y1="30.48" x2="-22.86" y2="25.4" width="0.1524" layer="91" grouprefs="RS485_COMMS"/>
+<junction x="-22.86" y="25.4" grouprefs="RS485_COMMS"/>
 <label x="-68.58" y="-5.08" size="1.778" layer="95"/>
 </segment>
 <segment>
 <pinref part="U3" gate="G$1" pin="1G"/>
-<wire x1="43.18" y1="-7.62" x2="35.56" y2="-7.62" width="0.1524" layer="91"/>
-<label x="30.48" y="-7.62" size="1.778" layer="95"/>
+<wire x1="-25.4" y1="-27.94" x2="-30.48" y2="-27.94" width="0.1524" layer="91" grouprefs="TTL_COMMS"/>
+<label x="-35.56" y="-27.94" size="1.778" layer="95" grouprefs="TTL_COMMS"/>
 </segment>
 <segment>
 <pinref part="U3" gate="G$1" pin="2G"/>
-<wire x1="68.58" y1="-7.62" x2="73.66" y2="-7.62" width="0.1524" layer="91"/>
-<label x="73.66" y="-7.62" size="1.778" layer="95"/>
+<wire x1="0" y1="-27.94" x2="7.62" y2="-27.94" width="0.1524" layer="91" grouprefs="TTL_COMMS"/>
+<label x="7.62" y="-27.94" size="1.778" layer="95" grouprefs="TTL_COMMS"/>
 </segment>
 </net>
 <net name="TX" class="0">
@@ -19007,20 +18588,16 @@ fast recovery rectifier, 1A</description>
 <net name="RX" class="0">
 <segment>
 <pinref part="IC1" gate="G$1" pin="DI"/>
-<wire x1="-17.78" y1="20.32" x2="-33.02" y2="20.32" width="0.1524" layer="91"/>
+<wire x1="-17.78" y1="20.32" x2="-33.02" y2="20.32" width="0.1524" layer="91" grouprefs="RS485_COMMS"/>
 <wire x1="-33.02" y1="20.32" x2="-33.02" y2="-2.54" width="0.1524" layer="91"/>
 <pinref part="SV1" gate="G$1" pin="2"/>
 <wire x1="-33.02" y1="-2.54" x2="-83.82" y2="-2.54" width="0.1524" layer="91"/>
 <label x="-66.04" y="-2.54" size="1.778" layer="95"/>
-<pinref part="IC2" gate="A" pin="A2"/>
-<wire x1="-27.94" y1="-25.4" x2="-33.02" y2="-25.4" width="0.1524" layer="91"/>
-<wire x1="-33.02" y1="-25.4" x2="-33.02" y2="-2.54" width="0.1524" layer="91"/>
-<junction x="-33.02" y="-2.54"/>
 </segment>
 <segment>
 <pinref part="U3" gate="G$1" pin="2A1"/>
-<wire x1="43.18" y1="-25.4" x2="35.56" y2="-25.4" width="0.1524" layer="91"/>
-<label x="30.48" y="-25.4" size="1.778" layer="95"/>
+<wire x1="-25.4" y1="-45.72" x2="-30.48" y2="-45.72" width="0.1524" layer="91" grouprefs="TTL_COMMS"/>
+<label x="-35.56" y="-45.72" size="1.778" layer="95" grouprefs="TTL_COMMS"/>
 </segment>
 </net>
 <net name="12V" class="0">
@@ -19052,27 +18629,22 @@ fast recovery rectifier, 1A</description>
 <net name="N$2" class="0">
 <segment>
 <pinref part="IC1" gate="G$1" pin="RO"/>
-<wire x1="-22.86" y1="35.56" x2="-17.78" y2="35.56" width="0.1524" layer="91"/>
-<wire x1="-43.18" y1="35.56" x2="-22.86" y2="35.56" width="0.1524" layer="91"/>
+<wire x1="-35.56" y1="35.56" x2="-17.78" y2="35.56" width="0.1524" layer="91" grouprefs="RS485_COMMS"/>
+<wire x1="-43.18" y1="35.56" x2="-35.56" y2="35.56" width="0.1524" layer="91"/>
 <pinref part="D2" gate="1" pin="A"/>
 <wire x1="-43.18" y1="20.32" x2="-43.18" y2="35.56" width="0.1524" layer="91"/>
 <pinref part="R8" gate="G$1" pin="1"/>
-<wire x1="-22.86" y1="43.18" x2="-22.86" y2="35.56" width="0.1524" layer="91"/>
-<junction x="-22.86" y="35.56"/>
+<wire x1="-35.56" y1="43.18" x2="-35.56" y2="35.56" width="0.1524" layer="91"/>
+<junction x="-35.56" y="35.56"/>
 </segment>
 </net>
 <net name="N$5" class="0">
 <segment>
-<pinref part="IC2" gate="A" pin="Y1"/>
-<wire x1="-2.54" y1="-22.86" x2="0" y2="-22.86" width="0.1524" layer="91"/>
-<wire x1="0" y1="-22.86" x2="0" y2="0" width="0.1524" layer="91"/>
-<pinref part="D1" gate="1" pin="A"/>
-<wire x1="0" y1="0" x2="-17.78" y2="0" width="0.1524" layer="91"/>
-<wire x1="0" y1="0" x2="71.12" y2="0" width="0.1524" layer="91"/>
-<wire x1="71.12" y1="0" x2="71.12" y2="-20.32" width="0.1524" layer="91"/>
-<junction x="0" y="0"/>
 <pinref part="U3" gate="G$1" pin="1Y4"/>
-<wire x1="71.12" y1="-20.32" x2="68.58" y2="-20.32" width="0.1524" layer="91"/>
+<wire x1="0" y1="-40.64" x2="15.24" y2="-40.64" width="0.1524" layer="91" grouprefs="TTL_COMMS"/>
+<wire x1="15.24" y1="-40.64" x2="15.24" y2="0" width="0.1524" layer="91"/>
+<pinref part="D1" gate="1" pin="A"/>
+<wire x1="15.24" y1="0" x2="-17.78" y2="0" width="0.1524" layer="91"/>
 </segment>
 </net>
 <net name="DATA" class="0">
@@ -19086,33 +18658,21 @@ fast recovery rectifier, 1A</description>
 <label x="53.34" y="50.8" size="1.778" layer="95"/>
 </segment>
 <segment>
-<pinref part="IC2" gate="A" pin="A1"/>
-<wire x1="-27.94" y1="-22.86" x2="-30.48" y2="-22.86" width="0.1524" layer="91"/>
-<wire x1="-30.48" y1="-22.86" x2="-30.48" y2="-15.24" width="0.1524" layer="91"/>
-<wire x1="-30.48" y1="-15.24" x2="2.54" y2="-15.24" width="0.1524" layer="91"/>
-<wire x1="2.54" y1="-15.24" x2="2.54" y2="-25.4" width="0.1524" layer="91"/>
-<pinref part="IC2" gate="A" pin="Y2"/>
-<wire x1="-2.54" y1="-25.4" x2="2.54" y2="-25.4" width="0.1524" layer="91"/>
-<wire x1="2.54" y1="-25.4" x2="7.62" y2="-25.4" width="0.1524" layer="91"/>
-<junction x="2.54" y="-25.4"/>
-<label x="7.62" y="-25.4" size="1.778" layer="95"/>
-</segment>
-<segment>
 <pinref part="U3" gate="G$1" pin="1A4"/>
-<wire x1="43.18" y1="-20.32" x2="35.56" y2="-20.32" width="0.1524" layer="91"/>
-<label x="27.94" y="-20.32" size="1.778" layer="95"/>
+<wire x1="-25.4" y1="-40.64" x2="-30.48" y2="-40.64" width="0.1524" layer="91" grouprefs="TTL_COMMS"/>
+<label x="-38.1" y="-40.64" size="1.778" layer="95" grouprefs="TTL_COMMS"/>
 </segment>
 <segment>
 <pinref part="U3" gate="G$1" pin="2Y1"/>
-<wire x1="68.58" y1="-25.4" x2="73.66" y2="-25.4" width="0.1524" layer="91"/>
-<label x="73.66" y="-25.4" size="1.778" layer="95"/>
+<wire x1="0" y1="-45.72" x2="7.62" y2="-45.72" width="0.1524" layer="91" grouprefs="TTL_COMMS"/>
+<label x="7.62" y="-45.72" size="1.778" layer="95" grouprefs="TTL_COMMS"/>
 </segment>
 </net>
 <net name="D-" class="0">
 <segment>
 <pinref part="IC1" gate="G$1" pin="B"/>
-<wire x1="15.24" y1="30.48" x2="22.86" y2="30.48" width="0.1524" layer="91"/>
-<label x="25.4" y="30.48" size="1.778" layer="95"/>
+<wire x1="15.24" y1="30.48" x2="22.86" y2="30.48" width="0.1524" layer="91" grouprefs="RS485_COMMS"/>
+<label x="25.4" y="30.48" size="1.778" layer="95" grouprefs="RS485_COMMS"/>
 </segment>
 <segment>
 <pinref part="U$2" gate="G$1" pin="D-"/>
@@ -19123,8 +18683,8 @@ fast recovery rectifier, 1A</description>
 <net name="D+" class="0">
 <segment>
 <pinref part="IC1" gate="G$1" pin="A"/>
-<wire x1="15.24" y1="25.4" x2="22.86" y2="25.4" width="0.1524" layer="91"/>
-<label x="25.4" y="25.4" size="1.778" layer="95"/>
+<wire x1="15.24" y1="25.4" x2="22.86" y2="25.4" width="0.1524" layer="91" grouprefs="RS485_COMMS"/>
+<label x="25.4" y="25.4" size="1.778" layer="95" grouprefs="RS485_COMMS"/>
 </segment>
 <segment>
 <pinref part="U$2" gate="G$1" pin="D+"/>
@@ -19170,6 +18730,11 @@ will not be understood (or retained) with this version.
 Since Version 8.3, EAGLE supports the association of 3D packages
 with devices in libraries, schematics, and board files. Those 3D
 packages will not be understood (or retained) with this version.
+</note>
+<note version="9.5" severity="warning">
+Since Version 9.5, EAGLE supports persistent groups with
+schematics, and board files. Those persistent groups
+will not be understood (or retained) with this version.
 </note>
 <note version="8.4" severity="warning">
 Since Version 8.4, EAGLE supports properties for SPICE simulation. 
