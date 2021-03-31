@@ -17976,90 +17976,6 @@ Source: AVX .. aphvc.pdf</description>
 </deviceset>
 </devicesets>
 </library>
-<library name="diode" urn="urn:adsk.eagle:library:210">
-<description>&lt;b&gt;Diodes&lt;/b&gt;&lt;p&gt;
-Based on the following sources:
-&lt;ul&gt;
-&lt;li&gt;Motorola : www.onsemi.com
-&lt;li&gt;Fairchild : www.fairchildsemi.com
-&lt;li&gt;Philips : www.semiconductors.com
-&lt;li&gt;Vishay : www.vishay.de
-&lt;/ul&gt;
-&lt;author&gt;Created by librarian@cadsoft.de&lt;/author&gt;</description>
-<packages>
-<package name="DO41-10" urn="urn:adsk.eagle:footprint:43094/1" library_version="2">
-<description>&lt;B&gt;DIODE&lt;/B&gt;&lt;p&gt;
-diameter 2.54 mm, horizontal, grid 10.16 mm</description>
-<wire x1="2.032" y1="-1.27" x2="-2.032" y2="-1.27" width="0.1524" layer="21"/>
-<wire x1="2.032" y1="-1.27" x2="2.032" y2="1.27" width="0.1524" layer="21"/>
-<wire x1="-2.032" y1="1.27" x2="2.032" y2="1.27" width="0.1524" layer="21"/>
-<wire x1="-2.032" y1="1.27" x2="-2.032" y2="-1.27" width="0.1524" layer="21"/>
-<wire x1="5.08" y1="0" x2="4.064" y2="0" width="0.762" layer="51"/>
-<wire x1="-5.08" y1="0" x2="-4.064" y2="0" width="0.762" layer="51"/>
-<wire x1="-0.635" y1="0" x2="0" y2="0" width="0.1524" layer="21"/>
-<wire x1="1.016" y1="0.635" x2="1.016" y2="-0.635" width="0.1524" layer="21"/>
-<wire x1="1.016" y1="-0.635" x2="0" y2="0" width="0.1524" layer="21"/>
-<wire x1="0" y1="0" x2="1.524" y2="0" width="0.1524" layer="21"/>
-<wire x1="0" y1="0" x2="1.016" y2="0.635" width="0.1524" layer="21"/>
-<wire x1="0" y1="0.635" x2="0" y2="0" width="0.1524" layer="21"/>
-<wire x1="0" y1="0" x2="0" y2="-0.635" width="0.1524" layer="21"/>
-<pad name="A" x="5.08" y="0" drill="1.1176"/>
-<pad name="C" x="-5.08" y="0" drill="1.1176"/>
-<text x="-2.032" y="1.651" size="1.27" layer="25" ratio="10">&gt;NAME</text>
-<text x="-2.032" y="-2.794" size="1.27" layer="27" ratio="10">&gt;VALUE</text>
-<rectangle x1="-1.651" y1="-1.27" x2="-1.143" y2="1.27" layer="21"/>
-<rectangle x1="2.032" y1="-0.381" x2="3.937" y2="0.381" layer="21"/>
-<rectangle x1="-3.937" y1="-0.381" x2="-2.032" y2="0.381" layer="21"/>
-</package>
-</packages>
-<packages3d>
-<package3d name="DO41-10" urn="urn:adsk.eagle:package:43336/1" type="box" library_version="2">
-<description>DIODE
-diameter 2.54 mm, horizontal, grid 10.16 mm</description>
-<packageinstances>
-<packageinstance name="DO41-10"/>
-</packageinstances>
-</package3d>
-</packages3d>
-<symbols>
-<symbol name="D" urn="urn:adsk.eagle:symbol:43091/1" library_version="2">
-<wire x1="-1.27" y1="-1.27" x2="1.27" y2="0" width="0.254" layer="94"/>
-<wire x1="1.27" y1="0" x2="-1.27" y2="1.27" width="0.254" layer="94"/>
-<wire x1="1.27" y1="1.27" x2="1.27" y2="0" width="0.254" layer="94"/>
-<wire x1="-1.27" y1="1.27" x2="-1.27" y2="-1.27" width="0.254" layer="94"/>
-<wire x1="1.27" y1="0" x2="1.27" y2="-1.27" width="0.254" layer="94"/>
-<text x="2.54" y="0.4826" size="1.778" layer="95">&gt;NAME</text>
-<text x="2.54" y="-2.3114" size="1.778" layer="96">&gt;VALUE</text>
-<text x="-2.54" y="0" size="0.4064" layer="99" align="center">SpiceOrder 1</text>
-<text x="2.54" y="0" size="0.4064" layer="99" align="center">SpiceOrder 2</text>
-<pin name="A" x="-2.54" y="0" visible="off" length="short" direction="pas"/>
-<pin name="C" x="2.54" y="0" visible="off" length="short" direction="pas" rot="R180"/>
-</symbol>
-</symbols>
-<devicesets>
-<deviceset name="1N4933" urn="urn:adsk.eagle:component:43469/1" prefix="D" library_version="2">
-<description>&lt;B&gt;DIODE&lt;/B&gt;&lt;p&gt;
-fast recovery rectifier, 1A</description>
-<gates>
-<gate name="1" symbol="D" x="0" y="0"/>
-</gates>
-<devices>
-<device name="" package="DO41-10">
-<connects>
-<connect gate="1" pin="A" pad="A"/>
-<connect gate="1" pin="C" pad="C"/>
-</connects>
-<package3dinstances>
-<package3dinstance package3d_urn="urn:adsk.eagle:package:43336/1"/>
-</package3dinstances>
-<technologies>
-<technology name=""/>
-</technologies>
-</device>
-</devices>
-</deviceset>
-</devicesets>
-</library>
 <library name="DynamixelLibrary">
 <packages>
 <package name="DYN-RA-3">
@@ -18252,6 +18168,197 @@ fast recovery rectifier, 1A</description>
 </deviceset>
 </devicesets>
 </library>
+<library name="74ac-logic" urn="urn:adsk.eagle:library:83">
+<description>&lt;b&gt;TTL Logic Devices, 74AC11xx and 74AC16xx Series&lt;/b&gt;&lt;p&gt;
+Based on the following source:
+&lt;ul&gt;
+&lt;li&gt;www.ti.com
+&lt;/ul&gt;
+&lt;author&gt;Created by librarian@cadsoft.de&lt;/author&gt;</description>
+<packages>
+<package name="DIL16" urn="urn:adsk.eagle:footprint:917/1" library_version="4">
+<description>&lt;b&gt;Dual In Line Package&lt;/b&gt;</description>
+<wire x1="10.16" y1="2.921" x2="-10.16" y2="2.921" width="0.1524" layer="21"/>
+<wire x1="-10.16" y1="-2.921" x2="10.16" y2="-2.921" width="0.1524" layer="21"/>
+<wire x1="10.16" y1="2.921" x2="10.16" y2="-2.921" width="0.1524" layer="21"/>
+<wire x1="-10.16" y1="2.921" x2="-10.16" y2="1.016" width="0.1524" layer="21"/>
+<wire x1="-10.16" y1="-2.921" x2="-10.16" y2="-1.016" width="0.1524" layer="21"/>
+<wire x1="-10.16" y1="1.016" x2="-10.16" y2="-1.016" width="0.1524" layer="21" curve="-180"/>
+<pad name="1" x="-8.89" y="-3.81" drill="0.8128" shape="long" rot="R90"/>
+<pad name="2" x="-6.35" y="-3.81" drill="0.8128" shape="long" rot="R90"/>
+<pad name="7" x="6.35" y="-3.81" drill="0.8128" shape="long" rot="R90"/>
+<pad name="8" x="8.89" y="-3.81" drill="0.8128" shape="long" rot="R90"/>
+<pad name="3" x="-3.81" y="-3.81" drill="0.8128" shape="long" rot="R90"/>
+<pad name="4" x="-1.27" y="-3.81" drill="0.8128" shape="long" rot="R90"/>
+<pad name="6" x="3.81" y="-3.81" drill="0.8128" shape="long" rot="R90"/>
+<pad name="5" x="1.27" y="-3.81" drill="0.8128" shape="long" rot="R90"/>
+<pad name="9" x="8.89" y="3.81" drill="0.8128" shape="long" rot="R90"/>
+<pad name="10" x="6.35" y="3.81" drill="0.8128" shape="long" rot="R90"/>
+<pad name="11" x="3.81" y="3.81" drill="0.8128" shape="long" rot="R90"/>
+<pad name="12" x="1.27" y="3.81" drill="0.8128" shape="long" rot="R90"/>
+<pad name="13" x="-1.27" y="3.81" drill="0.8128" shape="long" rot="R90"/>
+<pad name="14" x="-3.81" y="3.81" drill="0.8128" shape="long" rot="R90"/>
+<pad name="15" x="-6.35" y="3.81" drill="0.8128" shape="long" rot="R90"/>
+<pad name="16" x="-8.89" y="3.81" drill="0.8128" shape="long" rot="R90"/>
+<text x="-10.541" y="-2.921" size="1.27" layer="25" ratio="10" rot="R90">&gt;NAME</text>
+<text x="-7.493" y="-0.635" size="1.27" layer="27" ratio="10">&gt;VALUE</text>
+</package>
+<package name="SO16" urn="urn:adsk.eagle:footprint:1076/1" library_version="4">
+<description>&lt;b&gt;Small Outline package&lt;/b&gt; 150 mil</description>
+<wire x1="4.699" y1="1.9558" x2="-4.699" y2="1.9558" width="0.1524" layer="21"/>
+<wire x1="4.699" y1="-1.9558" x2="5.08" y2="-1.5748" width="0.1524" layer="21" curve="90"/>
+<wire x1="-5.08" y1="1.5748" x2="-4.699" y2="1.9558" width="0.1524" layer="21" curve="-90"/>
+<wire x1="4.699" y1="1.9558" x2="5.08" y2="1.5748" width="0.1524" layer="21" curve="-90"/>
+<wire x1="-5.08" y1="-1.5748" x2="-4.699" y2="-1.9558" width="0.1524" layer="21" curve="90"/>
+<wire x1="-4.699" y1="-1.9558" x2="4.699" y2="-1.9558" width="0.1524" layer="21"/>
+<wire x1="5.08" y1="-1.5748" x2="5.08" y2="1.5748" width="0.1524" layer="21"/>
+<wire x1="-5.08" y1="1.5748" x2="-5.08" y2="0.508" width="0.1524" layer="21"/>
+<wire x1="-5.08" y1="0.508" x2="-5.08" y2="-0.508" width="0.1524" layer="21"/>
+<wire x1="-5.08" y1="-0.508" x2="-5.08" y2="-1.5748" width="0.1524" layer="21"/>
+<wire x1="-5.08" y1="0.508" x2="-5.08" y2="-0.508" width="0.1524" layer="21" curve="-180"/>
+<wire x1="-5.08" y1="-1.6002" x2="5.08" y2="-1.6002" width="0.0508" layer="21"/>
+<smd name="1" x="-4.445" y="-3.0734" dx="0.6604" dy="2.032" layer="1"/>
+<smd name="16" x="-4.445" y="3.0734" dx="0.6604" dy="2.032" layer="1"/>
+<smd name="2" x="-3.175" y="-3.0734" dx="0.6604" dy="2.032" layer="1"/>
+<smd name="3" x="-1.905" y="-3.0734" dx="0.6604" dy="2.032" layer="1"/>
+<smd name="15" x="-3.175" y="3.0734" dx="0.6604" dy="2.032" layer="1"/>
+<smd name="14" x="-1.905" y="3.0734" dx="0.6604" dy="2.032" layer="1"/>
+<smd name="4" x="-0.635" y="-3.0734" dx="0.6604" dy="2.032" layer="1"/>
+<smd name="13" x="-0.635" y="3.0734" dx="0.6604" dy="2.032" layer="1"/>
+<smd name="5" x="0.635" y="-3.0734" dx="0.6604" dy="2.032" layer="1"/>
+<smd name="12" x="0.635" y="3.0734" dx="0.6604" dy="2.032" layer="1"/>
+<smd name="6" x="1.905" y="-3.0734" dx="0.6604" dy="2.032" layer="1"/>
+<smd name="7" x="3.175" y="-3.0734" dx="0.6604" dy="2.032" layer="1"/>
+<smd name="11" x="1.905" y="3.0734" dx="0.6604" dy="2.032" layer="1"/>
+<smd name="10" x="3.175" y="3.0734" dx="0.6604" dy="2.032" layer="1"/>
+<smd name="8" x="4.445" y="-3.0734" dx="0.6604" dy="2.032" layer="1"/>
+<smd name="9" x="4.445" y="3.0734" dx="0.6604" dy="2.032" layer="1"/>
+<text x="-4.064" y="-0.635" size="1.27" layer="27" ratio="10">&gt;VALUE</text>
+<text x="-5.461" y="-1.778" size="1.27" layer="25" ratio="10" rot="R90">&gt;NAME</text>
+<rectangle x1="-0.889" y1="1.9558" x2="-0.381" y2="3.0988" layer="51"/>
+<rectangle x1="-4.699" y1="-3.0988" x2="-4.191" y2="-1.9558" layer="51"/>
+<rectangle x1="-3.429" y1="-3.0988" x2="-2.921" y2="-1.9558" layer="51"/>
+<rectangle x1="-2.159" y1="-3.0734" x2="-1.651" y2="-1.9304" layer="51"/>
+<rectangle x1="-0.889" y1="-3.0988" x2="-0.381" y2="-1.9558" layer="51"/>
+<rectangle x1="-2.159" y1="1.9558" x2="-1.651" y2="3.0988" layer="51"/>
+<rectangle x1="-3.429" y1="1.9558" x2="-2.921" y2="3.0988" layer="51"/>
+<rectangle x1="-4.699" y1="1.9558" x2="-4.191" y2="3.0988" layer="51"/>
+<rectangle x1="0.381" y1="-3.0988" x2="0.889" y2="-1.9558" layer="51"/>
+<rectangle x1="1.651" y1="-3.0988" x2="2.159" y2="-1.9558" layer="51"/>
+<rectangle x1="2.921" y1="-3.0988" x2="3.429" y2="-1.9558" layer="51"/>
+<rectangle x1="4.191" y1="-3.0988" x2="4.699" y2="-1.9558" layer="51"/>
+<rectangle x1="0.381" y1="1.9558" x2="0.889" y2="3.0988" layer="51"/>
+<rectangle x1="1.651" y1="1.9558" x2="2.159" y2="3.0988" layer="51"/>
+<rectangle x1="2.921" y1="1.9558" x2="3.429" y2="3.0988" layer="51"/>
+<rectangle x1="4.191" y1="1.9558" x2="4.699" y2="3.0988" layer="51"/>
+</package>
+</packages>
+<packages3d>
+<package3d name="DIL16" urn="urn:adsk.eagle:package:922/2" type="model" library_version="4">
+<description>Dual In Line Package</description>
+<packageinstances>
+<packageinstance name="DIL16"/>
+</packageinstances>
+</package3d>
+<package3d name="SO16" urn="urn:adsk.eagle:package:1174/1" type="box" library_version="4">
+<description>Small Outline package 150 mil</description>
+<packageinstances>
+<packageinstance name="SO16"/>
+</packageinstances>
+</package3d>
+</packages3d>
+<symbols>
+<symbol name="7411008" urn="urn:adsk.eagle:symbol:1081/1" library_version="4">
+<wire x1="-2.54" y1="5.08" x2="-2.54" y2="-5.08" width="0.4064" layer="94"/>
+<wire x1="-2.54" y1="5.08" x2="2.5147" y2="0" width="0.4064" layer="94" curve="-89.713114" cap="flat"/>
+<wire x1="-2.54" y1="-5.08" x2="2.54" y2="0" width="0.4064" layer="94" curve="90" cap="flat"/>
+<text x="2.54" y="3.175" size="1.778" layer="95">&gt;NAME</text>
+<text x="2.54" y="-5.08" size="1.778" layer="96">&gt;VALUE</text>
+<pin name="I0" x="-7.62" y="2.54" visible="pad" length="middle" direction="in"/>
+<pin name="O" x="7.62" y="0" visible="pad" length="middle" direction="out" rot="R180"/>
+<pin name="I1" x="-7.62" y="-2.54" visible="pad" length="middle" direction="in"/>
+</symbol>
+<symbol name="2PWR2GND" urn="urn:adsk.eagle:symbol:1073/1" library_version="4">
+<text x="-3.175" y="-0.635" size="1.778" layer="95">&gt;NAME</text>
+<text x="1.905" y="2.54" size="1.27" layer="95" rot="R90">VCC</text>
+<text x="1.905" y="-5.842" size="1.27" layer="95" rot="R90">GND</text>
+<pin name="GND@1" x="-2.54" y="-7.62" visible="pad" length="middle" direction="pwr" rot="R90"/>
+<pin name="GND@2" x="0" y="-7.62" visible="pad" length="middle" direction="pwr" rot="R90"/>
+<pin name="VCC@1" x="-2.54" y="7.62" visible="pad" length="middle" direction="pwr" rot="R270"/>
+<pin name="VCC@2" x="0" y="7.62" visible="pad" length="middle" direction="pwr" rot="R270"/>
+</symbol>
+</symbols>
+<devicesets>
+<deviceset name="74AC11008" urn="urn:adsk.eagle:component:1200/3" prefix="IC" library_version="4">
+<description>Quadruple 2-input &lt;B&gt;AND&lt;/B&gt;</description>
+<gates>
+<gate name="A" symbol="7411008" x="-5.08" y="10.16" swaplevel="1"/>
+<gate name="B" symbol="7411008" x="-5.08" y="-2.54" swaplevel="1"/>
+<gate name="C" symbol="7411008" x="12.7" y="10.16" swaplevel="1"/>
+<gate name="D" symbol="7411008" x="12.7" y="-2.54" swaplevel="1"/>
+<gate name="P" symbol="2PWR2GND" x="27.94" y="5.08" addlevel="request"/>
+</gates>
+<devices>
+<device name="" package="DIL16">
+<connects>
+<connect gate="A" pin="I0" pad="1"/>
+<connect gate="A" pin="I1" pad="16"/>
+<connect gate="A" pin="O" pad="2"/>
+<connect gate="B" pin="I0" pad="15"/>
+<connect gate="B" pin="I1" pad="14"/>
+<connect gate="B" pin="O" pad="3"/>
+<connect gate="C" pin="I0" pad="11"/>
+<connect gate="C" pin="I1" pad="10"/>
+<connect gate="C" pin="O" pad="6"/>
+<connect gate="D" pin="I0" pad="9"/>
+<connect gate="D" pin="I1" pad="8"/>
+<connect gate="D" pin="O" pad="7"/>
+<connect gate="P" pin="GND@1" pad="4"/>
+<connect gate="P" pin="GND@2" pad="5"/>
+<connect gate="P" pin="VCC@1" pad="12"/>
+<connect gate="P" pin="VCC@2" pad="13"/>
+</connects>
+<package3dinstances>
+<package3dinstance package3d_urn="urn:adsk.eagle:package:922/2"/>
+</package3dinstances>
+<technologies>
+<technology name="">
+<attribute name="POPULARITY" value="0" constant="no"/>
+</technology>
+</technologies>
+</device>
+<device name="D" package="SO16">
+<connects>
+<connect gate="A" pin="I0" pad="1"/>
+<connect gate="A" pin="I1" pad="16"/>
+<connect gate="A" pin="O" pad="2"/>
+<connect gate="B" pin="I0" pad="15"/>
+<connect gate="B" pin="I1" pad="14"/>
+<connect gate="B" pin="O" pad="3"/>
+<connect gate="C" pin="I0" pad="11"/>
+<connect gate="C" pin="I1" pad="10"/>
+<connect gate="C" pin="O" pad="6"/>
+<connect gate="D" pin="I0" pad="9"/>
+<connect gate="D" pin="I1" pad="8"/>
+<connect gate="D" pin="O" pad="7"/>
+<connect gate="P" pin="GND@1" pad="4"/>
+<connect gate="P" pin="GND@2" pad="5"/>
+<connect gate="P" pin="VCC@1" pad="12"/>
+<connect gate="P" pin="VCC@2" pad="13"/>
+</connects>
+<package3dinstances>
+<package3dinstance package3d_urn="urn:adsk.eagle:package:1174/1"/>
+</package3dinstances>
+<technologies>
+<technology name="">
+<attribute name="POPULARITY" value="0" constant="no"/>
+</technology>
+</technologies>
+</device>
+</devices>
+</deviceset>
+</devicesets>
+</library>
 </libraries>
 <attributes>
 </attributes>
@@ -18284,8 +18391,9 @@ fast recovery rectifier, 1A</description>
 </module>
 </modules>
 <groups>
-<schematic_group name="TTL_COMMS"/>
 <schematic_group name="RS485_COMMS"/>
+<schematic_group name="TTL_COMMS"/>
+<schematic_group name="TX_MERGE"/>
 </groups>
 <parts>
 <part name="FRAME1" library="frames" library_urn="urn:adsk.eagle:library:229" deviceset="DINA4_L" device=""/>
@@ -18295,11 +18403,8 @@ fast recovery rectifier, 1A</description>
 <part name="SUPPLY2" library="supply2" library_urn="urn:adsk.eagle:library:372" deviceset="GND" device=""/>
 <part name="P+1" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="VCC" device=""/>
 <part name="P+2" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="VCC" device=""/>
-<part name="P+5" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="VCC" device=""/>
 <part name="J1" library="con-jack" library_urn="urn:adsk.eagle:library:154" deviceset="DCJ0303" device="" package3d_urn="urn:adsk.eagle:package:7493/1" value="12V"/>
 <part name="SUPPLY5" library="supply2" library_urn="urn:adsk.eagle:library:372" deviceset="GND" device=""/>
-<part name="D1" library="diode" library_urn="urn:adsk.eagle:library:210" deviceset="1N4933" device="" package3d_urn="urn:adsk.eagle:package:43336/1"/>
-<part name="D2" library="diode" library_urn="urn:adsk.eagle:library:210" deviceset="1N4933" device="" package3d_urn="urn:adsk.eagle:package:43336/1"/>
 <part name="P+6" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="VCC" device=""/>
 <part name="U$1" library="DynamixelLibrary" deviceset="DYN-RA-3" device=""/>
 <part name="U$2" library="DynamixelLibrary" deviceset="DYN-RA-4" device=""/>
@@ -18312,13 +18417,13 @@ fast recovery rectifier, 1A</description>
 <part name="R5" library="resistor" library_urn="urn:adsk.eagle:library:348" deviceset="R-EU_" device="R0805" package3d_urn="urn:adsk.eagle:package:23553/2" value="1k"/>
 <part name="R6" library="resistor" library_urn="urn:adsk.eagle:library:348" deviceset="R-EU_" device="R0805" package3d_urn="urn:adsk.eagle:package:23553/2" value="1k"/>
 <part name="R7" library="resistor" library_urn="urn:adsk.eagle:library:348" deviceset="R-EU_" device="R0805" package3d_urn="urn:adsk.eagle:package:23553/2" value="10k"/>
-<part name="R8" library="resistor" library_urn="urn:adsk.eagle:library:348" deviceset="R-EU_" device="R0805" package3d_urn="urn:adsk.eagle:package:23553/2" value="10k"/>
 <part name="C4" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="C-EU" device="C0805" package3d_urn="urn:adsk.eagle:package:23617/2" value="100u"/>
 <part name="C5" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="C-EU" device="C0805" package3d_urn="urn:adsk.eagle:package:23617/2" value="100u"/>
 <part name="C1" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="CPOL-EU" device="E5-13" package3d_urn="urn:adsk.eagle:package:23375/1" value="2200u"/>
 <part name="U3" library="DynamixelLibrary" deviceset="74LS241-N" device=""/>
 <part name="SUPPLY6" library="supply2" library_urn="urn:adsk.eagle:library:372" deviceset="GND" device=""/>
 <part name="P+8" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="VCC" device=""/>
+<part name="IC2" library="74ac-logic" library_urn="urn:adsk.eagle:library:83" deviceset="74AC11008" device="" package3d_urn="urn:adsk.eagle:package:922/2"/>
 </parts>
 <sheets>
 <sheet>
@@ -18357,23 +18462,12 @@ fast recovery rectifier, 1A</description>
 <instance part="P+2" gate="VCC" x="20.32" y="45.72" smashed="yes" grouprefs="RS485_COMMS">
 <attribute name="VALUE" x="17.78" y="43.18" size="1.778" layer="96" rot="R90"/>
 </instance>
-<instance part="P+5" gate="VCC" x="-43.18" y="58.42" smashed="yes" rot="R90">
-<attribute name="VALUE" x="-40.64" y="55.88" size="1.778" layer="96" rot="R180"/>
-</instance>
 <instance part="J1" gate="G$1" x="-109.22" y="55.88" smashed="yes">
 <attribute name="NAME" x="-111.76" y="59.69" size="1.778" layer="95"/>
 <attribute name="VALUE" x="-111.76" y="49.53" size="1.778" layer="96"/>
 </instance>
 <instance part="SUPPLY5" gate="GND" x="-93.98" y="35.56" smashed="yes">
 <attribute name="VALUE" x="-95.885" y="32.385" size="1.778" layer="96"/>
-</instance>
-<instance part="D1" gate="1" x="-20.32" y="0" smashed="yes" rot="R180">
-<attribute name="NAME" x="-22.86" y="-0.4826" size="1.778" layer="95" rot="R180"/>
-<attribute name="VALUE" x="-22.86" y="2.3114" size="1.778" layer="96" rot="R180"/>
-</instance>
-<instance part="D2" gate="1" x="-43.18" y="17.78" smashed="yes" rot="R270">
-<attribute name="NAME" x="-42.6974" y="15.24" size="1.778" layer="95" rot="R270"/>
-<attribute name="VALUE" x="-45.4914" y="15.24" size="1.778" layer="96" rot="R270"/>
 </instance>
 <instance part="P+6" gate="VCC" x="68.58" y="73.66" smashed="yes">
 <attribute name="VALUE" x="66.04" y="71.12" size="1.778" layer="96" rot="R90"/>
@@ -18412,10 +18506,6 @@ fast recovery rectifier, 1A</description>
 <attribute name="NAME" x="67.0814" y="59.69" size="1.778" layer="95" rot="R90"/>
 <attribute name="VALUE" x="71.882" y="59.69" size="1.778" layer="96" rot="R90"/>
 </instance>
-<instance part="R8" gate="G$1" x="-35.56" y="48.26" smashed="yes" rot="R90">
-<attribute name="NAME" x="-37.0586" y="44.45" size="1.778" layer="95" rot="R90"/>
-<attribute name="VALUE" x="-32.258" y="44.45" size="1.778" layer="96" rot="R90"/>
-</instance>
 <instance part="C4" gate="G$1" x="-15.24" y="-68.58" smashed="yes" rot="R90" grouprefs="TTL_COMMS">
 <attribute name="NAME" x="-15.621" y="-69.596" size="1.778" layer="95" rot="R180"/>
 <attribute name="VALUE" x="-8.001" y="-69.596" size="1.778" layer="96" rot="R180"/>
@@ -18436,6 +18526,10 @@ fast recovery rectifier, 1A</description>
 </instance>
 <instance part="P+8" gate="VCC" x="-30.48" y="-50.8" smashed="yes" grouprefs="TTL_COMMS">
 <attribute name="VALUE" x="-33.02" y="-53.34" size="1.778" layer="96" rot="R90"/>
+</instance>
+<instance part="IC2" gate="A" x="63.5" y="-15.24" smashed="yes" rot="R180" grouprefs="TX_MERGE">
+<attribute name="NAME" x="60.96" y="-18.415" size="1.778" layer="95" rot="R180"/>
+<attribute name="VALUE" x="60.96" y="-10.16" size="1.778" layer="96" rot="R180"/>
 </instance>
 </instances>
 <busses>
@@ -18499,7 +18593,7 @@ fast recovery rectifier, 1A</description>
 <wire x1="0" y1="-58.42" x2="5.08" y2="-58.42" width="0.1524" layer="91" grouprefs="TTL_COMMS"/>
 <wire x1="5.08" y1="-58.42" x2="5.08" y2="-68.58" width="0.1524" layer="91" grouprefs="TTL_COMMS"/>
 <pinref part="C4" gate="G$1" pin="2"/>
-<wire x1="5.08" y1="-68.58" x2="5.08" y2="-73.66" width="0.1524" layer="91" grouprefs="TTL_COMMS_CHIP TTL_COMMS"/>
+<wire x1="5.08" y1="-68.58" x2="5.08" y2="-73.66" width="0.1524" layer="91" grouprefs="TTL_COMMS"/>
 <wire x1="-10.16" y1="-68.58" x2="5.08" y2="-68.58" width="0.1524" layer="91" grouprefs="TTL_COMMS"/>
 <junction x="5.08" y="-68.58" grouprefs="TTL_COMMS"/>
 </segment>
@@ -18527,12 +18621,6 @@ fast recovery rectifier, 1A</description>
 <wire x1="-63.5" y1="-53.34" x2="-63.5" y2="-58.42" width="0.1524" layer="91"/>
 </segment>
 <segment>
-<pinref part="P+5" gate="VCC" pin="VCC"/>
-<pinref part="R8" gate="G$1" pin="2"/>
-<wire x1="-40.64" y1="58.42" x2="-35.56" y2="58.42" width="0.1524" layer="91"/>
-<wire x1="-35.56" y1="58.42" x2="-35.56" y2="53.34" width="0.1524" layer="91"/>
-</segment>
-<segment>
 <pinref part="R7" gate="G$1" pin="2"/>
 <pinref part="P+6" gate="VCC" pin="VCC"/>
 <wire x1="68.58" y1="68.58" x2="68.58" y2="71.12" width="0.1524" layer="91"/>
@@ -18551,15 +18639,7 @@ fast recovery rectifier, 1A</description>
 <net name="DIR" class="0">
 <segment>
 <pinref part="SV1" gate="G$1" pin="1"/>
-<wire x1="-83.82" y1="-5.08" x2="-38.1" y2="-5.08" width="0.1524" layer="91"/>
-<wire x1="-38.1" y1="-5.08" x2="-38.1" y2="25.4" width="0.1524" layer="91"/>
-<pinref part="IC1" gate="G$1" pin="DE"/>
-<wire x1="-38.1" y1="25.4" x2="-22.86" y2="25.4" width="0.1524" layer="91" grouprefs="RS485_COMMS"/>
-<pinref part="IC1" gate="G$1" pin="RE/"/>
-<wire x1="-22.86" y1="25.4" x2="-17.78" y2="25.4" width="0.1524" layer="91" grouprefs="RS485_COMMS"/>
-<wire x1="-17.78" y1="30.48" x2="-22.86" y2="30.48" width="0.1524" layer="91" grouprefs="RS485_COMMS"/>
-<wire x1="-22.86" y1="30.48" x2="-22.86" y2="25.4" width="0.1524" layer="91" grouprefs="RS485_COMMS"/>
-<junction x="-22.86" y="25.4" grouprefs="RS485_COMMS"/>
+<wire x1="-83.82" y1="-5.08" x2="-68.58" y2="-5.08" width="0.1524" layer="91"/>
 <label x="-68.58" y="-5.08" size="1.778" layer="95"/>
 </segment>
 <segment>
@@ -18572,32 +18652,44 @@ fast recovery rectifier, 1A</description>
 <wire x1="0" y1="-27.94" x2="7.62" y2="-27.94" width="0.1524" layer="91" grouprefs="TTL_COMMS"/>
 <label x="7.62" y="-27.94" size="1.778" layer="95" grouprefs="TTL_COMMS"/>
 </segment>
+<segment>
+<pinref part="IC1" gate="G$1" pin="DE"/>
+<wire x1="-20.32" y1="25.4" x2="-17.78" y2="25.4" width="0.1524" layer="91" grouprefs="RS485_COMMS"/>
+<pinref part="IC1" gate="G$1" pin="RE/"/>
+<wire x1="-17.78" y1="30.48" x2="-20.32" y2="30.48" width="0.1524" layer="91" grouprefs="RS485_COMMS"/>
+<wire x1="-20.32" y1="30.48" x2="-20.32" y2="25.4" width="0.1524" layer="91" grouprefs="RS485_COMMS"/>
+<wire x1="-20.32" y1="25.4" x2="-22.86" y2="25.4" width="0.1524" layer="91" grouprefs="RS485_COMMS"/>
+<junction x="-20.32" y="25.4" grouprefs="RS485_COMMS"/>
+<label x="-27.94" y="25.4" size="1.778" layer="95" grouprefs="RS485_COMMS"/>
+</segment>
 </net>
 <net name="TX" class="0">
 <segment>
 <pinref part="SV1" gate="G$1" pin="3"/>
-<wire x1="-83.82" y1="0" x2="-43.18" y2="0" width="0.1524" layer="91"/>
-<pinref part="D2" gate="1" pin="C"/>
-<wire x1="-43.18" y1="0" x2="-43.18" y2="15.24" width="0.1524" layer="91"/>
-<pinref part="D1" gate="1" pin="C"/>
-<wire x1="-43.18" y1="0" x2="-22.86" y2="0" width="0.1524" layer="91"/>
-<junction x="-43.18" y="0"/>
+<wire x1="-83.82" y1="0" x2="-63.5" y2="0" width="0.1524" layer="91"/>
 <label x="-63.5" y="0" size="1.778" layer="95"/>
+</segment>
+<segment>
+<pinref part="IC2" gate="A" pin="O"/>
+<wire x1="55.88" y1="-15.24" x2="50.8" y2="-15.24" width="0.1524" layer="91" grouprefs="TX_MERGE"/>
+<label x="45.72" y="-15.24" size="1.778" layer="95" grouprefs="TX_MERGE"/>
 </segment>
 </net>
 <net name="RX" class="0">
 <segment>
-<pinref part="IC1" gate="G$1" pin="DI"/>
-<wire x1="-17.78" y1="20.32" x2="-33.02" y2="20.32" width="0.1524" layer="91" grouprefs="RS485_COMMS"/>
-<wire x1="-33.02" y1="20.32" x2="-33.02" y2="-2.54" width="0.1524" layer="91"/>
 <pinref part="SV1" gate="G$1" pin="2"/>
-<wire x1="-33.02" y1="-2.54" x2="-83.82" y2="-2.54" width="0.1524" layer="91"/>
+<wire x1="-66.04" y1="-2.54" x2="-83.82" y2="-2.54" width="0.1524" layer="91"/>
 <label x="-66.04" y="-2.54" size="1.778" layer="95"/>
 </segment>
 <segment>
 <pinref part="U3" gate="G$1" pin="2A1"/>
 <wire x1="-25.4" y1="-45.72" x2="-30.48" y2="-45.72" width="0.1524" layer="91" grouprefs="TTL_COMMS"/>
 <label x="-35.56" y="-45.72" size="1.778" layer="95" grouprefs="TTL_COMMS"/>
+</segment>
+<segment>
+<pinref part="IC1" gate="G$1" pin="DI"/>
+<wire x1="-17.78" y1="20.32" x2="-22.86" y2="20.32" width="0.1524" layer="91" grouprefs="RS485_COMMS"/>
+<label x="-27.94" y="20.32" size="1.778" layer="95" grouprefs="RS485_COMMS"/>
 </segment>
 </net>
 <net name="12V" class="0">
@@ -18624,27 +18716,6 @@ fast recovery rectifier, 1A</description>
 <wire x1="96.52" y1="53.34" x2="86.36" y2="53.34" width="0.1524" layer="91"/>
 <wire x1="86.36" y1="53.34" x2="86.36" y2="71.12" width="0.1524" layer="91"/>
 <junction x="86.36" y="71.12"/>
-</segment>
-</net>
-<net name="N$2" class="0">
-<segment>
-<pinref part="IC1" gate="G$1" pin="RO"/>
-<wire x1="-35.56" y1="35.56" x2="-17.78" y2="35.56" width="0.1524" layer="91" grouprefs="RS485_COMMS"/>
-<wire x1="-43.18" y1="35.56" x2="-35.56" y2="35.56" width="0.1524" layer="91"/>
-<pinref part="D2" gate="1" pin="A"/>
-<wire x1="-43.18" y1="20.32" x2="-43.18" y2="35.56" width="0.1524" layer="91"/>
-<pinref part="R8" gate="G$1" pin="1"/>
-<wire x1="-35.56" y1="43.18" x2="-35.56" y2="35.56" width="0.1524" layer="91"/>
-<junction x="-35.56" y="35.56"/>
-</segment>
-</net>
-<net name="N$5" class="0">
-<segment>
-<pinref part="U3" gate="G$1" pin="1Y4"/>
-<wire x1="0" y1="-40.64" x2="15.24" y2="-40.64" width="0.1524" layer="91" grouprefs="TTL_COMMS"/>
-<wire x1="15.24" y1="-40.64" x2="15.24" y2="0" width="0.1524" layer="91"/>
-<pinref part="D1" gate="1" pin="A"/>
-<wire x1="15.24" y1="0" x2="-17.78" y2="0" width="0.1524" layer="91"/>
 </segment>
 </net>
 <net name="DATA" class="0">
@@ -18704,6 +18775,30 @@ fast recovery rectifier, 1A</description>
 <pinref part="LED2" gate="G$1" pin="C"/>
 <pinref part="R5" gate="G$1" pin="2"/>
 <wire x1="-63.5" y1="-66.04" x2="-63.5" y2="-71.12" width="0.1524" layer="91"/>
+</segment>
+</net>
+<net name="TTL_TX" class="0">
+<segment>
+<pinref part="U3" gate="G$1" pin="1Y4"/>
+<wire x1="0" y1="-40.64" x2="7.62" y2="-40.64" width="0.1524" layer="91" grouprefs="TTL_COMMS"/>
+<label x="7.62" y="-40.64" size="1.778" layer="95" grouprefs="TTL_COMMS"/>
+</segment>
+<segment>
+<pinref part="IC2" gate="A" pin="I0"/>
+<wire x1="71.12" y1="-17.78" x2="76.2" y2="-17.78" width="0.1524" layer="91" grouprefs="TX_MERGE"/>
+<label x="76.2" y="-17.78" size="1.778" layer="95" grouprefs="TX_MERGE"/>
+</segment>
+</net>
+<net name="RS485_TX" class="0">
+<segment>
+<pinref part="IC1" gate="G$1" pin="RO"/>
+<wire x1="-17.78" y1="35.56" x2="-22.86" y2="35.56" width="0.1524" layer="91" grouprefs="RS485_COMMS"/>
+<label x="-35.56" y="35.56" size="1.778" layer="95" grouprefs="RS485_COMMS"/>
+</segment>
+<segment>
+<pinref part="IC2" gate="A" pin="I1"/>
+<wire x1="71.12" y1="-12.7" x2="76.2" y2="-12.7" width="0.1524" layer="91" grouprefs="TX_MERGE"/>
+<label x="76.2" y="-12.7" size="1.778" layer="95" grouprefs="TX_MERGE"/>
 </segment>
 </net>
 </nets>
