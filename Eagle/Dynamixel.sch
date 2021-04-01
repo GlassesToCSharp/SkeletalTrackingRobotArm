@@ -18394,6 +18394,10 @@ Based on the following source:
 <schematic_group name="RS485_COMMS"/>
 <schematic_group name="TTL_COMMS"/>
 <schematic_group name="TX_MERGE"/>
+<schematic_group name="LED"/>
+<schematic_group name="SERVO_CONNECTORS"/>
+<schematic_group name="SERVO_POWER"/>
+<schematic_group name="IC_COMMS"/>
 </groups>
 <parts>
 <part name="FRAME1" library="frames" library_urn="urn:adsk.eagle:library:229" deviceset="DINA4_L" device=""/>
@@ -18428,8 +18432,8 @@ Based on the following source:
 <sheets>
 <sheet>
 <plain>
-<text x="-114.3" y="-7.62" size="1.778" layer="97">5 - Vcc
-4 - GND
+<text x="-121.92" y="-17.78" size="1.778" layer="97" grouprefs="IC_COMMS">5 - GND
+4 - Vcc
 3 - Tx
 2 - Rx
 1 - Direction
@@ -18446,65 +18450,65 @@ Based on the following source:
 <attribute name="NAME" x="-12.7" y="41.91" size="1.778" layer="95"/>
 <attribute name="VALUE" x="-12.7" y="12.7" size="1.778" layer="96"/>
 </instance>
-<instance part="SV1" gate="G$1" x="-91.44" y="0" smashed="yes">
-<attribute name="VALUE" x="-92.71" y="-10.16" size="1.778" layer="96"/>
-<attribute name="NAME" x="-92.71" y="8.382" size="1.778" layer="95"/>
+<instance part="SV1" gate="G$1" x="-99.06" y="-10.16" smashed="yes" grouprefs="IC_COMMS">
+<attribute name="VALUE" x="-100.33" y="-20.32" size="1.778" layer="96"/>
+<attribute name="NAME" x="-100.33" y="-1.778" size="1.778" layer="95"/>
 </instance>
-<instance part="SUPPLY1" gate="GND" x="-76.2" y="-12.7" smashed="yes">
-<attribute name="VALUE" x="-78.105" y="-15.875" size="1.778" layer="96"/>
+<instance part="SUPPLY1" gate="GND" x="-83.82" y="-22.86" smashed="yes" grouprefs="IC_COMMS">
+<attribute name="VALUE" x="-85.725" y="-26.035" size="1.778" layer="96"/>
 </instance>
 <instance part="SUPPLY2" gate="GND" x="20.32" y="12.7" smashed="yes" grouprefs="RS485_COMMS">
 <attribute name="VALUE" x="18.415" y="9.525" size="1.778" layer="96"/>
 </instance>
-<instance part="P+1" gate="VCC" x="-76.2" y="12.7" smashed="yes">
-<attribute name="VALUE" x="-78.74" y="10.16" size="1.778" layer="96" rot="R90"/>
+<instance part="P+1" gate="VCC" x="-86.36" y="2.54" smashed="yes" grouprefs="IC_COMMS">
+<attribute name="VALUE" x="-88.9" y="0" size="1.778" layer="96" rot="R90"/>
 </instance>
 <instance part="P+2" gate="VCC" x="20.32" y="45.72" smashed="yes" grouprefs="RS485_COMMS">
 <attribute name="VALUE" x="17.78" y="43.18" size="1.778" layer="96" rot="R90"/>
 </instance>
-<instance part="J1" gate="G$1" x="-109.22" y="55.88" smashed="yes">
-<attribute name="NAME" x="-111.76" y="59.69" size="1.778" layer="95"/>
-<attribute name="VALUE" x="-111.76" y="49.53" size="1.778" layer="96"/>
+<instance part="J1" gate="G$1" x="-101.6" y="50.8" smashed="yes" grouprefs="SERVO_POWER">
+<attribute name="NAME" x="-104.14" y="54.61" size="1.778" layer="95"/>
+<attribute name="VALUE" x="-104.14" y="44.45" size="1.778" layer="96"/>
 </instance>
-<instance part="SUPPLY5" gate="GND" x="-93.98" y="35.56" smashed="yes">
-<attribute name="VALUE" x="-95.885" y="32.385" size="1.778" layer="96"/>
+<instance part="SUPPLY5" gate="GND" x="-86.36" y="30.48" smashed="yes" grouprefs="SERVO_POWER">
+<attribute name="VALUE" x="-88.265" y="27.305" size="1.778" layer="96"/>
 </instance>
-<instance part="P+6" gate="VCC" x="68.58" y="73.66" smashed="yes">
-<attribute name="VALUE" x="66.04" y="71.12" size="1.778" layer="96" rot="R90"/>
+<instance part="P+6" gate="VCC" x="73.66" y="60.96" smashed="yes" grouprefs="SERVO_CONNECTORS">
+<attribute name="VALUE" x="71.12" y="58.42" size="1.778" layer="96" rot="R90"/>
 </instance>
-<instance part="U$1" gate="G$1" x="111.76" y="53.34" smashed="yes"/>
-<instance part="U$2" gate="G$1" x="109.22" y="63.5" smashed="yes"/>
-<instance part="SUPPLY7" gate="GND" x="91.44" y="40.64" smashed="yes">
-<attribute name="VALUE" x="89.535" y="37.465" size="1.778" layer="96"/>
+<instance part="U$1" gate="G$1" x="116.84" y="40.64" smashed="yes" grouprefs="SERVO_CONNECTORS"/>
+<instance part="U$2" gate="G$1" x="114.3" y="50.8" smashed="yes" grouprefs="SERVO_CONNECTORS"/>
+<instance part="SUPPLY7" gate="GND" x="96.52" y="27.94" smashed="yes" grouprefs="SERVO_CONNECTORS">
+<attribute name="VALUE" x="94.615" y="24.765" size="1.778" layer="96"/>
 </instance>
-<instance part="LED1" gate="G$1" x="-76.2" y="-60.96" smashed="yes">
-<attribute name="NAME" x="-72.644" y="-65.532" size="1.778" layer="95" rot="R90"/>
-<attribute name="VALUE" x="-70.485" y="-65.532" size="1.778" layer="96" rot="R90"/>
+<instance part="LED1" gate="G$1" x="-104.14" y="-53.34" smashed="yes" grouprefs="LED">
+<attribute name="NAME" x="-100.584" y="-57.912" size="1.778" layer="95" rot="R90"/>
+<attribute name="VALUE" x="-98.425" y="-57.912" size="1.778" layer="96" rot="R90"/>
 </instance>
-<instance part="LED2" gate="G$1" x="-63.5" y="-60.96" smashed="yes">
-<attribute name="NAME" x="-59.944" y="-65.532" size="1.778" layer="95" rot="R90"/>
-<attribute name="VALUE" x="-57.785" y="-65.532" size="1.778" layer="96" rot="R90"/>
+<instance part="LED2" gate="G$1" x="-91.44" y="-53.34" smashed="yes" grouprefs="LED">
+<attribute name="NAME" x="-87.884" y="-57.912" size="1.778" layer="95" rot="R90"/>
+<attribute name="VALUE" x="-85.725" y="-57.912" size="1.778" layer="96" rot="R90"/>
 </instance>
-<instance part="SUPPLY9" gate="GND" x="-76.2" y="-88.9" smashed="yes">
-<attribute name="VALUE" x="-78.105" y="-92.075" size="1.778" layer="96"/>
+<instance part="SUPPLY9" gate="GND" x="-104.14" y="-81.28" smashed="yes" grouprefs="LED">
+<attribute name="VALUE" x="-106.045" y="-84.455" size="1.778" layer="96"/>
 </instance>
-<instance part="SUPPLY10" gate="GND" x="-63.5" y="-88.9" smashed="yes">
-<attribute name="VALUE" x="-65.405" y="-92.075" size="1.778" layer="96"/>
+<instance part="SUPPLY10" gate="GND" x="-91.44" y="-81.28" smashed="yes" grouprefs="LED">
+<attribute name="VALUE" x="-93.345" y="-84.455" size="1.778" layer="96"/>
 </instance>
-<instance part="P+7" gate="VCC" x="-63.5" y="-50.8" smashed="yes">
-<attribute name="VALUE" x="-66.04" y="-53.34" size="1.778" layer="96" rot="R90"/>
+<instance part="P+7" gate="VCC" x="-91.44" y="-43.18" smashed="yes" grouprefs="LED">
+<attribute name="VALUE" x="-88.9" y="-45.72" size="1.778" layer="96"/>
 </instance>
-<instance part="R5" gate="G$1" x="-63.5" y="-76.2" smashed="yes" rot="R90">
-<attribute name="NAME" x="-64.9986" y="-80.01" size="1.778" layer="95" rot="R90"/>
-<attribute name="VALUE" x="-60.198" y="-80.01" size="1.778" layer="96" rot="R90"/>
+<instance part="R5" gate="G$1" x="-91.44" y="-68.58" smashed="yes" rot="R90" grouprefs="LED">
+<attribute name="NAME" x="-92.9386" y="-72.39" size="1.778" layer="95" rot="R90"/>
+<attribute name="VALUE" x="-88.138" y="-72.39" size="1.778" layer="96" rot="R90"/>
 </instance>
-<instance part="R6" gate="G$1" x="-76.2" y="-76.2" smashed="yes" rot="R90">
-<attribute name="NAME" x="-77.6986" y="-80.01" size="1.778" layer="95" rot="R90"/>
-<attribute name="VALUE" x="-72.898" y="-80.01" size="1.778" layer="96" rot="R90"/>
+<instance part="R6" gate="G$1" x="-104.14" y="-68.58" smashed="yes" rot="R90" grouprefs="LED">
+<attribute name="NAME" x="-105.6386" y="-72.39" size="1.778" layer="95" rot="R90"/>
+<attribute name="VALUE" x="-100.838" y="-72.39" size="1.778" layer="96" rot="R90"/>
 </instance>
-<instance part="R7" gate="G$1" x="68.58" y="63.5" smashed="yes" rot="R90">
-<attribute name="NAME" x="67.0814" y="59.69" size="1.778" layer="95" rot="R90"/>
-<attribute name="VALUE" x="71.882" y="59.69" size="1.778" layer="96" rot="R90"/>
+<instance part="R7" gate="G$1" x="73.66" y="50.8" smashed="yes" rot="R90" grouprefs="SERVO_CONNECTORS">
+<attribute name="NAME" x="72.1614" y="46.99" size="1.778" layer="95" rot="R90"/>
+<attribute name="VALUE" x="76.962" y="46.99" size="1.778" layer="96" rot="R90"/>
 </instance>
 <instance part="C4" gate="G$1" x="-15.24" y="-68.58" smashed="yes" rot="R90" grouprefs="TTL_COMMS">
 <attribute name="NAME" x="-15.621" y="-69.596" size="1.778" layer="95" rot="R180"/>
@@ -18514,9 +18518,9 @@ Based on the following source:
 <attribute name="NAME" x="34.544" y="30.861" size="1.778" layer="95"/>
 <attribute name="VALUE" x="34.544" y="25.781" size="1.778" layer="96"/>
 </instance>
-<instance part="C1" gate="G$1" x="-93.98" y="50.8" smashed="yes">
-<attribute name="NAME" x="-92.837" y="51.2826" size="1.778" layer="95"/>
-<attribute name="VALUE" x="-92.837" y="46.2026" size="1.778" layer="96"/>
+<instance part="C1" gate="G$1" x="-86.36" y="45.72" smashed="yes" grouprefs="SERVO_POWER">
+<attribute name="NAME" x="-85.217" y="46.2026" size="1.778" layer="95"/>
+<attribute name="VALUE" x="-85.217" y="41.1226" size="1.778" layer="96"/>
 </instance>
 <instance part="U3" gate="G$1" x="-12.7" y="-43.18" smashed="yes" grouprefs="TTL_COMMS">
 <attribute name="NAME" x="-20.32" y="-25.4" size="1.778" layer="95"/>
@@ -18547,45 +18551,39 @@ Based on the following source:
 <junction x="20.32" y="17.78" grouprefs="RS485_COMMS"/>
 </segment>
 <segment>
-<pinref part="SUPPLY1" gate="GND" pin="GND"/>
-<wire x1="-76.2" y1="-10.16" x2="-76.2" y2="2.54" width="0.1524" layer="91"/>
-<pinref part="SV1" gate="G$1" pin="4"/>
-<wire x1="-76.2" y1="2.54" x2="-83.82" y2="2.54" width="0.1524" layer="91"/>
-</segment>
-<segment>
 <pinref part="SUPPLY5" gate="GND" pin="GND"/>
 <pinref part="J1" gate="G$1" pin="2"/>
-<wire x1="-93.98" y1="40.64" x2="-93.98" y2="38.1" width="0.1524" layer="91"/>
-<wire x1="-101.6" y1="55.88" x2="-99.06" y2="55.88" width="0.1524" layer="91"/>
-<wire x1="-99.06" y1="55.88" x2="-99.06" y2="53.34" width="0.1524" layer="91"/>
-<wire x1="-99.06" y1="53.34" x2="-99.06" y2="40.64" width="0.1524" layer="91"/>
-<wire x1="-99.06" y1="40.64" x2="-93.98" y2="40.64" width="0.1524" layer="91"/>
+<wire x1="-86.36" y1="35.56" x2="-86.36" y2="33.02" width="0.1524" layer="91" grouprefs="SERVO_POWER"/>
+<wire x1="-93.98" y1="50.8" x2="-91.44" y2="50.8" width="0.1524" layer="91" grouprefs="SERVO_POWER"/>
+<wire x1="-91.44" y1="50.8" x2="-91.44" y2="48.26" width="0.1524" layer="91" grouprefs="SERVO_POWER"/>
+<wire x1="-91.44" y1="48.26" x2="-91.44" y2="35.56" width="0.1524" layer="91" grouprefs="SERVO_POWER"/>
+<wire x1="-91.44" y1="35.56" x2="-86.36" y2="35.56" width="0.1524" layer="91" grouprefs="SERVO_POWER"/>
 <pinref part="J1" gate="G$1" pin="3"/>
-<wire x1="-101.6" y1="53.34" x2="-99.06" y2="53.34" width="0.1524" layer="91"/>
-<junction x="-99.06" y="53.34"/>
+<wire x1="-93.98" y1="48.26" x2="-91.44" y2="48.26" width="0.1524" layer="91" grouprefs="SERVO_POWER"/>
+<junction x="-91.44" y="48.26" grouprefs="SERVO_POWER"/>
 <pinref part="C1" gate="G$1" pin="-"/>
-<wire x1="-93.98" y1="45.72" x2="-93.98" y2="40.64" width="0.1524" layer="91"/>
-<junction x="-93.98" y="40.64"/>
+<wire x1="-86.36" y1="40.64" x2="-86.36" y2="35.56" width="0.1524" layer="91" grouprefs="SERVO_POWER"/>
+<junction x="-86.36" y="35.56" grouprefs="SERVO_POWER"/>
 </segment>
 <segment>
 <pinref part="R6" gate="G$1" pin="1"/>
 <pinref part="SUPPLY9" gate="GND" pin="GND"/>
-<wire x1="-76.2" y1="-81.28" x2="-76.2" y2="-86.36" width="0.1524" layer="91"/>
+<wire x1="-104.14" y1="-73.66" x2="-104.14" y2="-78.74" width="0.1524" layer="91" grouprefs="LED"/>
 </segment>
 <segment>
 <pinref part="R5" gate="G$1" pin="1"/>
 <pinref part="SUPPLY10" gate="GND" pin="GND"/>
-<wire x1="-63.5" y1="-81.28" x2="-63.5" y2="-86.36" width="0.1524" layer="91"/>
+<wire x1="-91.44" y1="-73.66" x2="-91.44" y2="-78.74" width="0.1524" layer="91" grouprefs="LED"/>
 </segment>
 <segment>
 <pinref part="SUPPLY7" gate="GND" pin="GND"/>
-<wire x1="91.44" y1="43.18" x2="91.44" y2="55.88" width="0.1524" layer="91"/>
+<wire x1="96.52" y1="30.48" x2="96.52" y2="43.18" width="0.1524" layer="91" grouprefs="SERVO_CONNECTORS"/>
 <pinref part="U$2" gate="G$1" pin="GND"/>
-<wire x1="91.44" y1="55.88" x2="91.44" y2="73.66" width="0.1524" layer="91"/>
-<wire x1="91.44" y1="73.66" x2="96.52" y2="73.66" width="0.1524" layer="91"/>
+<wire x1="96.52" y1="43.18" x2="96.52" y2="60.96" width="0.1524" layer="91" grouprefs="SERVO_CONNECTORS"/>
+<wire x1="96.52" y1="60.96" x2="101.6" y2="60.96" width="0.1524" layer="91" grouprefs="SERVO_CONNECTORS"/>
 <pinref part="U$1" gate="G$1" pin="GND"/>
-<wire x1="96.52" y1="55.88" x2="91.44" y2="55.88" width="0.1524" layer="91"/>
-<junction x="91.44" y="55.88"/>
+<wire x1="101.6" y1="43.18" x2="96.52" y2="43.18" width="0.1524" layer="91" grouprefs="SERVO_CONNECTORS"/>
+<junction x="96.52" y="43.18" grouprefs="SERVO_CONNECTORS"/>
 </segment>
 <segment>
 <pinref part="U3" gate="G$1" pin="GND"/>
@@ -18597,14 +18595,14 @@ Based on the following source:
 <wire x1="-10.16" y1="-68.58" x2="5.08" y2="-68.58" width="0.1524" layer="91" grouprefs="TTL_COMMS"/>
 <junction x="5.08" y="-68.58" grouprefs="TTL_COMMS"/>
 </segment>
-</net>
-<net name="VCC" class="0">
 <segment>
 <pinref part="SV1" gate="G$1" pin="5"/>
-<wire x1="-83.82" y1="5.08" x2="-76.2" y2="5.08" width="0.1524" layer="91"/>
-<pinref part="P+1" gate="VCC" pin="VCC"/>
-<wire x1="-76.2" y1="5.08" x2="-76.2" y2="10.16" width="0.1524" layer="91"/>
+<pinref part="SUPPLY1" gate="GND" pin="GND"/>
+<wire x1="-91.44" y1="-5.08" x2="-83.82" y2="-5.08" width="0.1524" layer="91" grouprefs="IC_COMMS"/>
+<wire x1="-83.82" y1="-5.08" x2="-83.82" y2="-20.32" width="0.1524" layer="91" grouprefs="IC_COMMS"/>
 </segment>
+</net>
+<net name="VCC" class="0">
 <segment>
 <pinref part="IC1" gate="G$1" pin="VCC"/>
 <wire x1="15.24" y1="38.1" x2="20.32" y2="38.1" width="0.1524" layer="91" grouprefs="RS485_COMMS"/>
@@ -18618,12 +18616,12 @@ Based on the following source:
 <segment>
 <pinref part="P+7" gate="VCC" pin="VCC"/>
 <pinref part="LED2" gate="G$1" pin="A"/>
-<wire x1="-63.5" y1="-53.34" x2="-63.5" y2="-58.42" width="0.1524" layer="91"/>
+<wire x1="-91.44" y1="-45.72" x2="-91.44" y2="-50.8" width="0.1524" layer="91" grouprefs="LED"/>
 </segment>
 <segment>
 <pinref part="R7" gate="G$1" pin="2"/>
 <pinref part="P+6" gate="VCC" pin="VCC"/>
-<wire x1="68.58" y1="68.58" x2="68.58" y2="71.12" width="0.1524" layer="91"/>
+<wire x1="73.66" y1="55.88" x2="73.66" y2="58.42" width="0.1524" layer="91" grouprefs="SERVO_CONNECTORS"/>
 </segment>
 <segment>
 <pinref part="P+8" gate="VCC" pin="VCC"/>
@@ -18635,12 +18633,18 @@ Based on the following source:
 <wire x1="-30.48" y1="-68.58" x2="-17.78" y2="-68.58" width="0.1524" layer="91" grouprefs="TTL_COMMS"/>
 <junction x="-30.48" y="-58.42" grouprefs="TTL_COMMS"/>
 </segment>
+<segment>
+<pinref part="SV1" gate="G$1" pin="4"/>
+<wire x1="-91.44" y1="-7.62" x2="-86.36" y2="-7.62" width="0.1524" layer="91" grouprefs="IC_COMMS"/>
+<pinref part="P+1" gate="VCC" pin="VCC"/>
+<wire x1="-86.36" y1="-7.62" x2="-86.36" y2="0" width="0.1524" layer="91" grouprefs="IC_COMMS"/>
+</segment>
 </net>
 <net name="DIR" class="0">
 <segment>
 <pinref part="SV1" gate="G$1" pin="1"/>
-<wire x1="-83.82" y1="-5.08" x2="-68.58" y2="-5.08" width="0.1524" layer="91"/>
-<label x="-68.58" y="-5.08" size="1.778" layer="95"/>
+<wire x1="-91.44" y1="-15.24" x2="-76.2" y2="-15.24" width="0.1524" layer="91" grouprefs="IC_COMMS"/>
+<label x="-76.2" y="-15.24" size="1.778" layer="95" grouprefs="IC_COMMS"/>
 </segment>
 <segment>
 <pinref part="U3" gate="G$1" pin="1G"/>
@@ -18666,8 +18670,8 @@ Based on the following source:
 <net name="TX" class="0">
 <segment>
 <pinref part="SV1" gate="G$1" pin="3"/>
-<wire x1="-83.82" y1="0" x2="-63.5" y2="0" width="0.1524" layer="91"/>
-<label x="-63.5" y="0" size="1.778" layer="95"/>
+<wire x1="-91.44" y1="-10.16" x2="-71.12" y2="-10.16" width="0.1524" layer="91" grouprefs="IC_COMMS"/>
+<label x="-71.12" y="-10.16" size="1.778" layer="95" grouprefs="IC_COMMS"/>
 </segment>
 <segment>
 <pinref part="IC2" gate="A" pin="O"/>
@@ -18678,8 +18682,8 @@ Based on the following source:
 <net name="RX" class="0">
 <segment>
 <pinref part="SV1" gate="G$1" pin="2"/>
-<wire x1="-66.04" y1="-2.54" x2="-83.82" y2="-2.54" width="0.1524" layer="91"/>
-<label x="-66.04" y="-2.54" size="1.778" layer="95"/>
+<wire x1="-73.66" y1="-12.7" x2="-91.44" y2="-12.7" width="0.1524" layer="91" grouprefs="IC_COMMS"/>
+<label x="-73.66" y="-12.7" size="1.778" layer="95" grouprefs="IC_COMMS"/>
 </segment>
 <segment>
 <pinref part="U3" gate="G$1" pin="2A1"/>
@@ -18695,38 +18699,38 @@ Based on the following source:
 <net name="12V" class="0">
 <segment>
 <pinref part="J1" gate="G$1" pin="1"/>
-<wire x1="-101.6" y1="58.42" x2="-93.98" y2="58.42" width="0.1524" layer="91"/>
-<wire x1="-93.98" y1="58.42" x2="-88.9" y2="58.42" width="0.1524" layer="91"/>
-<label x="-86.36" y="58.42" size="1.778" layer="95"/>
+<wire x1="-93.98" y1="53.34" x2="-86.36" y2="53.34" width="0.1524" layer="91" grouprefs="SERVO_POWER"/>
+<wire x1="-86.36" y1="53.34" x2="-81.28" y2="53.34" width="0.1524" layer="91" grouprefs="SERVO_POWER"/>
+<label x="-78.74" y="53.34" size="1.778" layer="95" grouprefs="SERVO_POWER"/>
 <pinref part="C1" gate="G$1" pin="+"/>
-<wire x1="-93.98" y1="53.34" x2="-93.98" y2="58.42" width="0.1524" layer="91"/>
-<junction x="-93.98" y="58.42"/>
+<wire x1="-86.36" y1="48.26" x2="-86.36" y2="53.34" width="0.1524" layer="91" grouprefs="SERVO_POWER"/>
+<junction x="-86.36" y="53.34" grouprefs="SERVO_POWER"/>
 </segment>
 <segment>
 <pinref part="LED1" gate="G$1" pin="A"/>
-<wire x1="-76.2" y1="-58.42" x2="-76.2" y2="-53.34" width="0.1524" layer="91"/>
-<label x="-81.28" y="-53.34" size="1.778" layer="95"/>
+<wire x1="-104.14" y1="-50.8" x2="-104.14" y2="-45.72" width="0.1524" layer="91" grouprefs="LED"/>
+<label x="-104.14" y="-45.72" size="1.778" layer="95" grouprefs="LED"/>
 </segment>
 <segment>
 <pinref part="U$2" gate="G$1" pin="VIN"/>
-<wire x1="96.52" y1="71.12" x2="86.36" y2="71.12" width="0.1524" layer="91"/>
-<label x="76.2" y="71.12" size="1.778" layer="95"/>
+<wire x1="101.6" y1="58.42" x2="91.44" y2="58.42" width="0.1524" layer="91" grouprefs="SERVO_CONNECTORS"/>
+<label x="81.28" y="58.42" size="1.778" layer="95" grouprefs="SERVO_CONNECTORS"/>
 <pinref part="U$1" gate="G$1" pin="VIN"/>
-<wire x1="86.36" y1="71.12" x2="81.28" y2="71.12" width="0.1524" layer="91"/>
-<wire x1="96.52" y1="53.34" x2="86.36" y2="53.34" width="0.1524" layer="91"/>
-<wire x1="86.36" y1="53.34" x2="86.36" y2="71.12" width="0.1524" layer="91"/>
-<junction x="86.36" y="71.12"/>
+<wire x1="91.44" y1="58.42" x2="86.36" y2="58.42" width="0.1524" layer="91" grouprefs="SERVO_CONNECTORS"/>
+<wire x1="101.6" y1="40.64" x2="91.44" y2="40.64" width="0.1524" layer="91" grouprefs="SERVO_CONNECTORS"/>
+<wire x1="91.44" y1="40.64" x2="91.44" y2="58.42" width="0.1524" layer="91" grouprefs="SERVO_CONNECTORS"/>
+<junction x="91.44" y="58.42" grouprefs="SERVO_CONNECTORS"/>
 </segment>
 </net>
 <net name="DATA" class="0">
 <segment>
 <pinref part="U$1" gate="G$1" pin="DATA"/>
-<wire x1="96.52" y1="50.8" x2="68.58" y2="50.8" width="0.1524" layer="91"/>
+<wire x1="101.6" y1="38.1" x2="73.66" y2="38.1" width="0.1524" layer="91" grouprefs="SERVO_CONNECTORS"/>
 <pinref part="R7" gate="G$1" pin="1"/>
-<wire x1="68.58" y1="50.8" x2="68.58" y2="58.42" width="0.1524" layer="91"/>
-<wire x1="68.58" y1="50.8" x2="60.96" y2="50.8" width="0.1524" layer="91"/>
-<junction x="68.58" y="50.8"/>
-<label x="53.34" y="50.8" size="1.778" layer="95"/>
+<wire x1="73.66" y1="38.1" x2="73.66" y2="45.72" width="0.1524" layer="91" grouprefs="SERVO_CONNECTORS"/>
+<wire x1="73.66" y1="38.1" x2="66.04" y2="38.1" width="0.1524" layer="91" grouprefs="SERVO_CONNECTORS"/>
+<junction x="73.66" y="38.1" grouprefs="SERVO_CONNECTORS"/>
+<label x="58.42" y="38.1" size="1.778" layer="95" grouprefs="SERVO_CONNECTORS"/>
 </segment>
 <segment>
 <pinref part="U3" gate="G$1" pin="1A4"/>
@@ -18747,8 +18751,8 @@ Based on the following source:
 </segment>
 <segment>
 <pinref part="U$2" gate="G$1" pin="D-"/>
-<wire x1="96.52" y1="66.04" x2="81.28" y2="66.04" width="0.1524" layer="91"/>
-<label x="76.2" y="66.04" size="1.778" layer="95"/>
+<wire x1="101.6" y1="53.34" x2="86.36" y2="53.34" width="0.1524" layer="91" grouprefs="SERVO_CONNECTORS"/>
+<label x="81.28" y="53.34" size="1.778" layer="95" grouprefs="SERVO_CONNECTORS"/>
 </segment>
 </net>
 <net name="D+" class="0">
@@ -18759,22 +18763,22 @@ Based on the following source:
 </segment>
 <segment>
 <pinref part="U$2" gate="G$1" pin="D+"/>
-<wire x1="96.52" y1="68.58" x2="81.28" y2="68.58" width="0.1524" layer="91"/>
-<label x="76.2" y="68.58" size="1.778" layer="95"/>
+<wire x1="101.6" y1="55.88" x2="86.36" y2="55.88" width="0.1524" layer="91" grouprefs="SERVO_CONNECTORS"/>
+<label x="81.28" y="55.88" size="1.778" layer="95" grouprefs="SERVO_CONNECTORS"/>
 </segment>
 </net>
 <net name="N$6" class="0">
 <segment>
 <pinref part="LED1" gate="G$1" pin="C"/>
 <pinref part="R6" gate="G$1" pin="2"/>
-<wire x1="-76.2" y1="-66.04" x2="-76.2" y2="-71.12" width="0.1524" layer="91"/>
+<wire x1="-104.14" y1="-58.42" x2="-104.14" y2="-63.5" width="0.1524" layer="91" grouprefs="LED"/>
 </segment>
 </net>
 <net name="N$7" class="0">
 <segment>
 <pinref part="LED2" gate="G$1" pin="C"/>
 <pinref part="R5" gate="G$1" pin="2"/>
-<wire x1="-63.5" y1="-66.04" x2="-63.5" y2="-71.12" width="0.1524" layer="91"/>
+<wire x1="-91.44" y1="-58.42" x2="-91.44" y2="-63.5" width="0.1524" layer="91" grouprefs="LED"/>
 </segment>
 </net>
 <net name="TTL_TX" class="0">
