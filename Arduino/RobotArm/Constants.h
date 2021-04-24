@@ -22,9 +22,9 @@ const char SEPARATOR = ',';
 const char NEGATIVE_SYMBOL = '-';
 const char START_BYTE = 'S';
 const char END_BYTE = 'E';
-const char READY_BYTE = 'E';
+const char READY_BYTE = 'R';
 
 const uint16_t DEFAULT_MOTOR_SPEED = 100;
-const uint8_t DIRECTION_PIN = 15;
+const uint8_t DIRECTION_PIN = 2;
 
 #endif

@@ -4,20 +4,22 @@
 #include <DynamixelSerial.h>
 #include <stdint.h>
 
-uint16_t ConvertToServoPosition(const int* angle, const bool reverse = false);
+uint16_t ConvertToServoPosition(const int16_t angle, const bool reverse = false);
 
-void MoveToAngle(const uint8_t id, int16_t inputAngle)
+void MoveToAngle(uint8_t const id, const int16_t inputAngle, const bool reverse)
 {
-    if (inputAngle > SERVO_MAX_POSITION)
+    int16_t dynamixelAngle = ConvertToServoPosition(inputAngle, reverse);
+
+    if (dynamixelAngle > SERVO_MAX_POSITION)
     {
-        inputAngle = SERVO_MAX_POSITION;
+        dynamixelAngle = SERVO_MAX_POSITION;
     }
-    else if (inputAngle < SERVO_MIN_POSITION)
+    else if (dynamixelAngle < SERVO_MIN_POSITION)
     {
-        inputAngle = SERVO_MIN_POSITION;
+        dynamixelAngle = SERVO_MIN_POSITION;
     }
-    
-    Dynamixel.moveSpeed(id, inputAngle, DEFAULT_MOTOR_SPEED);
+
+    Dynamixel.moveSpeed(id, dynamixelAngle, DEFAULT_MOTOR_SPEED);
 }
 
 void ResetDynamixelSerial()
@@ -35,64 +37,25 @@ void DynamixelInit()
 //    Dynamixel.setMaxTorque(254,512);        // 50% of Torque
 //    Dynamixel.setSRL(254,2);                // Set the SRL to Return All
 
-    Dynamixel.setCMargin(BROADCAST_ID, 0, 0);
-    Dynamixel.setCSlope(BROADCAST_ID, 50, 50);
-    Dynamixel.setPunch(BROADCAST_ID, 0);
+//    Dynamixel.setAngleLimit(BROADCAST_ID, SERVO_MIN_POSITION, SERVO_MAX_POSITION);
+//    Dynamixel.setCMargin(BROADCAST_ID, 0, 0);
+//    Dynamixel.setCSlope(BROADCAST_ID, 50, 50);
+//    Dynamixel.setPunch(BROADCAST_ID, 0);
   
-    // Set the initial position
-    MoveToAngle(BROADCAST_ID, SERVO_RESET_POSITION);
+    // Set the initial position (no reverse)
+    MoveToAngle(BROADCAST_ID, 0, false);
 }
 
-void SetShoulderYaw(const int* shoulderYaw)
-{
-    int16_t dynamixelPosition = ConvertToServoPosition(shoulderYaw);    
-    MoveToAngle(RIGHT_SHOULDER_YAW_ID, dynamixelPosition);
-}
-
-void SetShoulderPitch(const int* shoulderPitch)
-{
-    int16_t dynamixelPosition = ConvertToServoPosition(shoulderPitch);
-    MoveToAngle(RIGHT_SHOULDER_PITCH_ID, dynamixelPosition);
-}
-
-void SetShoulderRoll(const int* shoulderRoll)
-{
-    int16_t dynamixelPosition = ConvertToServoPosition(shoulderRoll);
-    MoveToAngle(RIGHT_SHOULDER_ROLL_ID, dynamixelPosition);
-}
-
-void SetElbowPitch(const int* elbowPitch)
-{
-    int16_t dynamixelPosition = ConvertToServoPosition(elbowPitch);
-    MoveToAngle(RIGHT_ELBOW_PITCH_ID, dynamixelPosition);
-}
-
-uint16_t ConvertToServoPosition(const int* angle, const bool reverse)
+uint16_t ConvertToServoPosition(const int16_t angle, const bool reverse)
 {
     uint16_t position = SERVO_RESET_POSITION;
-    uint16_t servoAngle = *angle / SERVO_RESOLUTION;
-    if (*angle > 0)
+    uint16_t servoAngle = angle / SERVO_RESOLUTION;
+    if (reverse)
     {
-        if (reverse)
-        {
-            position += servoAngle;
-        }
-        else
-        {
-            position -= servoAngle;
-        }
+        servoAngle = -servoAngle;
     }
-    else if (*angle < 0)
-    {
-        if (reverse)
-        {
-            position -= servoAngle;
-        }
-        else
-        {
-            position += servoAngle;
-        }
-    }
+
+    position += servoAngle;
 
     return position;
 }

@@ -2,21 +2,29 @@
 #define SERIAL_CONTROL_H
 
 #include "Constants.h"
+#include "DynamixelMotorControl.h"
 
 bool hasStartMessageBeenReceived = false;
-bool isCurrentValueNegative = false;
-int elbowAngle = 0;
-int shoulderPitch = 0;
-int shoulderYaw = 0;
-int shoulderRoll = 0;
+
+const uint8_t numberOfAngles = 8;
+typedef struct JointAngle {
+  uint8_t index;
+  bool isNegative = false;
+  int16_t angle = 0;
+} JointAngle;
+JointAngle jointAngles[numberOfAngles];
 
 enum MessageIndex
 {
-  StartByte,
-  ShoulderYaw,
-  ShoulderPitch,
-  ShoulderRoll,
-  ElbowPitch,
+  StartByte = 0,
+  RightShoulderYaw,
+  RightShoulderPitch,
+  RightShoulderRoll,
+  RightElbowPitch,
+  LeftShoulderYaw,
+  LeftShoulderPitch,
+  LeftShoulderRoll,
+  LeftElbowPitch,
   EndByte
 };
 
@@ -57,82 +65,60 @@ void CheckAndHandleSerialInput()
 {
   while (Serial.available() > 0)
   {
-    const char readByte = Serial.read();
+    char readByte = Serial.read();
     ProcessIncomingByte(&readByte);
   }
 }
 
 
-void PrepareForNextJoint()
+MessageIndex GetNextMessageIndex()
 {
   switch (currentMessageIndex)
   {
-    case StartByte:
-      currentMessageIndex = ShoulderYaw;
-      break;
-
-    case ShoulderYaw:
-      if (isCurrentValueNegative)
-      {
-        shoulderYaw = -shoulderYaw;
-      }
-      currentMessageIndex = ShoulderPitch;
-      break;
-
-    case ShoulderPitch:
-      if (isCurrentValueNegative)
-      {
-        shoulderPitch = -shoulderPitch;
-      }
-      currentMessageIndex = ShoulderRoll;
-      break;
-
-    case ShoulderRoll:
-      //            if (isCurrentValueNegative)
-      //            {
-      //                shoulderRoll = -shoulderRoll;
-      //            }
-      currentMessageIndex = ElbowPitch;
-      break;
-
-    case ElbowPitch:
-      //            if (isCurrentValueNegative)
-      //            {
-      //                shoulderRoll = -shoulderRoll;
-      //            }
-      currentMessageIndex = EndByte;
-      break;
+    case StartByte: return RightShoulderYaw;
+    case RightShoulderYaw: return RightShoulderPitch;
+    case RightShoulderPitch: return RightShoulderRoll;
+    case RightShoulderRoll: return RightElbowPitch;
+    case RightElbowPitch: return LeftShoulderYaw;
+    case LeftShoulderYaw: return LeftShoulderPitch;
+    case LeftShoulderPitch: return LeftShoulderRoll;
+    case LeftShoulderRoll: return LeftElbowPitch;
+    case LeftElbowPitch: return EndByte;
   }
-
-  isCurrentValueNegative = false;
 }
 
 
-void AssignToJointAngle(const char* readByte)
+uint8_t GetServoIdForIndex()
 {
-  // Assume not negative
   switch (currentMessageIndex)
   {
-    case ShoulderYaw:
-      shoulderYaw = shoulderYaw * 10;
-      shoulderYaw = shoulderYaw + (*readByte - 48);
-      break;
-
-    case ShoulderPitch:
-      shoulderPitch = shoulderPitch * 10;
-      shoulderPitch = shoulderPitch + (*readByte - 48);
-      break;
-
-    case ShoulderRoll:
-      shoulderRoll = shoulderRoll * 10;
-      shoulderRoll = shoulderRoll + (*readByte - 48);
-      break;
-
-    case ElbowPitch:
-      elbowAngle = elbowAngle * 10;
-      elbowAngle = elbowAngle + (*readByte - 48);
-      break;
+    case RightShoulderYaw: return RIGHT_SHOULDER_YAW_ID;
+    case RightShoulderPitch: return RIGHT_SHOULDER_PITCH_ID;
+    case RightShoulderRoll: return RIGHT_SHOULDER_ROLL_ID;
+    case RightElbowPitch: return RIGHT_ELBOW_PITCH_ID;
+    case LeftShoulderYaw: return LEFT_SHOULDER_YAW_ID;
+    case LeftShoulderPitch: return LEFT_SHOULDER_PITCH_ID;
+    case LeftShoulderRoll: return LEFT_SHOULDER_ROLL_ID;
+    case LeftElbowPitch: return LEFT_ELBOW_PITCH_ID;
   }
+}
+
+
+bool ReverseServo(const uint8_t servoId)
+{
+  switch (servoId)
+  {
+    case RIGHT_SHOULDER_YAW_ID: return false;
+    case RIGHT_SHOULDER_PITCH_ID: return true;
+    case RIGHT_SHOULDER_ROLL_ID: return false;
+    case RIGHT_ELBOW_PITCH_ID: return false;
+    case LEFT_SHOULDER_YAW_ID: return true;
+    case LEFT_SHOULDER_PITCH_ID: return true;
+    case LEFT_SHOULDER_ROLL_ID: return true;
+    case LEFT_ELBOW_PITCH_ID: return false;
+  }
+
+  return false;
 }
 
 
@@ -141,35 +127,48 @@ void ProcessIncomingByte(const char* const readByte)
   if (*readByte == START_BYTE)
   {
     hasStartMessageBeenReceived = true;
-    isCurrentValueNegative = false;
-    shoulderPitch = 0;
-    shoulderYaw = 0;
-    shoulderRoll = 0;
-    elbowAngle = 0;
     currentMessageIndex = StartByte;
+    return;
   }
-  else if (hasStartMessageBeenReceived)
+
+  if (!hasStartMessageBeenReceived)
   {
-    if (*readByte == SEPARATOR)
-    {
-      PrepareForNextJoint();
-    }
-    else if (*readByte == NEGATIVE_SYMBOL)
-    {
-      isCurrentValueNegative = true;
-    }
-    else if (*readByte == END_BYTE)
-    {
+    return;
+  }
+
+  switch (*readByte)
+  {
+    case SEPARATOR:
+      currentMessageIndex = GetNextMessageIndex();
+      jointAngles[currentMessageIndex - 1].index = GetServoIdForIndex();
+      jointAngles[currentMessageIndex - 1].angle = 0;
+      jointAngles[currentMessageIndex - 1].isNegative = false;
+      break;
+
+    case NEGATIVE_SYMBOL:
+      jointAngles[currentMessageIndex - 1].isNegative = true;
+      break;
+
+    case END_BYTE:
       // Move servos to position.
-      SetShoulderYaw(&shoulderYaw);
-      SetShoulderPitch(&shoulderPitch);
-      SetShoulderRoll(&shoulderRoll);
-      SetElbowPitch(&elbowAngle);
-    }
-    else
-    {
-      AssignToJointAngle(readByte);
-    }
+      for(uint8_t i = 0; i < numberOfAngles; i++)
+      {
+        JointAngle jointAngle = jointAngles[i];
+        int16_t angle = jointAngle.angle;
+        if (jointAngle.isNegative)
+        {
+          angle = -angle;
+        }
+        MoveToAngle(jointAngle.index, angle, ReverseServo(jointAngle.index));
+      }
+      break;
+
+    default:
+      if (*readByte >= '0' && *readByte <= '9') {
+        jointAngles[currentMessageIndex - 1].angle *= 10;
+        jointAngles[currentMessageIndex - 1].angle += (*readByte - 48);
+      }
+      break;
   }
 }
 
