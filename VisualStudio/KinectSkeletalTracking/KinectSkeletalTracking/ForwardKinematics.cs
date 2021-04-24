@@ -118,7 +118,7 @@ namespace KinectSkeletalTracking
         {
             Matrix elbowMatrix = GetElbowTranslationMatrixLeft(shoulderPosition, upperArmLength, shoulderYawRadians, shoulderPitchRadians);
             Point3 elbow = GetElbowPointLeft(shoulderPosition, upperArmLength, shoulderYawRadians, shoulderPitchRadians, elbowMatrix: elbowMatrix);
-            Point3 wrist = GetWristPointLeft(elbowMatrix, shoulderRollRadians - shoulderYawRadians, elbowPitchRadians, lowerArmLength);
+            Point3 wrist = GetWristPointLeft(elbowMatrix, shoulderRollRadians, elbowPitchRadians, lowerArmLength);
 
             return new ForwardKinematics(shoulderPosition, elbow, wrist);
         }

@@ -172,7 +172,7 @@ namespace KinematicsTests
                 }
 
                 [TestMethod]
-                public void WristPointingForward()//roll + 90
+                public void WristPointingForward()
                 {
                     Point3 wrist = new Point3(8, 9, 9);
 
@@ -180,7 +180,7 @@ namespace KinematicsTests
                 }
 
                 [TestMethod]
-                public void WristPointingInwards()// roll 0
+                public void WristPointingInwards()
                 {
                     Point3 wrist = new Point3(9, 9, 10);
 

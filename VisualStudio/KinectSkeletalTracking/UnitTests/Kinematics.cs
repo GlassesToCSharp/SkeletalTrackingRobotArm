@@ -354,14 +354,12 @@ namespace KinematicsTests
                 public class ElbowPointingSide
                 {
                     private static readonly Point3 elbow = new Point3(7, 10, 10);
-                    private static readonly Vector3 shoulderToElbow = Vector3.FromPoints(shoulderL, elbow);
-                    private static readonly double forwardFacingRatio = 0;
 
                     [TestMethod]
                     public void Inline()
                     {
-                        Vector3 elbowToWrist = new Vector3(-1, 0, 0);
-                        double roll = InverseKinematics.GetShoulderRollLeft(neckToSpine, shoulderR2L, shoulderToElbow, elbowToWrist, forwardFacingRatio);
+                        Point3 wrist = new Point3(6, 10, 10);
+                        double roll = InverseKinematics.GetShoulderRollLeft(neckToSpine, shoulderL, shoulderR, elbow, wrist);
 
                         Assert.AreEqual(0, roll);
                     }
@@ -369,8 +367,8 @@ namespace KinematicsTests
                     [TestMethod]
                     public void WristPointingDown()
                     {
-                        Vector3 elbowToWrist = new Vector3(0, -1, 0);
-                        double roll = InverseKinematics.GetShoulderRollLeft(neckToSpine, shoulderR2L, shoulderToElbow, elbowToWrist, forwardFacingRatio);
+                        Point3 wrist = new Point3(7, 9, 10);
+                        double roll = InverseKinematics.GetShoulderRollLeft(neckToSpine, shoulderL, shoulderR, elbow, wrist);
 
                         Assert.AreEqual(-90, roll, angleTolerance);
                     }
@@ -378,8 +376,8 @@ namespace KinematicsTests
                     [TestMethod]
                     public void WristPointingForward()
                     {
-                        Vector3 elbowToWrist = new Vector3(0, 0, -1);
-                        double roll = InverseKinematics.GetShoulderRollLeft(neckToSpine, shoulderR2L, shoulderToElbow, elbowToWrist, forwardFacingRatio);
+                        Point3 wrist = new Point3(6, 10, 9);
+                        double roll = InverseKinematics.GetShoulderRollLeft(neckToSpine, shoulderL, shoulderR, elbow, wrist);
 
                         Assert.AreEqual(0, roll, angleTolerance);
                     }
@@ -387,8 +385,8 @@ namespace KinematicsTests
                     [TestMethod]
                     public void WristPointingUp()
                     {
-                        Vector3 elbowToWrist = new Vector3(0, 1, 0);
-                        double roll = InverseKinematics.GetShoulderRollLeft(neckToSpine, shoulderR2L, shoulderToElbow, elbowToWrist, forwardFacingRatio);
+                        Point3 wrist = new Point3(7, 11, 10);
+                        double roll = InverseKinematics.GetShoulderRollLeft(neckToSpine, shoulderL, shoulderR, elbow, wrist);
 
                         Assert.AreEqual(90, roll, angleTolerance);
                     }
@@ -398,14 +396,12 @@ namespace KinematicsTests
                 public class ElbowPointingDown
                 {
                     private static readonly Point3 elbow = new Point3(8, 9, 10);
-                    private static readonly Vector3 shoulderToElbow = Vector3.FromPoints(shoulderL, elbow);
-                    private static readonly double forwardFacingRatio = 0;
 
                     [TestMethod]
                     public void Inline()
                     {
-                        Vector3 elbowToWrist = new Vector3(0, -1, 0);
-                        double roll = InverseKinematics.GetShoulderRollLeft(neckToSpine, shoulderR2L, shoulderToElbow, elbowToWrist, forwardFacingRatio);
+                        Point3 wrist = new Point3(8, 8, 10);
+                        double roll = InverseKinematics.GetShoulderRollLeft(neckToSpine, shoulderL, shoulderR, elbow, wrist);
 
                         Assert.AreEqual(0, roll);
                     }
@@ -413,28 +409,19 @@ namespace KinematicsTests
                     [TestMethod]
                     public void WristPointingForward()
                     {
-                        Vector3 elbowToWrist = new Vector3(0, 0, -1);
-                        double roll = InverseKinematics.GetShoulderRollLeft(neckToSpine, shoulderR2L, shoulderToElbow, elbowToWrist, forwardFacingRatio);
+                        Point3 wrist = new Point3(8, 9, 9);
+                        double roll = InverseKinematics.GetShoulderRollLeft(neckToSpine, shoulderL, shoulderR, elbow, wrist);
 
-                        Assert.AreEqual(0, roll, angleTolerance);
+                        Assert.AreEqual(90, roll, angleTolerance);
                     }
 
                     [TestMethod]
                     public void WristPointingInside()
                     {
-                        Vector3 elbowToWrist = new Vector3(1, 0, 0);
-                        double roll = InverseKinematics.GetShoulderRollLeft(neckToSpine, shoulderR2L, shoulderToElbow, elbowToWrist, forwardFacingRatio);
+                        Point3 wrist = new Point3(9, 9, 10);
+                        double roll = InverseKinematics.GetShoulderRollLeft(neckToSpine, shoulderL, shoulderR, elbow, wrist);
 
-                        Assert.AreEqual(-90, roll, angleTolerance);
-                    }
-
-                    [TestMethod]
-                    public void WristPointingOutside()
-                    {
-                        Vector3 elbowToWrist = new Vector3(-1, 0, 0);
-                        double roll = InverseKinematics.GetShoulderRollLeft(neckToSpine, shoulderR2L, shoulderToElbow, elbowToWrist, forwardFacingRatio);
-
-                        Assert.AreEqual(90, roll, angleTolerance);
+                        Assert.AreEqual(0, roll, angleTolerance);
                     }
                 }
 
@@ -442,23 +429,30 @@ namespace KinematicsTests
                 public class ElbowPointingForward
                 {
                     private static readonly Point3 elbow = new Point3(8, 10, 9);
-                    private static readonly Vector3 shoulderToElbow = Vector3.FromPoints(shoulderL, elbow);
-                    private static readonly double forwardFacingRatio = 1;
 
                     [TestMethod]
                     public void Inline()
                     {
-                        Vector3 elbowToWrist = new Vector3(0, 0, -1);
-                        double roll = InverseKinematics.GetShoulderRollLeft(neckToSpine, shoulderR2L, shoulderToElbow, elbowToWrist, forwardFacingRatio);
+                        Point3 wrist = new Point3(8, 10, 8);
+                        double roll = InverseKinematics.GetShoulderRollLeft(neckToSpine, shoulderL, shoulderR, elbow, wrist);
 
                         Assert.AreEqual(0, roll);
                     }
 
                     [TestMethod]
+                    public void WristPointingDown()
+                    {
+                        Point3 wrist = new Point3(8, 9, 9);
+                        double roll = InverseKinematics.GetShoulderRollLeft(neckToSpine, shoulderL, shoulderR, elbow, wrist);
+
+                        Assert.AreEqual(-90, roll, angleTolerance);
+                    }
+
+                    [TestMethod]
                     public void WristPointingInside()
                     {
-                        Vector3 elbowToWrist = new Vector3(1, 0, 0);
-                        double roll = InverseKinematics.GetShoulderRollLeft(neckToSpine, shoulderR2L, shoulderToElbow, elbowToWrist, forwardFacingRatio);
+                        Point3 wrist = new Point3(9, 10, 9);
+                        double roll = InverseKinematics.GetShoulderRollLeft(neckToSpine, shoulderL, shoulderR, elbow, wrist);
 
                         Assert.AreEqual(0, roll, angleTolerance);
                     }
@@ -466,8 +460,8 @@ namespace KinematicsTests
                     [TestMethod]
                     public void WristPointingUp()
                     {
-                        Vector3 elbowToWrist = new Vector3(0, 1, 0);
-                        double roll = InverseKinematics.GetShoulderRollLeft(neckToSpine, shoulderR2L, shoulderToElbow, elbowToWrist, forwardFacingRatio);
+                        Point3 wrist = new Point3(8, 11, 9);
+                        double roll = InverseKinematics.GetShoulderRollLeft(neckToSpine, shoulderL, shoulderR, elbow, wrist);
 
                         Assert.AreEqual(90, roll, angleTolerance);
                     }
