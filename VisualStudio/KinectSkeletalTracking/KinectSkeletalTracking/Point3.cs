@@ -98,6 +98,59 @@ namespace KinectSkeletalTracking
             };
         }
 
+        /// <summary>
+        /// Calculates the shortest distance to a given plane.
+        /// </summary>
+        /// <param name="plane">The plane to calculate the distance from.</param>
+        /// <returns>The distance.</returns>
+        public double DistanceFromPlane(Plane plane)
+        {
+            double distanceFromPlane = plane.AsVector().Dot(X, Y, Z);
+            distanceFromPlane += plane.D;
+            distanceFromPlane /= plane.AsVector().Magnitude;
+
+            return distanceFromPlane;
+        }
+
+        /// <summary>
+        /// Calculates the projected point onto a given plane.
+        /// </summary>
+        /// <param name="plane">The plane to project the point on.</param>
+        /// <param name="pointOnPlane">A point on the plane.</param>
+        /// <returns>The projected point.</returns>
+        public Point3 ProjectedOntoPlane(Plane plane, Point3 pointOnPlane)
+        {
+            // Steps taken from https://math.stackexchange.com/a/100766
+            //double t = (plane.X * pointOnPlane.X - plane.X * X) + (plane.Y * pointOnPlane.Y - plane.Y * Y) + (plane.Z * pointOnPlane.Z - plane.Z * Z);
+            //t /= plane.AsVector().Magnitude;
+
+            //return new Point3(X + t * plane.X, Y + t * plane.Y, Z + t * plane.Z);
+
+            // Steps taken from https://math.stackexchange.com/questions/444968/project-a-point-in-3d-on-a-given-plane
+            //Vector3 thisToPlane = Vector3.FromPoints(this, pointOnPlane);
+            //Vector3 vec = Vector3.FromPoints(new Point3(), this) - (thisToPlane.Dot(plane.AsVector()) * thisToPlane);
+            //return new Point3(vec.X, vec.Y, vec.Z);
+
+            double dist = DistanceFromPlane(plane);
+            double vecMag = plane.AsVector().Magnitude;
+            double factor = dist / vecMag;
+            Vector3 movingVector = plane.AsVector() * -(factor);
+            return this + new Point3(movingVector.X, movingVector.Y, movingVector.Z);
+        }
+
+        /// <summary>
+        /// Calculates the projected point onto a given plane.
+        /// </summary>
+        /// <param name="plane">The plane to project the point on.</param>
+        /// <returns>The projection vector.</returns>
+        public Vector3 ProjectionVectorToPlane(Plane plane)
+        {
+            double dist = DistanceFromPlane(plane);
+            double vecMag = plane.AsVector().Magnitude;
+            double factor = dist / vecMag;
+            return plane.AsVector() * -(factor);
+        }
+
         public override string ToString()
         {
             return String.Format("Point3[X:{0}, Y:{1}, Z:{2}]", X, Y, Z);
