@@ -19,6 +19,8 @@ namespace KinectSkeletalTracking
         private const bool SendToMotors = false;
 
         private const string SerialDataFormat = "S{0}E";
+        private bool lastStateLeftHandClosed = false;
+        private bool lastStateRightHandClosed = false;
 
         /// <summary>
         /// Radius of drawn hand circles
@@ -435,8 +437,28 @@ namespace KinectSkeletalTracking
                                 Int32.TryParse(selection.Substring(0, 1), out int selectedIndex) &&
                                 selectedIndex == bodyIndex)
                             {
-                                // At this point, calculate the angles of the arm joints relative to the shoulder plane.
-                                FollowBody(drawPen, ref joints);
+                                Func<HandState, bool, bool> setHandStateMemory = (HandState bodyHandState, bool defaultValue) =>
+                                {
+                                    switch (bodyHandState)
+                                    {
+                                        case HandState.Open:
+                                            return false;
+
+                                        case HandState.Closed:
+                                            return true;
+                                    }
+
+                                    return defaultValue;
+                                };
+
+                                lastStateLeftHandClosed = setHandStateMemory(body.HandLeftState, lastStateLeftHandClosed);
+                                lastStateRightHandClosed = setHandStateMemory(body.HandRightState, lastStateRightHandClosed);
+
+                                // Only do the complicated maths if the user has both their fists closed.
+                                if (lastStateLeftHandClosed && lastStateRightHandClosed)
+                                {
+                                    FollowBody(drawPen, ref joints);
+                                }
                             }
 
 
