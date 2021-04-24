@@ -371,6 +371,9 @@ namespace KinectSkeletalTracking
         /// <param name="e">event arguments</param>
         private void Reader_FrameArrived(object sender, BodyFrameArrivedEventArgs e)
         {
+            //TestCommunications();
+            //return;
+
             bool dataReceived = false;
 
             using (BodyFrame bodyFrame = e.FrameReference.AcquireFrame())
@@ -657,6 +660,34 @@ namespace KinectSkeletalTracking
             TestShoulderToElbow(ref joints);
         }
 
+        private const byte positions = 6;
+        private const byte joints = 8;
+        private readonly Matrix testPositions = new Matrix(positions, joints, new double[,]
+        {
+            {0, 0, 0, 0, 0, 0, 0, 0 },
+            {0, 0, 90, -90, 0, 0, 90, -90 },
+            {0, -90, 90, -90, 0, -90, 90, -90 },
+            {-90, -90, 90, -90, -90, -90, 90, -90 },
+            {0, -90, 90, -90, 0, -90, 90, -90 },
+            {0, 0, 90, -90, 0, 0, 90, -90 },
+        });
+        private const int max_repeats = 50;
+        private int repeats = 0;
+        private int row = 0;
+        private void TestCommunications()
+        {
+            if (repeats >= max_repeats)
+            {
+                row++;
+                row %= positions;
+                Console.WriteLine(String.Format("Completed {0} repeats of {1}. Reading row {2}.", repeats, max_repeats, row));
+                repeats = 0;
+            }
+
+            SerialWrite(FilterAngles(testPositions.GetRow(row)));
+            repeats++;
+        }
+
         /// <summary>
         /// Gets the angle of the elbow joint from the upper arm and lower arm vectors.
         /// </summary>
@@ -851,7 +882,11 @@ namespace KinectSkeletalTracking
                 inverseKinematicsRight.ShoulderYaw,
                 inverseKinematicsRight.ShoulderPitch,
                 inverseKinematicsRight.ShoulderRoll,
-                inverseKinematicsRight.ElbowPitch
+                inverseKinematicsRight.ElbowPitch,
+                inverseKinematicsLeft.ShoulderYaw,
+                inverseKinematicsLeft.ShoulderPitch,
+                inverseKinematicsLeft.ShoulderRoll,
+                inverseKinematicsLeft.ElbowPitch
             }));
         }
 
@@ -892,7 +927,7 @@ namespace KinectSkeletalTracking
         #region Filtering
 
         private const byte averageSpan = 5;
-        private const byte columns = 4;
+        private const byte columns = 8;
         private double[,] recentAngles;
         /// <summary>
         /// Applies a moving average filter to the angles. The new values are
