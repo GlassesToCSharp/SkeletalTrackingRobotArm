@@ -437,7 +437,7 @@ namespace KinectSkeletalTracking
                                 Int32.TryParse(selection.Substring(0, 1), out int selectedIndex) &&
                                 selectedIndex == bodyIndex)
                             {
-                                Func<HandState, bool, bool> setHandStateMemory = (HandState bodyHandState, bool defaultValue) =>
+                                bool setHandStateMemory(HandState bodyHandState, bool defaultValue)
                                 {
                                     switch (bodyHandState)
                                     {
@@ -449,7 +449,7 @@ namespace KinectSkeletalTracking
                                     }
 
                                     return defaultValue;
-                                };
+                                }
 
                                 lastStateLeftHandClosed = setHandStateMemory(body.HandLeftState, lastStateLeftHandClosed);
                                 lastStateRightHandClosed = setHandStateMemory(body.HandRightState, lastStateRightHandClosed);
