@@ -153,33 +153,6 @@ namespace KinectSkeletalTracking
             Red, Orange, Green, Blue, Indigo, Violet
         }
 
-        private List<string> bodiesList = new List<string>();
-        public List<string> BodiesList
-        {
-            get { return bodiesList; }
-            set
-            {
-                bodiesList = value;
-                OnPropertyChanged(nameof(BodiesList));
-
-                if (bodiesListIndex > bodiesList.Count)
-                {
-                    bodiesListIndex = bodiesList.Count - 1;
-                }
-            }
-        }
-
-        private int bodiesListIndex = 0;
-        public int BodiesListIndex
-        {
-            get { return bodiesListIndex; }
-            set
-            {
-                bodiesListIndex = value;
-                OnPropertyChanged(nameof(bodiesListIndex));
-            }
-        }
-
         private Brush textColourOfBody = new SolidColorBrush(Color.FromRgb(0, 0, 0));
         public Brush TextColourOfBody
         {
@@ -410,7 +383,7 @@ namespace KinectSkeletalTracking
                     {
                         Body body = bodies[bodyIndex];
 
-                        Pen drawPen = bodyColors[3];// this.bodyColors[bodyIndex];
+                        Pen drawPen = this.bodyColors[bodyIndex];
 
                         if (body.IsTracked)
                         {
@@ -430,35 +403,27 @@ namespace KinectSkeletalTracking
                                 jointPoints[jointType] = new Point(depthSpacePoint.X, depthSpacePoint.Y);
                             }
 
-                            string selection;
-                            if (BodiesList.Count > 0 &&
-                                BodiesListIndex >= 0 &&
-                                !String.IsNullOrWhiteSpace(selection = BodiesList[BodiesListIndex]) &&
-                                Int32.TryParse(selection.Substring(0, 1), out int selectedIndex) &&
-                                selectedIndex == bodyIndex)
+                            bool setHandStateMemory(HandState bodyHandState, bool defaultValue)
                             {
-                                bool setHandStateMemory(HandState bodyHandState, bool defaultValue)
+                                switch (bodyHandState)
                                 {
-                                    switch (bodyHandState)
-                                    {
-                                        case HandState.Open:
-                                            return false;
+                                    case HandState.Open:
+                                        return false;
 
-                                        case HandState.Closed:
-                                            return true;
-                                    }
-
-                                    return defaultValue;
+                                    case HandState.Closed:
+                                        return true;
                                 }
 
-                                lastStateLeftHandClosed = setHandStateMemory(body.HandLeftState, lastStateLeftHandClosed);
-                                lastStateRightHandClosed = setHandStateMemory(body.HandRightState, lastStateRightHandClosed);
+                                return defaultValue;
+                            }
 
-                                // Only do the complicated maths if the user has both their fists closed.
-                                if (lastStateLeftHandClosed && lastStateRightHandClosed)
-                                {
-                                    FollowBody(drawPen, ref joints);
-                                }
+                            lastStateLeftHandClosed = setHandStateMemory(body.HandLeftState, lastStateLeftHandClosed);
+                            lastStateRightHandClosed = setHandStateMemory(body.HandRightState, lastStateRightHandClosed);
+
+                            // Only do the complicated maths if the user has both their fists closed.
+                            if (lastStateLeftHandClosed && lastStateRightHandClosed)
+                            {
+                                FollowBody(drawPen, ref joints);
                             }
 
 
@@ -468,32 +433,6 @@ namespace KinectSkeletalTracking
                             this.DrawHand(body.HandRightState, jointPoints[JointType.HandRight], dc);
                         }
                     }
-
-                    BodiesList = tempListstring;
-
-                    //string selection = "";
-                    //int selectedIndex = 0;
-
-                    // If there is only one body being tracked, automatically
-                    // follow that one. Otherwise, follow the selected body.
-                    //if ((BodiesList.Count == 1) || (BodiesList.Count > 0 &&
-                    //    BodiesListIndex >= 0 &&
-                    //    !String.IsNullOrWhiteSpace(selection) &&
-                    //    Int32.TryParse(selection.Substring(0, 1), out selectedIndex) &&
-                    //    selectedIndex < bodies.Length))
-                    //System.Diagnostics.Debug.WriteLine($"BodiesListCount: {BodiesList.Count}");
-                    //System.Diagnostics.Debug.WriteLine($"bodyColours count: {bodyColors.Count}");
-                    //System.Diagnostics.Debug.WriteLine($"bodies count: {bodies.Length}");
-                    //foreach (string colour in BodiesList)
-                    //{
-                    //    System.Diagnostics.Debug.WriteLine($"Colour: {colour}");
-                    //}
-                    //if (BodiesList.Count == 1)
-                    //{
-                    //    Pen drawPen = bodyColors[selectedIndex];
-                    //    IReadOnlyDictionary<JointType, Joint> joints = bodies[selectedIndex].Joints;
-                    //    FollowBody(drawPen, ref joints);
-                    //}
 
                     // prevent drawing outside of our render area
                     this.drawingGroup.ClipGeometry = new RectangleGeometry(new Rect(0.0, 0.0, this.displayWidth, this.displayHeight));
