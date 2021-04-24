@@ -101,23 +101,35 @@
             Grid.Row="2">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="3*"/>
+                <ColumnDefinition Width="3*"/>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
 
             <TextBlock 
                 Grid.Column="0" 
-                Name="Angles"
+                Name="AnglesL"
                 Margin="0" 
                 HorizontalAlignment="Center" 
                 VerticalAlignment="Center" 
                 Foreground="{Binding TextColourOfBody}" 
                 FontFamily="Consolas" 
                 FontSize="30"
-                Text="Body Angles"/>
+                Text="Left Angles"/>
+
+            <TextBlock 
+                Grid.Column="1" 
+                Name="AnglesR"
+                Margin="0" 
+                HorizontalAlignment="Center" 
+                VerticalAlignment="Center" 
+                Foreground="{Binding TextColourOfBody}" 
+                FontFamily="Consolas" 
+                FontSize="30"
+                Text="Right Angles"/>
             
             <ComboBox 
                 x:Name="BodiesListXaml"
-                Grid.Column="1"
+                Grid.Column="2"
                 
                 ItemsSource="{Binding BodiesList}"
                 SelectedIndex="{Binding BodiesListIndex, Mode=TwoWay}"/>

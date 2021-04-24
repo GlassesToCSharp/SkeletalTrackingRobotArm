@@ -818,7 +818,7 @@ namespace KinectSkeletalTracking
                 // prevent drawing outside of our render area
                 this.projectedGroup.ClipGeometry = new RectangleGeometry(new Rect(0.0, 0.0, this.displayWidth, this.displayHeight));
 
-                Angles.Text = String.Format(
+                AnglesR.Text = String.Format(
                     "Shoulder {0}" + Environment.NewLine +
                     "Elbow    {1}" + Environment.NewLine +
                     "Wrist    {2}" + Environment.NewLine +
@@ -830,6 +830,19 @@ namespace KinectSkeletalTracking
                     SpacePointToString(rightArmPoints[JointType.WristRight].Position), inverseKinematicsRight.UpperArmLength, inverseKinematicsRight.LowerArmLength,
                     (int)inverseKinematicsRight.ShoulderYaw, (int)inverseKinematicsRight.ShoulderPitch, (int)inverseKinematicsRight.ShoulderRoll,
                     (int)inverseKinematicsRight.ElbowPitch);
+
+                AnglesL.Text = String.Format(
+                    "Shoulder {0}" + Environment.NewLine +
+                    "Elbow    {1}" + Environment.NewLine +
+                    "Wrist    {2}" + Environment.NewLine +
+                    "U Arm L  {3}" + Environment.NewLine +
+                    "L Arm L  {4}" + Environment.NewLine +
+                    "Shoulder {5}, {6}, {7}" + Environment.NewLine +
+                    "Elbow {8}",
+                    SpacePointToString(leftArmPoints[JointType.ShoulderLeft].Position), SpacePointToString(leftArmPoints[JointType.ElbowLeft].Position),
+                    SpacePointToString(leftArmPoints[JointType.WristLeft].Position), inverseKinematicsLeft.UpperArmLength, inverseKinematicsLeft.LowerArmLength,
+                    (int)inverseKinematicsLeft.ShoulderYaw, (int)inverseKinematicsLeft.ShoulderPitch, (int)inverseKinematicsLeft.ShoulderRoll,
+                    (int)inverseKinematicsLeft.ElbowPitch);
             }
 
             // 4. Send the angles to the motors
