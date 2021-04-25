@@ -137,7 +137,7 @@ namespace KinematicsTests
                     [TestMethod]
                     public void WristPointingUp()
                     {
-                        Point3 wrist = new Point3(10, 11, 10);
+                        Point3 wrist = new Point3(11, 11, 10);
                         double roll = InverseKinematics.GetShoulderRollRight(neckToSpine, shoulderL, shoulderR, elbow, wrist);
 
                         Assert.AreEqual(90, roll, angleTolerance);
