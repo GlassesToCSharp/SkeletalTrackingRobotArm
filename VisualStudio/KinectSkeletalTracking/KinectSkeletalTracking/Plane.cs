@@ -69,32 +69,23 @@ namespace KinectSkeletalTracking
             Vector3 AB = Vector3.FromPoints(a, b);
             Vector3 AC = Vector3.FromPoints(a, c);
 
-            // Do the cross product
-            Vector3 normal = AB.Cross(AC);
-
-            // Return the normal with the ammended D value. This is the Plane equation.
-            return new Plane
-            {
-                X = normal.X,
-                Y = normal.Y,
-                Z = normal.Z,
-                D = (normal.X * (-a.X)) + (normal.Y * (-b.Y)) + (normal.Z * (-c.Z))
-            };
+            return FromVectors(AB, AC);
         }
 
 
         public static Plane FromVectors(Vector3 u, Vector3 v)
         {
             // Do the cross product
-            Vector3 orthogonal = u.Cross(v);
+            Vector3 normal = u.Cross(v);
 
             // Return the normal with the ammended D value. This is the Plane equation.
+            // The values should be in the format Xx + Yy + Zz = D
             return new Plane
             {
-                X = orthogonal.X,
-                Y = orthogonal.Y,
-                Z = orthogonal.Z,
-                D = -((orthogonal.X * (-u.X)) + (orthogonal.Y * (-u.Y)) + (orthogonal.Z * (-u.Z)))
+                X = normal.X,
+                Y = normal.Y,
+                Z = normal.Z,
+                D = normal.Dot(u.X, u.Y, u.Z)
             };
         }
 
@@ -108,7 +99,7 @@ namespace KinectSkeletalTracking
 
         public override string ToString()
         {
-            return String.Format("Plane[X:{0}, Y:{1}, Z:{2}, D:{3}]", X, Y, Z, D);
+            return String.Format("Plane[{0}x + {1}y + {2}z = {3}]", X, Y, Z, D);
         }
     }
 }

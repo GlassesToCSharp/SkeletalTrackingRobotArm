@@ -105,9 +105,10 @@ namespace KinectSkeletalTracking
         /// <returns>The distance.</returns>
         public double DistanceFromPlane(Plane plane)
         {
-            double distanceFromPlane = plane.AsVector().Dot(X, Y, Z);
+            Vector3 planeNormal = plane.AsVector();
+            double distanceFromPlane = planeNormal.Dot(X, Y, Z);
             distanceFromPlane += plane.D;
-            distanceFromPlane /= plane.AsVector().Magnitude;
+            distanceFromPlane /= planeNormal.Magnitude;
 
             return distanceFromPlane;
         }
