@@ -245,14 +245,11 @@ namespace KinectSkeletalTracking
                 Vector3 bodyPlaneNormal = bodyPlane.AsVector();
                 Point3 shoulderOffset = new Point3(shoulderR.X + bodyPlaneNormal.X, shoulderR.Y + bodyPlaneNormal.Y, shoulderR.Z + bodyPlaneNormal.Z);
                 upperArmPlane = Plane.FromPoints(shoulderR, shoulderL, shoulderOffset);
-                angle = Plane.GetAngleBetweenPlanes(armPlane, upperArmPlane, inRadians);
-            }
-            else
-            {
-                angle = Plane.GetAngleBetweenPlanes(armPlane, upperArmPlane, inRadians);
             }
 
-            double distFromPlane = wrist.DistanceFromPlane(upperArmPlane);
+            angle = Plane.GetAngleBetweenPlanes(armPlane, upperArmPlane, inRadians);
+
+            double distFromPlane = new Point3(wrist.X - elbow.X , wrist.Y - elbow.Y, wrist.Z - elbow.Z).DistanceFromPlane(upperArmPlane);
             if (distFromPlane < 0)
             {
                 return -angle;
@@ -295,20 +292,17 @@ namespace KinectSkeletalTracking
                 // When the elbow is point perpendicular to the body to the
                 // side, the upper arm plane will be empty (as the shoulders
                 // and upper arm vectors will line up). Use the body plane's
-                // normal vector to create a new virtual should to create an
+                // normal vector to create a new virtual shoulder to create an
                 // upper arm plane.
                 Plane bodyPlane = Plane.FromVectors(neckToSpine, shoulderR2L);
                 Vector3 bodyPlaneNormal = bodyPlane.AsVector();
                 Point3 shoulderOffset = new Point3(shoulderL.X + bodyPlaneNormal.X, shoulderL.Y + bodyPlaneNormal.Y, shoulderL.Z + bodyPlaneNormal.Z);
                 upperArmPlane = Plane.FromPoints(shoulderR, shoulderL, shoulderOffset);
-                angle = Plane.GetAngleBetweenPlanes(armPlane, upperArmPlane, inRadians);
-            }
-            else
-            {
-                angle = Plane.GetAngleBetweenPlanes(armPlane, upperArmPlane, inRadians);
             }
 
-            double distFromPlane = wrist.DistanceFromPlane(upperArmPlane);
+            angle = Plane.GetAngleBetweenPlanes(armPlane, upperArmPlane, inRadians);
+
+            double distFromPlane = new Point3(wrist.X - elbow.X, wrist.Y - elbow.Y, wrist.Z - elbow.Z).DistanceFromPlane(upperArmPlane);
             if (distFromPlane > 0)
             {
                 return -angle;
