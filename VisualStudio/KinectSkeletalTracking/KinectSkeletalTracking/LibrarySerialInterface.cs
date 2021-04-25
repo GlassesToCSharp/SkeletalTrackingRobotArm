@@ -83,7 +83,15 @@ namespace KinectSkeletalTracking
                 ThrowNewException("Port is not open.");
             }
 
-            port.Write(stream);
+            try
+            {
+                port.Write(stream);
+            }
+            catch (Exception e)
+            {
+                port.Close();
+                Console.WriteLine("Exception occurred: " + e.Message);
+            }
             stopWatch.Restart();
 
             //Debug.WriteLine($"Data sent at {DateTime.Now}");
