@@ -70,7 +70,7 @@
                     VerticalAlignment="Center"
                     Text="Sensor output"
                     FontFamily="Segoe UI" 
-                    FontSize="18"/>
+                    FontSize="30"/>
                 <Viewbox 
                     HorizontalAlignment="Center">
                     <Image 
@@ -87,7 +87,7 @@
                     VerticalAlignment="Center"
                     Text="Projected output"
                     FontFamily="Segoe UI" 
-                    FontSize="18"/>
+                    FontSize="30"/>
                 <Viewbox 
                     HorizontalAlignment="Center">
                     <Image 
@@ -112,7 +112,7 @@
                 VerticalAlignment="Center" 
                 Foreground="{Binding TextColourOfBody}" 
                 FontFamily="Consolas" 
-                FontSize="30"
+                FontSize="25"
                 Text="Left Angles"/>
 
             <TextBlock 
@@ -123,7 +123,7 @@
                 VerticalAlignment="Center" 
                 Foreground="{Binding TextColourOfBody}" 
                 FontFamily="Consolas" 
-                FontSize="30"
+                FontSize="25"
                 Text="Right Angles"/>
             
         </Grid>
