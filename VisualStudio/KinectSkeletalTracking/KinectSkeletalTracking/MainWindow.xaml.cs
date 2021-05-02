@@ -16,7 +16,7 @@ namespace KinectSkeletalTracking
     /// </summary>
     public partial class MainWindow : Window, INotifyPropertyChanged
     {
-        private const bool SendToMotors = false;
+        private const bool SendToMotors = true;
 
         private const string SerialDataFormat = "S{0}E";
         private bool lastStateLeftHandClosed = false;
